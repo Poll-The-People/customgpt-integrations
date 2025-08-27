@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  instagram-bot:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      # Instagram/Meta API Configuration
+      - INSTAGRAM_ACCESS_TOKEN=${INSTAGRAM_ACCESS_TOKEN}
+      - INSTAGRAM_APP_SECRET=${INSTAGRAM_APP_SECRET}
+      - WEBHOOK_VERIFY_TOKEN=${WEBHOOK_VERIFY_TOKEN}
+      
+      # CustomGPT API Configuration
+      - CUSTOMGPT_API_KEY=${CUSTOMGPT_API_KEY}
+      - CUSTOMGPT_API_BASE_URL=${CUSTOMGPT_API_BASE_URL:-https://app.customgpt.ai/api/v1}
+      - DEFAULT_AGENT_ID=${DEFAULT_AGENT_ID}
+      
+      # Server Configuration
+      - HOST=0.0.0.0
+      - PORT=3000
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      
+      # Security & Rate Limiting
+      - RATE_LIMIT_PER_USER_PER_MINUTE=${RATE_LIMIT_PER_USER_PER_MINUTE:-10}
+      - RATE_LIMIT_PER_USER_PER_HOUR=${RATE_LIMIT_PER_USER_PER_HOUR:-50}
+      - MAX_MESSAGE_LENGTH=${MAX_MESSAGE_LENGTH:-2000}
+      
+      # Redis Configuration
+      - REDIS_URL=redis://redis:6379
+      
+      # Feature Configuration
+      - ENABLE_STARTER_QUESTIONS=${ENABLE_STARTER_QUESTIONS:-true}
+      - ENABLE_CITATIONS=${ENABLE_CITATIONS:-true}
+      - ENABLE_TYPING_INDICATOR=${ENABLE_TYPING_INDICATOR:-true}
+      
+      # User Management (optional)
+      - ALLOWED_USER_IDS=${ALLOWED_USER_IDS}
+      - BLOCKED_USER_IDS=${BLOCKED_USER_IDS}
+      
+      # Analytics Configuration (optional)
+      - ANALYTICS_ENABLED=${ANALYTICS_ENABLED:-false}
+      - ANALYTICS_ENDPOINT=${ANALYTICS_ENDPOINT}
+    
+    depends_on:
+      redis:
+        condition: service_healthy
+    
+    restart: unless-stopped
+    
+    networks:
+      - bot-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    
+    command: redis-server --appendonly yes
+    
+    volumes:
+      - redis_data:/data
+    
+    networks:
+      - bot-network
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+    # Uncomment to expose Redis port (development only)
+    # ports:
+    #   - "6379:6379"
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  bot-network:
+    driver: bridge
