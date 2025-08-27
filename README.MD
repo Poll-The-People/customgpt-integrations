@@ -82,7 +82,20 @@ Enterprise-grade Microsoft Teams integration with advanced collaboration feature
 
 ---
 
-### 1.7 Facebook Messenger Bot (Work in Progress)
+### 1.7 Instagram Chat Bot (Work in Progress)
+
+AI-powered Instagram DM bot with planned comment reply functionality.
+
+* **Status**: 🚧 DM support complete, comment replies in development
+* **Features**: Multi-agent support, starter questions, rate limiting, typing indicators
+* **Planned**: Comment webhooks, mention detection, auto-moderation
+* **Setup Time**: 15-20 minutes  
+* **Hosting Options**: Railway, Render, Google Cloud Platform, Docker
+* **[Full Documentation](Instagram%20Chat%20Bot/README.md)**
+
+---
+
+### 1.8 Facebook Messenger Bot (Work in Progress)
 
 Connect CustomGPT with Facebook Messenger for seamless customer interactions.
 
@@ -123,21 +136,23 @@ Connect CustomGPT with Facebook Messenger for seamless customer interactions.
 * **Telegram**: Telegram Bot Father token
 * **Google Chat**: Google Workspace account
 * **Microsoft Teams**: Azure account (free tier available), Teams admin access
+* **Instagram**: Instagram Business Account, Facebook Page connection
 * **Facebook Messenger**: Facebook Page and App (developer account)
 
 ---
 
 ## 4. Feature Comparison
 
-| Feature          | WhatsApp | Discord | Slack  | Telegram | Google Chat | MS Teams | FB Messenger |
-| ---------------- | -------- | ------- | ------ | -------- | ----------- | -------- | ------------ |
-| Free Hosting     | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | 🚧 WIP       |
-| Rate Limiting    | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | 🚧 WIP       |
-| Multi-Agent      | ✖        | ✖       | ✔      | ✖        | ✔           | ✖        | 🚧 WIP       |
-| Rich Media       | ✔        | ✔       | ✔      | ✔        | Limited     | ✔        | 🚧 WIP       |
-| Threading        | ✖        | ✔       | ✔      | ✖        | ✔           | ✔        | 🚧 WIP       |
-| Analytics        | ✔        | ✖       | ✔      | ✔        | ✖           | ✔        | 🚧 WIP       |
-| Setup Complexity | Medium   | Easy    | Medium | Easy     | Easy        | Medium   | 🚧 WIP       |
+| Feature          | WhatsApp | Discord | Slack  | Telegram | Google Chat | MS Teams | Instagram | FB Messenger |
+| ---------------- | -------- | ------- | ------ | -------- | ----------- | -------- | --------- | ------------ |
+| Free Hosting     | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | ✔         | 🚧 WIP       |
+| Rate Limiting    | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | ✔         | 🚧 WIP       |
+| Multi-Agent      | ✖        | ✖       | ✔      | ✖        | ✔           | ✖        | ✔         | 🚧 WIP       |
+| Rich Media       | ✔        | ✔       | ✔      | ✔        | Limited     | ✔        | Limited   | 🚧 WIP       |
+| Threading        | ✖        | ✔       | ✔      | ✖        | ✔           | ✔        | ✖         | 🚧 WIP       |
+| Analytics        | ✔        | ✖       | ✔      | ✔        | ✖           | ✔        | ✔         | 🚧 WIP       |
+| Comment Replies  | ✖        | ✖       | ✖      | ✖        | ✖           | ✖        | 🚧 Planned | 🚧 WIP       |
+| Setup Complexity | Medium   | Easy    | Medium | Easy     | Easy        | Medium   | Medium    | 🚧 WIP       |
 
 ---
 

@@ -1,0 +1,4 @@
+aiohttp>=3.9.0
+rocketchat_API>=1.30.0
+python-dotenv>=1.0.0
+asyncio>=3.4.3
