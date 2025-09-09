@@ -5,7 +5,7 @@ Manages conversation state and context
 
 import time
 import logging
-from typing import Dict, Optional, List, Tuple
+from typing import Dict, Optional, List, Tuple, Any
 from collections import defaultdict
 from datetime import datetime, timedelta
 import uuid

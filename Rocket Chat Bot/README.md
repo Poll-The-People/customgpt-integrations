@@ -292,6 +292,19 @@ MIT License - see LICENSE file for details
 
 ## Support
 
-- CustomGPT Documentation: https://docs.customgpt.ai
-- Rocket Chat API: https://docs.rocket.chat/reference/api
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Platform Documentation
+- Rocket Chat API: [docs.rocket.chat/reference/api](https://docs.rocket.chat/reference/api)
+
+### Support Channels
 - Issues: Create an issue in the repository

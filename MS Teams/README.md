@@ -369,7 +369,22 @@ pytest tests/test_bot.py -v
 
 ## Support
 
-- **Documentation**: See `/docs` folder
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Platform Documentation
+- **Microsoft Teams Bot Documentation**: See `/docs` folder
+- **Microsoft Bot Framework**: [docs.microsoft.com/en-us/azure/bot-service](https://docs.microsoft.com/en-us/azure/bot-service)
+
+### Support Channels
 - **Issues**: GitHub Issues
 - **CustomGPT Support**: support@customgpt.ai
 

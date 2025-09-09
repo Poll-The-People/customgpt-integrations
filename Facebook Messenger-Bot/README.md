@@ -115,5 +115,17 @@ Edit `config.js` to modify:
 - Multi-language support
 
 ## Support
-- CustomGPT Documentation: https://docs.customgpt.ai
-- Facebook Messenger Platform: https://developers.facebook.com/docs/messenger-platform
+
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Platform Documentation
+- Facebook Messenger Platform: [developers.facebook.com/docs/messenger-platform](https://developers.facebook.com/docs/messenger-platform)

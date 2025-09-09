@@ -4,6 +4,8 @@ import logging
 import asyncio
 from typing import Optional, List
 import re
+import ssl
+import certifi
 
 from config import *
 from customgpt_client import CustomGPTClient
