@@ -381,7 +381,18 @@ Set up time-based trigger in Apps Script.
 
 ## Support & Resources
 
-- [CustomGPT API Docs](https://docs.customgpt.ai)
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Platform Documentation
 - [Google Apps Script Docs](https://developers.google.com/apps-script)
 - [Google Chat Bot Guide](https://developers.google.com/chat/how-tos/bots-develop)
 - [Material Design Guidelines](https://material.io/design)

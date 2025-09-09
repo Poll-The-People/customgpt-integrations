@@ -227,6 +227,25 @@ logging.basicConfig(level=logging.DEBUG)
 
 MIT
 
+## Resources
+
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Video Tutorial
+- **[Telegram Bot Setup Video](https://youtu.be/yqGZGcnqtg0)**
+
+### Platform Documentation
+- Telegram Bot Documentation: [core.telegram.org/bots/api](https://core.telegram.org/bots/api)
+
 ## Support
 
 For issues:
@@ -235,5 +254,5 @@ For issues:
 3. Ensure all prerequisites are met
 4. Verify API credentials are correct
 
-For CustomGPT API issues, refer to their documentation.
+For CustomGPT API issues, check the resources above.
 For Telegram Bot API issues, check [Telegram Bot Documentation](https://core.telegram.org/bots/api).

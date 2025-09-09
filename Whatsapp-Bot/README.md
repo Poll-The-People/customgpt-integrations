@@ -400,6 +400,22 @@ curl 'https://api.twilio.com/2010-04-01/Accounts/ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 Feel free to submit issues and enhancement requests!
 
+## Resources
+
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Platform Documentation
+- Twilio WhatsApp API Documentation: [twilio.com/docs/whatsapp/api](https://www.twilio.com/docs/whatsapp/api)
+
 ## License
 
 MIT

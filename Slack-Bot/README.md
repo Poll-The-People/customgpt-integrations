@@ -359,11 +359,29 @@ export LOG_LEVEL=DEBUG
 python bot.py
 ```
 
+## Resources
+
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Video Tutorial
+- **[Slack Bot Setup Video](https://youtu.be/5x2NMQ7qIvg)**
+
+### Platform Documentation
+- Slack API Documentation: [api.slack.com](https://api.slack.com)
+
 ## Support
 
-- CustomGPT Documentation: [customgpt.ai/docs](https://customgpt.ai/docs)
-- Slack API Documentation: [api.slack.com](https://api.slack.com)
-- Issues: Create an issue in this repository
+- CustomGPT Issues: Check the resources above or open an issue in this repository
+- Platform-Specific Help: Refer to Slack API documentation
 
 ## License
 

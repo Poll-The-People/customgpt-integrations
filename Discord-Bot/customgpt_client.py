@@ -3,6 +3,8 @@ import json
 import logging
 from typing import Optional, Dict, Any, AsyncGenerator
 import asyncio
+import ssl
+import certifi
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +21,10 @@ class CustomGPTClient:
         self._conversation_sessions = {}  # Store conversation sessions per Discord channel
     
     async def __aenter__(self):
-        self._session = aiohttp.ClientSession()
+        # Create SSL context with proper certificate verification
+        ssl_context = ssl.create_default_context(cafile=certifi.where())
+        connector = aiohttp.TCPConnector(ssl=ssl_context)
+        self._session = aiohttp.ClientSession(connector=connector)
         return self
     
     async def __aexit__(self, exc_type, exc_val, exc_tb):

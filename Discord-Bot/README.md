@@ -190,9 +190,28 @@ For distributed rate limiting across multiple bot instances:
 5. Set appropriate rate limits
 6. Use channel/role restrictions
 
+## Resources
+
+### CustomGPT Links
+- **[CustomGPT Landing Page](https://customgpt.ai)**
+- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/api-reference)**
+- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
+- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+
+### Video Tutorial
+- **[Discord Bot Setup Video](https://youtu.be/mhqIJZ8fFAk)**
+
+### Platform Documentation
+- Discord.py Documentation: [discordpy.readthedocs.io](https://discordpy.readthedocs.io)
+
 ## Support
 
 For issues related to:
 - Discord Bot: Check Discord.py documentation
-- CustomGPT API: Contact CustomGPT support
+- CustomGPT API: Check the resources above or contact CustomGPT support
 - This integration: Open an issue on GitHub
