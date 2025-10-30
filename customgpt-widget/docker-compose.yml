@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  customgpt-widget:
+    image: zriyansh/customgpt-widget:latest
+    container_name: customgpt-widget
+    restart: unless-stopped
+
+    # Port mapping: host:container
+    ports:
+      - "${HOST_PORT:-8000}:80"
+
+    # Environment variables loaded from .env file
+    environment:
+      # CustomGPT Configuration
+      - USE_CUSTOMGPT=${USE_CUSTOMGPT:-false}
+      - CUSTOMGPT_PROJECT_ID=${CUSTOMGPT_PROJECT_ID}
+      - CUSTOMGPT_API_KEY=${CUSTOMGPT_API_KEY}
+      - CUSTOMGPT_STREAM=${CUSTOMGPT_STREAM:-true}
+
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AI_COMPLETION_MODEL=${AI_COMPLETION_MODEL:-gpt-4o-mini}
+
+      # Speech-to-Text Configuration
+      - STT_MODEL=${STT_MODEL:-gpt-4o-mini-transcribe}
+
+      # Text-to-Speech Configuration
+      - TTS_PROVIDER=${TTS_PROVIDER:-OPENAI}
+      - OPENAI_TTS_MODEL=${OPENAI_TTS_MODEL:-tts-1}
+      - OPENAI_TTS_VOICE=${OPENAI_TTS_VOICE:-nova}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - ELEVENLABS_VOICE=${ELEVENLABS_VOICE:-EXAVITQu4vr4xnSDxMaL}
+      - EDGETTS_VOICE=${EDGETTS_VOICE:-en-US-EricNeural}
+
+      # Language Configuration
+      - LANGUAGE=${LANGUAGE:-en}
+
+    # Resource limits (optional, uncomment to enable)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1.0'
+    #       memory: 1G
+    #     reservations:
+    #       cpus: '0.5'
+    #       memory: 512M
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    # Labels for organization
+    labels:
+      - "com.customgpt.widget=true"
+      - "com.customgpt.version=1.0"
+      - "created_by=docker-compose"
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Optional: Add networks for better isolation
+# networks:
+#   customgpt-network:
+#     driver: bridge
+
+# Optional: Add volumes for persistent data
+# volumes:
+#   customgpt-data:
+#     driver: local

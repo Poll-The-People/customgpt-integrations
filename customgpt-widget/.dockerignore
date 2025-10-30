@@ -1,0 +1,39 @@
+# Node modules
+frontend/node_modules
+backend/__pycache__
+
+# Build artifacts
+frontend/dist
+frontend/.vite
+
+# Python cache
+backend/*.pyc
+backend/**/__pycache__
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+/tmp
+*.tmp
