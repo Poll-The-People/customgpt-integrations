@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CustomGPT Assistant</title>
+  <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Loading State -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading...</p>
+    </div>
+
+    <div class="chat-wrapper" id="chatWrapper" style="display: none;">
+      <div class="chat-container">
+        <div class="agent-bar">
+          <div class="agent-name" id="agentName">My Google Drive Agent</div>
+          <button
+            class="refresh-btn"
+            id="refreshBtn"
+            title="New Chat"
+            aria-label="Start new conversation">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M23 4v6h-6"></path>
+              <path d="M1 20v-6h6"></path>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="welcome-screen" id="welcomeScreen" style="display: flex;">
+          <div class="avatar-section">
+            <div class="avatar" id="avatar" role="img" aria-label="AI Assistant Avatar">
+              <img src="https://ui-avatars.com/api/?name=AI&background=8b5cf6&color=fff&size=120&bold=true" alt="AI Assistant Avatar" />
+            </div>
+            <h2 class="title" id="title">My Google Drive Agent</h2>
+            
+          </div>
+
+          <div class="suggested-questions" id="suggestedQuestions" role="list" aria-label="Suggested questions">
+            <h3 class="suggested-title">Try asking me</h3>
+          </div>
+        </div>
+
+        <div
+          class="messages-container"
+          id="messagesContainer"
+          role="log"
+          aria-live="polite"
+          aria-label="Conversation messages"
+          style="display: none;">
+        </div>
+
+        <div
+          class="error-message"
+          id="errorMessage"
+          role="alert"
+          aria-live="assertive">
+        </div>
+
+        <div class="controls-bottom">
+          <div class="input-area">
+            <input
+              type="text"
+              class="text-input"
+              id="textInput"
+              placeholder="Ask me anything..."
+              aria-label="Message input"
+              autocomplete="off" />
+            <button
+              class="send-btn"
+              id="sendBtn"
+              title="Send message"
+              aria-label="Send message"
+              disabled>
+              <span class="send-btn-text">Send</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Branding Footer -->
+        <div class="branding-footer">
+          <span class="branding-text">Powered by <strong>CustomGPT</strong></span>
+        </div>
+
+        <!-- Screen reader announcements -->
+        <div id="srAnnouncements" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/markdown.js"></script>
+  <script src="js/popup.js"></script>
+</body>
+</html>
