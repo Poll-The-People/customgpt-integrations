@@ -2,6 +2,20 @@
 
 A dual-mode AI assistant with voice and chat interfaces. Interact naturally through voice with real-time particle animations or 3D avatar, or use the text-based chat interface with message reactions and citations.
 
+## Screenshots
+
+<div align="center">
+  <img src="images/widget-avatar.png" alt="Avatar Mode - 3D talking avatar with lip-sync" width="45%">
+  <img src="images/widget-voice.png" alt="Voice Mode - Particle animation interface" width="45%">
+</div>
+
+<div align="center">
+  <img src="images/widget-floating.png" alt="Floating Chatbot - Intercom-style widget" width="45%">
+  <img src="images/windget-embed.png" alt="Inline Embed - Chat interface in page flow" width="45%">
+</div>
+
+*Clockwise from top-left: Avatar mode with 3D character, Voice mode with particle animations, Inline embedded chat, Floating chatbot widget*
+
 ## Features
 
 ### Voice Mode
