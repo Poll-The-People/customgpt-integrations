@@ -1,0 +1,41 @@
+{
+  "name": "customgpt-widget-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.920.0",
+    "@elevenlabs/elevenlabs-js": "^2.21.0",
+    "@ricky0123/vad-react": "^0.0.35",
+    "@types/uuid": "^10.0.0",
+    "@vercel/blob": "^2.0.0",
+    "edge-tts": "^1.0.1",
+    "formdata-node": "^6.0.3",
+    "google-tts-api": "^2.0.2",
+    "next": "16.0.1",
+    "openai": "^6.7.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-markdown": "^10.1.0",
+    "react-spinners": "^0.17.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
+    "three": "^0.170.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

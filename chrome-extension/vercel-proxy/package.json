@@ -1,0 +1,19 @@
+{
+  "name": "customgpt-chrome-extension-proxy",
+  "version": "1.0.0",
+  "description": "Vercel proxy server for CustomGPT Chrome Extension (white-label solution)",
+  "main": "api/index.js",
+  "scripts": {
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["customgpt", "chrome-extension", "proxy", "vercel"],
+  "author": "Your Company",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}
