@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inline Embed Test - Voice Assistant in Scrollable Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .intro {
+            font-size: 1.25rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .content-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.75;
+            color: #4b5563;
+            margin-bottom: 16px;
+        }
+
+        .highlight-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        .highlight-box h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 1.125rem;
+            color: #4b5563;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        li:before {
+            content: "→";
+            color: #8b5cf6;
+            font-weight: bold;
+            position: absolute;
+            left: -20px;
+        }
+
+        .embed-section {
+            background: #f3f4f6;
+            padding: 40px;
+            border-radius: 12px;
+            margin: 60px 0;
+        }
+
+        .embed-section h2 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        footer {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to CustomGPT</h1>
+            <p class="intro">
+                This page demonstrates the inline embed of the Voice Assistant.
+                Scroll down to see it embedded naturally in the page flow.
+            </p>
+        </header>
+
+        <div class="content-section">
+            <h2>About Our Voice Assistant</h2>
+            <p>
+                Our AI-powered voice assistant brings natural conversation to your website.
+                Using cutting-edge speech recognition and synthesis, it provides an intuitive
+                way for your users to interact with information.
+            </p>
+            <p>
+                The assistant is embedded directly in your page content, making it a seamless
+                part of your user experience rather than a separate popup or modal.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Key Features</h2>
+            <div class="highlight-box">
+                <h3>🎤 Advanced Voice Recognition</h3>
+                <ul>
+                    <li>Real-time speech-to-text using OpenAI Whisper</li>
+                    <li>Support for multiple languages</li>
+                    <li>High accuracy even in noisy environments</li>
+                </ul>
+            </div>
+            <div class="highlight-box">
+                <h3>🤖 Intelligent AI Responses</h3>
+                <ul>
+                    <li>Powered by CustomGPT with RAG capabilities</li>
+                    <li>Context-aware conversations</li>
+                    <li>Natural language understanding</li>
+                </ul>
+            </div>
+            <div class="highlight-box">
+                <h3>🔊 Natural Voice Output</h3>
+                <ul>
+                    <li>High-quality text-to-speech synthesis</li>
+                    <li>Multiple voice options</li>
+                    <li>Streaming audio for faster responses</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Voice Assistant Embed Section -->
+        <div class="embed-section">
+            <h2>🎤 Try Our Voice Assistant</h2>
+            <p style="text-align: center; color: #6b7280; margin-bottom: 24px;">
+                Click the microphone icon below and start speaking to experience the voice assistant
+            </p>
+
+            <!-- This is where the voice assistant will be embedded -->
+            <div id="customgpt-widget-embed"></div>
+        </div>
+
+        <div class="content-section">
+            <h2>Integration Benefits</h2>
+            <p>
+                By embedding the voice assistant inline, you create a more integrated experience
+                for your users. They can scroll to the assistant naturally as part of your content,
+                rather than having to find and click a floating button.
+            </p>
+            <p>
+                This approach is perfect for:
+            </p>
+            <ul>
+                <li>FAQ sections where users want quick voice answers</li>
+                <li>Product pages where voice search is valuable</li>
+                <li>Support pages where conversational help is needed</li>
+                <li>Landing pages with voice-enabled CTAs</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>How It Works</h2>
+            <p>
+                The integration is incredibly simple. Just add a container div and include our script:
+            </p>
+            <pre style="background: #1f2937; color: #10b981; padding: 20px; border-radius: 8px; overflow-x: auto;"><code>&lt;!-- Add container where you want the assistant --&gt;
+&lt;div id="customgpt-widget-embed"&gt;&lt;/div&gt;
+
+&lt;!-- Load the script --&gt;
+&lt;script src="../embed-scripts/script-inline-embed.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 CustomGPT. All rights reserved.</p>
+            <p style="margin-top: 8px; font-size: 0.875rem;">
+                Scroll up and down to see how the assistant is part of the page flow
+            </p>
+        </footer>
+    </div>
+
+    <!-- Load the inline embed script -->
+    <script src="../embed-scripts/script-inline-embed.js"></script>
+</body>
+
+</html>

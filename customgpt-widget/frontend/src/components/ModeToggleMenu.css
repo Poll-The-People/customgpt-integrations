@@ -1,0 +1,88 @@
+/**
+ * ModeToggleMenu Component Styles
+ */
+
+.mode-toggle-menu {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 220px;
+  padding: 8px 0;
+  z-index: 1000;
+  animation: menu-fade-in 200ms ease-out;
+}
+
+@keyframes menu-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mode-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1f2937;
+  transition: background-color 150ms ease;
+  text-align: left;
+}
+
+.mode-menu-item:hover {
+  background: #f3f4f6;
+}
+
+.mode-menu-item.active {
+  color: #8b5cf6;
+  font-weight: 500;
+}
+
+.mode-icon {
+  font-size: 18px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-label {
+  flex: 1;
+}
+
+.mode-checkmark {
+  font-size: 16px;
+  color: #8b5cf6;
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mode-toggle-menu {
+    top: 56px;
+    right: 12px;
+    min-width: 200px;
+  }
+
+  .mode-menu-item {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .mode-icon {
+    font-size: 16px;
+    width: 20px;
+  }
+}
