@@ -97,3 +97,7 @@ applicationinsights.log
 
 # Icons (keep manifest.json)
 deployment/*.png
+
+# Claude Code
+.claude/
+CLAUDE.md.backup

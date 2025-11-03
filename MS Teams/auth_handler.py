@@ -10,7 +10,7 @@ from botbuilder.core import (
     BotFrameworkAdapterSettings,
     TurnContext
 )
-from botbuilder.schema import Activity
+from botbuilder.schema import Activity, ChannelAccount
 from botframework.connector.auth import (
     AuthenticationConfiguration,
     SimpleCredentialProvider,

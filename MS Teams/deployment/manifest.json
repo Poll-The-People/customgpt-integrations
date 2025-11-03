@@ -25,7 +25,7 @@
     "accentColor": "#FFFFFF",
     "bots": [
         {
-            "botId": "YOUR-BOT-ID-HERE",
+            "botId": "YOUR-APP-ID-HERE",
             "scopes": [
                 "personal",
                 "team",
@@ -79,8 +79,8 @@
         "*.azurewebsites.net"
     ],
     "webApplicationInfo": {
-        "id": "YOUR-AAD-APP-ID-HERE",
-        "resource": "api://YOUR-DOMAIN/YOUR-BOT-ID"
+        "id": "YOUR-APP-ID-HERE",
+        "resource": "api://botid-YOUR-APP-ID-HERE"
     },
     "defaultInstallScope": "team",
     "defaultGroupCapability": {

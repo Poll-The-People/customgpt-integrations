@@ -19,11 +19,14 @@ def print_header(text):
 
 def check_python_version():
     """Check Python version"""
-    if sys.version_info < (3, 9):
-        print("❌ Python 3.9 or higher is required")
+    if sys.version_info < (3, 8):
+        print("❌ Python 3.8 or higher is required")
         print(f"   Current version: {sys.version}")
+        print("   Recommended: Python 3.11 or 3.12 for best performance")
         return False
     print(f"✅ Python version: {sys.version.split()[0]}")
+    if sys.version_info < (3, 10):
+        print("   ⚠️  Consider upgrading to Python 3.11+ for better async performance")
     return True
 
 

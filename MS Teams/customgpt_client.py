@@ -26,25 +26,36 @@ class CustomGPTClient:
             'User-Agent': 'CustomGPT-Teams-Bot/1.0'
         }
         self._session: Optional[aiohttp.ClientSession] = None
+        self._session_lock = asyncio.Lock()
         self._usage_cache = {}
         self._cache_timestamp = None
         self._cache_ttl = 300  # 5 minutes cache for usage data
-    
-    async def _get_session(self) -> aiohttp.ClientSession:
-        """Get or create aiohttp session"""
-        if not self._session or self._session.closed:
-            timeout = aiohttp.ClientTimeout(total=Config.RESPONSE_TIMEOUT)
-            connector = aiohttp.TCPConnector(limit=100, limit_per_host=30)
-            self._session = aiohttp.ClientSession(
-                timeout=timeout,
-                connector=connector
-            )
+
+    async def _ensure_session(self) -> aiohttp.ClientSession:
+        """Ensure session exists within event loop context"""
+        async with self._session_lock:
+            if self._session is None or self._session.closed:
+                timeout = aiohttp.ClientTimeout(total=Config.RESPONSE_TIMEOUT)
+                connector = aiohttp.TCPConnector(
+                    limit=100,
+                    limit_per_host=30,
+                    enable_cleanup_closed=True
+                )
+                self._session = aiohttp.ClientSession(
+                    timeout=timeout,
+                    connector=connector,
+                    headers=self.headers
+                )
+                logger.info("aiohttp session created")
         return self._session
-    
+
     async def close(self):
-        """Close the aiohttp session"""
+        """Properly close session with delay for connection cleanup"""
         if self._session and not self._session.closed:
             await self._session.close()
+            # Small delay to allow underlying connections to close
+            await asyncio.sleep(0.25)
+            logger.info("aiohttp session closed")
     
     async def create_conversation(self, project_id: str, metadata: Optional[Dict] = None) -> Dict[str, Any]:
         """Create a new conversation with optional metadata"""
@@ -55,8 +66,8 @@ class CustomGPTClient:
             payload['metadata'] = metadata
         
         try:
-            session = await self._get_session()
-            async with session.post(url, headers=self.headers, json=payload) as response:
+            session = await self._ensure_session()
+            async with session.post(url, json=payload) as response:
                 if response.status == 201:
                     data = await response.json()
                     logger.info(f"Created conversation: {data['data']['session_id']}")
@@ -97,8 +108,8 @@ class CustomGPTClient:
         }
         
         try:
-            session = await self._get_session()
-            async with session.post(url, headers=self.headers, json=payload) as response:
+            session = await self._ensure_session()
+            async with session.post(url, json=payload) as response:
                 if response.status == 200:
                     data = await response.json()
                     logger.info(f"Message sent successfully to session {session_id}")
@@ -141,8 +152,8 @@ class CustomGPTClient:
         }
         
         try:
-            session = await self._get_session()
-            async with session.post(url, headers=self.headers, json=payload) as response:
+            session = await self._ensure_session()
+            async with session.post(url, json=payload) as response:
                 if response.status == 200:
                     async for line in response.content:
                         if line:
@@ -190,8 +201,8 @@ class CustomGPTClient:
             payload["session_id"] = session_id
         
         try:
-            session = await self._get_session()
-            async with session.post(url, headers=self.headers, json=payload) as response:
+            session = await self._ensure_session()
+            async with session.post(url, json=payload) as response:
                 if response.status == 200:
                     data = await response.json()
                     logger.info("OpenAI format message sent successfully")
@@ -209,8 +220,8 @@ class CustomGPTClient:
         url = f"{self.base_url}/projects/{project_id}/settings"
         
         try:
-            session = await self._get_session()
-            async with session.get(url, headers=self.headers) as response:
+            session = await self._ensure_session()
+            async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
                     logger.info(f"Retrieved agent settings for project {project_id}")
@@ -228,8 +239,8 @@ class CustomGPTClient:
         url = f"{self.base_url}/projects/{project_id}"
         
         try:
-            session = await self._get_session()
-            async with session.get(url, headers=self.headers) as response:
+            session = await self._ensure_session()
+            async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
                     logger.info(f"Retrieved agent info for project {project_id}")
@@ -254,8 +265,8 @@ class CustomGPTClient:
         url = f"{self.base_url}/limits/usage"
         
         try:
-            session = await self._get_session()
-            async with session.get(url, headers=self.headers) as response:
+            session = await self._ensure_session()
+            async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
                     self._usage_cache = data['data']
@@ -276,8 +287,8 @@ class CustomGPTClient:
         url = f"{self.base_url}/projects/{project_id}/citations/{citation_id}"
         
         try:
-            session = await self._get_session()
-            async with session.get(url, headers=self.headers) as response:
+            session = await self._ensure_session()
+            async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
                     return data['data']
@@ -302,8 +313,8 @@ class CustomGPTClient:
         payload = {"reaction": reaction}
         
         try:
-            session = await self._get_session()
-            async with session.put(url, headers=self.headers, json=payload) as response:
+            session = await self._ensure_session()
+            async with session.put(url, json=payload) as response:
                 if response.status == 200:
                     data = await response.json()
                     logger.info(f"Updated feedback for message {prompt_id}: {reaction}")
@@ -328,8 +339,8 @@ class CustomGPTClient:
         params = {"page": page, "order": order}
         
         try:
-            session = await self._get_session()
-            async with session.get(url, headers=self.headers, params=params) as response:
+            session = await self._ensure_session()
+            async with session.get(url, params=params) as response:
                 if response.status == 200:
                     data = await response.json()
                     return data['data']
@@ -346,8 +357,8 @@ class CustomGPTClient:
         url = f"{self.base_url}/projects/{project_id}/conversations/{session_id}"
         
         try:
-            session = await self._get_session()
-            async with session.delete(url, headers=self.headers) as response:
+            session = await self._ensure_session()
+            async with session.delete(url) as response:
                 if response.status == 200:
                     logger.info(f"Deleted conversation {session_id}")
                     return True

@@ -37,26 +37,19 @@ const validate = async (blob: Blob) => {
 };
 
 const sendData = async (blob: Blob) => {
-    // Check if we're in avatar mode (declare at function scope for error handler access)
-    const displayMode = (window as any).getDisplayMode ? (window as any).getDisplayMode() : 'particles';
-    const isAvatarMode = displayMode === 'avatar';
-
     try {
         const totalStart = performance.now();
 
         // Update state: user speaking finished → processing
-        if (isAvatarMode && (window as any).avatarSetProcessing) {
-            console.log('[Speech] 🤔 Avatar entering processing state');
-            (window as any).avatarSetProcessing();
-        } else if ((window as any).particleActions) {
+        if ((window as any).particleActions) {
             (window as any).particleActions.onProcessing();
         }
 
-        // Use UNIFIED /inference endpoint (STT → AI → TTS pipeline)
+        // Use STREAMING /inference-stream endpoint for progressive updates
         const formData = new FormData();
         formData.append('audio', blob, 'audio.wav');
 
-        const response = await fetch('/api/inference', {
+        const response = await fetch('/api/inference-stream', {
             method: 'POST',
             body: formData,
             headers: {
@@ -68,74 +61,17 @@ const sendData = async (blob: Blob) => {
             throw new Error(`Inference failed: ${response.statusText}`);
         }
 
-        // Extract timing and content from response headers
-        const sttTime = parseFloat(response.headers.get('X-STT-Time') || '0');
-        const aiTime = parseFloat(response.headers.get('X-AI-Time') || '0');
-        const transcriptB64 = response.headers.get('X-Transcript') || '';
-        const transcript = transcriptB64 ? atob(transcriptB64) : '';  // Decode base64 for Unicode support
-        const aiResponseB64 = response.headers.get('X-AI-Response') || '';
-        const aiResponse = aiResponseB64 ? atob(aiResponseB64) : '';
+        // Parse Server-Sent Events for progressive updates
+        const reader = response.body!.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let currentEvent = '';
+        let transcript = '';
+        let aiResponse = '';
+        let audioData: string | null = null;
+        let sttTime = 0;
+        let aiTime = 0;
 
-        // Update conversation history (server returns base64 conversation)
-        conversationHistory = response.headers.get('X-Conversation') || conversationHistory;
-
-        console.log(`[TIMING] STT: ${sttTime.toFixed(3)}s | Transcript: ${transcript}`);
-        console.log(`[TIMING] AI: ${aiTime.toFixed(3)}s | Response: ${aiResponse.substring(0, 100)}...`);
-
-        // Show user message in UI
-        if ((window as any).addUserMessage) {
-            (window as any).addUserMessage(transcript);
-        }
-
-        // Update particle state: AI speaking
-        if ((window as any).particleActions) {
-            (window as any).particleActions.onAiSpeaking();
-        }
-
-        // Play audio using HTML5 Audio for progressive playback
-        const playStart = performance.now();
-        await playStreamingAudio(response.body!, aiResponse);
-        const playTime = performance.now() - playStart;
-
-        const totalTime = performance.now() - totalStart;
-        console.log(`[TIMING] TOTAL: ${(totalTime / 1000).toFixed(3)}s (STT: ${sttTime.toFixed(3)}s, AI: ${aiTime.toFixed(3)}s, Play: ${(playTime / 1000).toFixed(3)}s)`);
-
-        // Reset state after audio finishes
-        if (isAvatarMode && (window as any).avatarSetIdle) {
-            console.log('[Speech] 😌 Avatar returning to idle state');
-            (window as any).avatarSetIdle();
-        } else if ((window as any).particleActions) {
-            (window as any).particleActions.reset();
-        }
-
-    } catch (error) {
-        console.error('[ERROR] Speech processing failed:', error);
-
-        // Reset state on error
-        if (isAvatarMode && (window as any).avatarSetIdle) {
-            console.log('[Speech] ⚠️ Avatar returning to idle after error');
-            (window as any).avatarSetIdle();
-        } else if ((window as any).particleActions) {
-            (window as any).particleActions.reset();
-        }
-
-        throw error;
-    }
-};
-
-const playStreamingAudio = async (stream: ReadableStream<Uint8Array>, aiResponse: string) => {
-    // Stop any currently playing audio
-    if (currentAudioElement) {
-        currentAudioElement.pause();
-        currentAudioElement.src = '';
-        currentAudioElement = null;
-    }
-
-    // Collect all chunks (required for MP3 decoding)
-    const chunks: any[] = [];
-    const reader = stream.getReader();
-
-    try {
         while (true) {
             const { done, value } = await reader.read();
 
@@ -143,80 +79,171 @@ const playStreamingAudio = async (stream: ReadableStream<Uint8Array>, aiResponse
                 break;
             }
 
-            chunks.push(value as BlobPart);
+            // Decode chunk and add to buffer
+            buffer += decoder.decode(value, { stream: true });
+
+            // Process complete SSE messages
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+            for (const line of lines) {
+                if (line.startsWith('event:')) {
+                    currentEvent = line.substring(6).trim();
+                    console.log(`[SSE] Event type: ${currentEvent}`);
+                    continue;
+                }
+
+                if (line.startsWith('data:')) {
+                    const data = JSON.parse(line.substring(5).trim());
+
+                    // Handle different event types based on event name
+                    if (currentEvent === 'transcript') {
+                        // First event: STT transcript
+                        transcript = data.text;
+                        sttTime = parseFloat(data.timing || '0');
+
+                        console.log(`[TIMING] ✅ STT Complete: ${sttTime.toFixed(3)}s | Transcript: ${transcript}`);
+
+                        // ✅ IMMEDIATE: Show user message as soon as STT completes
+                        if ((window as any).addUserMessage) {
+                            (window as any).addUserMessage(transcript);
+                        }
+
+                    } else if (currentEvent === 'ai_response') {
+                        // Second event: AI response text
+                        aiResponse = data.text;
+                        aiTime = parseFloat(data.timing || '0');
+
+                        console.log(`[TIMING] ✅ AI Complete: ${aiTime.toFixed(3)}s | Response: ${aiResponse.substring(0, 100)}...`);
+                        console.log(`[SSE] ✅ aiResponse variable set, length: ${aiResponse.length}`);
+
+                        // Note: We DON'T call updateCaptions here to avoid duplicate messages
+                        // The caption will be added when audio is ready (with both text and audioUrl)
+
+                        // Update particle state: AI speaking
+                        if ((window as any).particleActions) {
+                            (window as any).particleActions.onAiSpeaking();
+                        }
+
+                    } else if (currentEvent === 'audio') {
+                        // Third event: TTS audio data
+                        audioData = data.data;
+                        conversationHistory = data.conversation || conversationHistory;
+
+                        console.log('[TIMING] ✅ TTS Complete - audio ready for playback');
+                    } else if (currentEvent === 'error') {
+                        // Error event
+                        throw new Error(data.message);
+                    }
+
+                    // Reset event name after processing
+                    currentEvent = '';
+                }
+            }
         }
-    } finally {
-        reader.releaseLock();
+
+        // Play audio once it's available
+        if (!audioData) {
+            throw new Error('No audio data received');
+        }
+
+        console.log('[Speech] 🔍 Before playAudioWithCaption:', {
+            hasAudioData: !!audioData,
+            hasAiResponse: !!aiResponse,
+            aiResponseLength: aiResponse?.length || 0,
+            aiResponsePreview: aiResponse?.substring(0, 100) + '...' || 'EMPTY'
+        });
+
+        const playStart = performance.now();
+        const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mpeg' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        await playAudioWithCaption(audioUrl, aiResponse);
+
+        const playTime = performance.now() - playStart;
+        const totalTime = performance.now() - totalStart;
+
+        console.log(`[TIMING] TOTAL: ${(totalTime / 1000).toFixed(3)}s`);
+        console.log(`[TIMING] ├─ STT: ${sttTime.toFixed(3)}s → User message shown immediately`);
+        console.log(`[TIMING] ├─ AI: ${aiTime.toFixed(3)}s → AI text shown immediately`);
+        console.log(`[TIMING] └─ Audio playback: ${(playTime / 1000).toFixed(3)}s`);
+
+        // Reset state after audio finishes
+        if ((window as any).particleActions) {
+            (window as any).particleActions.reset();
+        }
+
+    } catch (error) {
+        console.error('[ERROR] Speech processing failed:', error);
+
+        // Reset state on error
+        if ((window as any).particleActions) {
+            (window as any).particleActions.reset();
+        }
+
+        throw error;
+    }
+};
+
+const playAudioWithCaption = async (audioUrl: string, aiResponse: string) => {
+    // Stop any currently playing audio
+    if (currentAudioElement) {
+        currentAudioElement.pause();
+        currentAudioElement.src = '';
+        currentAudioElement = null;
     }
 
-    // Combine chunks into single blob
-    const audioBlob = new Blob(chunks, { type: 'audio/mpeg' });
-    const audioUrl = URL.createObjectURL(audioBlob);
+    console.log('[Speech] 📋 playAudioWithCaption called with:', {
+        audioUrl: audioUrl.substring(0, 60) + '...',
+        aiResponse: aiResponse.substring(0, 60) + '...',
+        hasUpdateCaptions: !!(window as any).updateCaptions
+    });
 
-    // Check if we're in avatar mode
-    const displayMode = (window as any).getDisplayMode ? (window as any).getDisplayMode() : 'particles';
-    const isAvatarMode = displayMode === 'avatar';
-
-    console.log('[Speech] Display mode:', displayMode, '| Avatar mode:', isAvatarMode);
-
-    // Update UI with AI response and audio URL (for avatar mode)
+    // Update UI with AI response and audio URL
     if ((window as any).updateCaptions) {
+        console.log('[Speech] 📤 Calling updateCaptions with audio URL and transcript');
         (window as any).updateCaptions(aiResponse, audioUrl);
+        console.log('[Speech] ✅ updateCaptions called successfully');
+    } else {
+        console.error('[Speech] ❌ updateCaptions function not available on window');
     }
 
-    // In avatar mode, TalkingHead will handle audio playback for lip-sync
-    // In particle mode, play through HTML5 Audio element
-    if (isAvatarMode) {
-        console.log('[Speech] Avatar mode - TalkingHead will handle audio playback');
+    // Play through HTML5 Audio element
+    console.log('[Speech] Playing audio via HTML5 Audio element');
 
-        // Wait for avatar to finish speaking
-        if ((window as any).waitForAvatarSpeak) {
-            await (window as any).waitForAvatarSpeak();
-            console.log('[Speech] Avatar speaking complete');
-        } else {
-            console.warn('[Speech] waitForAvatarSpeak not available, waiting 5s fallback');
-            await new Promise(resolve => setTimeout(resolve, 5000));
+    // Create HTML5 Audio element for playback
+    currentAudioElement = new Audio(audioUrl);
+
+    // Wait for audio to be playable
+    await new Promise<void>((resolve, reject) => {
+        if (!currentAudioElement) {
+            reject(new Error('Audio element not created'));
+            return;
         }
 
-        // Don't revoke immediately - wait for avatar speak complete callback
-        // The blob URL will be cleaned up after TalkingHead has fetched the audio
-    } else {
-        console.log('[Speech] Particle mode - playing audio via HTML5 Audio element');
+        currentAudioElement.oncanplaythrough = () => resolve();
+        currentAudioElement.onerror = () => reject(new Error('Audio playback failed'));
 
-        // Create HTML5 Audio element for playback
-        currentAudioElement = new Audio(audioUrl);
+        // Start loading
+        currentAudioElement.load();
+    });
 
-        // Wait for audio to be playable
-        await new Promise<void>((resolve, reject) => {
-            if (!currentAudioElement) {
-                reject(new Error('Audio element not created'));
-                return;
-            }
+    // Play audio
+    await currentAudioElement.play();
 
-            currentAudioElement.oncanplaythrough = () => resolve();
-            currentAudioElement.onerror = () => reject(new Error('Audio playback failed'));
+    // Wait for playback to complete
+    await new Promise<void>((resolve) => {
+        if (!currentAudioElement) {
+            resolve();
+            return;
+        }
 
-            // Start loading
-            currentAudioElement.load();
-        });
-
-        // Play audio
-        await currentAudioElement.play();
-
-        // Wait for playback to complete
-        await new Promise<void>((resolve) => {
-            if (!currentAudioElement) {
-                resolve();
-                return;
-            }
-
-            currentAudioElement.onended = () => {
-                // Cleanup
-                URL.revokeObjectURL(audioUrl);
-                resolve();
-            };
-        });
-    }
+        currentAudioElement.onended = () => {
+            // Cleanup
+            URL.revokeObjectURL(audioUrl);
+            resolve();
+        };
+    });
 };
 
 // Global stop function for UI stop button
@@ -236,14 +263,7 @@ const playStreamingAudio = async (stream: ReadableStream<Uint8Array>, aiResponse
 export const onSpeechStart = () => {
     console.log('[VAD] Speech started');
 
-    // Check if we're in avatar mode
-    const displayMode = (window as any).getDisplayMode ? (window as any).getDisplayMode() : 'particles';
-    const isAvatarMode = displayMode === 'avatar';
-
-    if (isAvatarMode && (window as any).avatarSetListening) {
-        console.log('[VAD] 👂 Avatar entering listening state (user speaking)');
-        (window as any).avatarSetListening();
-    } else if ((window as any).particleActions) {
+    if ((window as any).particleActions) {
         (window as any).particleActions.onUserSpeaking();
     }
 };
@@ -253,14 +273,7 @@ export const onSpeechEnd = processSpeech;
 export const onMisfire = () => {
     console.log('[VAD] Misfire detected');
 
-    // Check if we're in avatar mode
-    const displayMode = (window as any).getDisplayMode ? (window as any).getDisplayMode() : 'particles';
-    const isAvatarMode = displayMode === 'avatar';
-
-    if (isAvatarMode && (window as any).avatarSetIdle) {
-        console.log('[VAD] ⚠️ Avatar returning to idle after misfire');
-        (window as any).avatarSetIdle();
-    } else if ((window as any).particleActions) {
+    if ((window as any).particleActions) {
         (window as any).particleActions.reset();
     }
 };

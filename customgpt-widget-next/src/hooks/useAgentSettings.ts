@@ -29,13 +29,8 @@ export const useAgentSettings = () => {
       } catch (err) {
         console.error('Error fetching agent settings:', err);
         setError(err instanceof Error ? err.message : 'Unknown error');
-        // Set default values on error
-        setSettings({
-          chatbot_avatar: null,
-          chatbot_title: 'AI Assistant',
-          user_name: 'You',
-          example_questions: []
-        });
+        // No fallback - leave settings as null so UI can handle gracefully
+        setSettings(null);
       } finally {
         setLoading(false);
       }

@@ -3,10 +3,9 @@
 import {useEffect, useRef} from "react";
 import {useMicVAD} from "@ricky0123/vad-react";
 import {onMisfire, onSpeechEnd, onSpeechStart} from "@/lib/speech-manager";
+import { AI_CONFIG } from '@/config/constants';
 
 export const useMicVADWrapper = (onLoadingChange: (loading: boolean) => void) => {
-    console.log("[VAD] Initializing useMicVADWrapper");
-
     const micVAD = useMicVAD({
         startOnLoad: true,
         onSpeechStart: () => {
@@ -21,14 +20,14 @@ export const useMicVADWrapper = (onLoadingChange: (loading: boolean) => void) =>
             console.log("[VAD] ⚠️ VAD misfire detected");
             onMisfire();
         },
-        positiveSpeechThreshold: 0.90,
-        negativeSpeechThreshold: 0.75
-    });
-
-    console.log("[VAD] micVAD state:", {
-        loading: micVAD.loading,
-        listening: micVAD.listening,
-        userSpeaking: micVAD.userSpeaking
+        positiveSpeechThreshold: AI_CONFIG.vadPositiveSpeechThreshold,
+        negativeSpeechThreshold: AI_CONFIG.vadNegativeSpeechThreshold,
+        // Configure ONNX runtime to load WASM files from public directory
+        ortConfig: (ort) => {
+            // Set WASM paths to public directory root
+            ort.env.wasm.wasmPaths = '/';
+            console.log("[VAD] ONNX Runtime configured to load from:", ort.env.wasm.wasmPaths);
+        }
     });
 
     const loadingRef = useRef(micVAD.loading);

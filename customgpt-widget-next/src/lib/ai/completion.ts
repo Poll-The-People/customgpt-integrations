@@ -6,10 +6,11 @@
 import OpenAI from 'openai';
 import { customGPTClient } from '@/lib/ai/customgpt-client';
 import { truncateForVoice } from '@/lib/ai/truncate';
+import { CUSTOMGPT_CONFIG, OPENAI_CONFIG, AI_CONFIG } from '@/config/constants';
 
-const USE_CUSTOMGPT = process.env.USE_CUSTOMGPT === 'true';
-const AI_COMPLETION_MODEL = process.env.AI_COMPLETION_MODEL || 'gpt-4o-mini';
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const USE_CUSTOMGPT = CUSTOMGPT_CONFIG.useCustomGPT;
+const AI_COMPLETION_MODEL = OPENAI_CONFIG.completionModel;
+const OPENAI_API_KEY = OPENAI_CONFIG.apiKey;
 
 interface Message {
   role: 'system' | 'user' | 'assistant';
@@ -53,7 +54,7 @@ export async function getCompletion(
       const completion = await client.chat.completions.create({
         model: AI_COMPLETION_MODEL,
         messages: messages as any,
-        max_tokens: forVoice ? 150 : undefined,
+        max_tokens: forVoice ? AI_CONFIG.voiceMaxTokens : undefined,
       });
 
       response = completion.choices[0]?.message?.content || '';

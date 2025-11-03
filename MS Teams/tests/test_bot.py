@@ -12,20 +12,24 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bot import CustomGPTBot
+from bot import CustomGPTTeamsBot
 from config import Config
 from rate_limiter import RateLimiter
 from conversation_manager import ConversationManager
+from botbuilder.core import MemoryStorage, ConversationState, UserState
 
 
 class TestCustomGPTBot:
     """Test cases for CustomGPT Teams Bot"""
-    
+
     @pytest.fixture
     def bot(self):
         """Create bot instance"""
         with patch('customgpt_client.CustomGPTClient'):
-            return CustomGPTBot()
+            storage = MemoryStorage()
+            conversation_state = ConversationState(storage)
+            user_state = UserState(storage)
+            return CustomGPTTeamsBot(conversation_state, user_state)
     
     @pytest.fixture
     def mock_turn_context(self):

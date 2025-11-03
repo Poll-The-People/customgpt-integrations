@@ -5,10 +5,12 @@
  * Supports conversation creation, message sending, and streaming responses.
  */
 
-const BASE_URL = 'https://app.customgpt.ai/api/v1';
-const PROJECT_ID = process.env.CUSTOMGPT_PROJECT_ID;
-const API_KEY = process.env.CUSTOMGPT_API_KEY;
-const LANGUAGE = process.env.LANGUAGE || 'en';
+import { CUSTOMGPT_CONFIG, LANGUAGE_CONFIG } from '@/config/constants';
+
+const BASE_URL = CUSTOMGPT_CONFIG.apiBaseUrl;
+const PROJECT_ID = CUSTOMGPT_CONFIG.projectId;
+const API_KEY = CUSTOMGPT_CONFIG.apiKey;
+const LANGUAGE = LANGUAGE_CONFIG.default;
 
 if (!PROJECT_ID) {
   throw new Error('CUSTOMGPT_PROJECT_ID environment variable is required');
@@ -51,6 +53,78 @@ export interface StreamData {
   status: 'progress' | 'finish' | 'error';
   message?: string;
   error?: string;
+}
+
+export interface AgentSettings {
+  chatbot_avatar: string | null;
+  chatbot_background_type?: string;
+  chatbot_background?: string;
+  chatbot_background_color?: string;
+  default_prompt?: string;
+  example_questions: string[];
+  response_source?: string;
+  chatbot_msg_lang?: string;
+  chatbot_color?: string;
+  chatbot_toolbar_color?: string;
+  persona_instructions?: string;
+  citations_answer_source_label_msg?: string;
+  citations_sources_label_msg?: string;
+  hang_in_there_msg?: string;
+  chatbot_siesta_msg?: string;
+  is_loading_indicator_enabled?: boolean;
+  enable_citations?: number;
+  enable_feedbacks?: boolean;
+  citations_view_type?: string;
+  image_citation_display?: string;
+  no_answer_message?: string;
+  ending_message?: string;
+  try_asking_questions_msg?: string;
+  view_more_msg?: string;
+  view_less_msg?: string;
+  remove_branding?: boolean;
+  private_deployment?: boolean;
+  enable_recaptcha_for_public_chatbots?: boolean;
+  chatbot_model?: string;
+  is_selling_enabled?: boolean;
+  license_slug?: boolean;
+  selling_url?: string;
+  can_share_conversation?: boolean;
+  can_export_conversation?: boolean;
+  hide_sources_from_responses?: boolean;
+  input_field_addendum?: string;
+  user_avatar?: string;
+  spotlight_avatar_enabled?: boolean;
+  spotlight_avatar?: string;
+  spotlight_avatar_shape?: string;
+  spotlight_avatar_type?: string;
+  user_avatar_orientation?: string;
+  chatbot_title: string;
+  chatbot_title_color?: string;
+  enable_inline_citations_api?: boolean;
+  conversation_time_window?: boolean;
+  conversation_retention_period?: string;
+  conversation_retention_days?: number;
+  enable_agent_knowledge_base_awareness?: boolean;
+  markdown_enabled?: boolean;
+}
+
+export interface AgentDetails {
+  id: number;
+  project_name: string;
+  sitemap_path?: string;
+  is_chat_active: boolean;
+  user_id: number;
+  team_id: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string | null;
+  type: string;
+  is_shared: boolean;
+  shareable_slug?: string;
+  shareable_link?: string;
+  embed_code?: string;
+  live_chat_code?: string;
+  are_licenses_allowed?: boolean;
 }
 
 /**
@@ -287,6 +361,8 @@ export class CustomGPTClient {
 
     const payload = { reaction };
 
+    console.log('[CustomGPT] Updating message reaction:', { url, payload });
+
     const response = await fetch(url, {
       method: 'PUT',
       headers: this.getHeaders(),
@@ -294,7 +370,16 @@ export class CustomGPTClient {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to update reaction: ${response.status} ${response.statusText}`);
+      // Try to get error details from response body
+      let errorDetails = `${response.status} ${response.statusText}`;
+      try {
+        const errorBody = await response.json();
+        errorDetails = errorBody.data?.message || errorBody.message || errorDetails;
+        console.error('[CustomGPT] Feedback API error response:', errorBody);
+      } catch {
+        // Couldn't parse error body
+      }
+      throw new Error(`Failed to update reaction: ${errorDetails}`);
     }
 
     const data: ApiResponse<MessageData> = await response.json();
@@ -303,6 +388,7 @@ export class CustomGPTClient {
       throw new Error(`Failed to update reaction: ${data.message || 'Unknown error'}`);
     }
 
+    console.log('[CustomGPT] Reaction updated successfully');
     return data.data;
   }
 
@@ -328,6 +414,58 @@ export class CustomGPTClient {
 
     if (data.status !== 'success') {
       throw new Error(`Failed to get citation: ${data.message || 'Unknown error'}`);
+    }
+
+    return data.data;
+  }
+
+  /**
+   * Get agent settings
+   *
+   * @returns Agent settings including title, avatar, example questions, etc.
+   */
+  async getAgentSettings(): Promise<AgentSettings> {
+    const url = `${this.baseUrl}/projects/${this.projectId}/settings`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get agent settings: ${response.status} ${response.statusText}`);
+    }
+
+    const data: ApiResponse<AgentSettings> = await response.json();
+
+    if (data.status !== 'success') {
+      throw new Error(`Failed to get agent settings: ${data.message || 'Unknown error'}`);
+    }
+
+    return data.data;
+  }
+
+  /**
+   * Get agent details
+   *
+   * @returns Agent details including name, type, status, etc.
+   */
+  async getAgentDetails(): Promise<AgentDetails> {
+    const url = `${this.baseUrl}/projects/${this.projectId}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get agent details: ${response.status} ${response.statusText}`);
+    }
+
+    const data: ApiResponse<AgentDetails> = await response.json();
+
+    if (data.status !== 'success') {
+      throw new Error(`Failed to get agent details: ${data.message || 'Unknown error'}`);
     }
 
     return data.data;

@@ -45,3 +45,10 @@ CLAUDE.md
 DATA_CONTRACT_FIXES.md
 RUNTIME_FIXES.md
 .claude/
+
+# VAD (Voice Activity Detection) model files
+# These are copied from node_modules during postinstall
+/public/*.onnx
+/public/*.wasm
+/public/*.mjs
+/public/vad.worklet.bundle.min.js

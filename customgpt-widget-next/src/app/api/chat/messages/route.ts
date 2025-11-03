@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
 
       const duration = ((performance.now() - startTime) / 1000).toFixed(3);
       console.log(`[TIMING] Chat Message: ${duration}s`);
+      console.log('[API] Response citations:', response.citations);
 
       return NextResponse.json({
         success: true,

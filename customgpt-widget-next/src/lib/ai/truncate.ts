@@ -49,11 +49,15 @@ export function truncateForVoice(
     const words = sentence.split(/\s+/);
 
     if (totalWords + words.length > maxWords) {
-      // Add partial sentence if we haven't added anything yet
-      if (resultSentences.length === 0) {
-        const remainingWords = maxWords - totalWords;
-        resultSentences.push(words.slice(0, remainingWords).join(' '));
+      // Only break if we already have at least one complete sentence
+      // This prevents mid-sentence cuts like "Feature 1."
+      if (resultSentences.length > 0) {
+        break;
       }
+      // If this is the first sentence and it's too long, take the full sentence anyway
+      // Better to be slightly over limit than cut mid-sentence
+      resultSentences.push(sentence);
+      totalWords += words.length;
       break;
     }
 

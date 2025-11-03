@@ -5,7 +5,7 @@ Microsoft Teams Bot Implementation for CustomGPT
 import asyncio
 import logging
 import re
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime, timezone
 
 from botbuilder.core import (
@@ -37,37 +37,108 @@ from customgpt_client import CustomGPTClient
 from rate_limiter import RateLimiter
 from conversation_manager import ConversationManager
 from adaptive_cards import AdaptiveCardBuilder
+from input_validator import InputValidator
+
+# Conditional Confluence import
+confluence_client_module = None
+if Config.CONFLUENCE_ENABLED:
+    try:
+        from confluence_client import ConfluenceClient
+        confluence_client_module = ConfluenceClient
+    except ImportError:
+        logger.warning("Confluence enabled but confluence_client module not found")
 
 logger = logging.getLogger(__name__)
 
-class TeamsBot(ActivityHandler):
-    """Microsoft Teams bot implementation"""
-    
+class CustomGPTTeamsBot(ActivityHandler):
+    """Microsoft Teams bot implementation for CustomGPT integration"""
+
     def __init__(
         self,
         conversation_state: ConversationState,
         user_state: UserState
     ):
         super().__init__()
-        
+
         # Initialize components
         self.conversation_state = conversation_state
         self.user_state = user_state
         self.customgpt_client = CustomGPTClient(Config.CUSTOMGPT_API_KEY)
         self.rate_limiter = RateLimiter(self.customgpt_client)
         self.conversation_manager = ConversationManager()
-        
+        self._initialized = False
+
+        # Initialize Confluence client if enabled
+        self.confluence_client = None
+        if Config.CONFLUENCE_ENABLED and confluence_client_module:
+            self.confluence_client = confluence_client_module(
+                base_url=Config.CONFLUENCE_BASE_URL,
+                username=Config.CONFLUENCE_USERNAME,
+                api_token=Config.CONFLUENCE_API_TOKEN,
+                access_token=Config.CONFLUENCE_ACCESS_TOKEN,
+                is_cloud=Config.CONFLUENCE_IS_CLOUD
+            )
+
         # Cache for starter questions
         self._starter_questions_cache = None
         self._starter_questions_timestamp = None
         self._starter_questions_ttl = 3600  # 1 hour cache
-        
+
         # Command patterns
         self.command_patterns = {
             '/help': self._handle_help_command,
             '/clear': self._handle_clear_command,
             '/status': self._handle_status_command
         }
+
+        # Add Confluence commands if enabled
+        if Config.CONFLUENCE_ENABLED:
+            self.command_patterns['/confluence'] = self._handle_confluence_command
+            self.command_patterns['/search'] = self._handle_confluence_search
+
+    async def initialize(self):
+        """
+        Async initialization - call this before using the bot
+        Properly initializes async components with error handling
+        """
+        if self._initialized:
+            return
+
+        try:
+            # Initialize HTTP session
+            await self.customgpt_client._ensure_session()
+            logger.info("CustomGPT client initialized")
+
+            # Initialize Redis connections if available
+            await self.rate_limiter.initialize()
+            logger.info("Rate limiter initialized")
+
+            await self.conversation_manager.initialize()
+            logger.info("Conversation manager initialized")
+
+            # Initialize Confluence client if enabled
+            if self.confluence_client:
+                await self.confluence_client._ensure_session()
+                logger.info("Confluence client initialized")
+
+            self._initialized = True
+            logger.info("Bot initialization complete")
+        except Exception as e:
+            logger.error(f"Bot initialization failed: {e}")
+            raise
+
+    async def cleanup(self):
+        """Clean up bot resources"""
+        logger.info("Starting bot cleanup...")
+        try:
+            await self.customgpt_client.close()
+            await self.rate_limiter.close()
+            await self.conversation_manager.close()
+            if self.confluence_client:
+                await self.confluence_client.close()
+            logger.info("Bot cleanup complete")
+        except Exception as e:
+            logger.error(f"Error during cleanup: {e}")
     
     async def on_message_activity(self, turn_context: TurnContext) -> None:
         """Handle incoming messages"""
@@ -75,21 +146,48 @@ class TeamsBot(ActivityHandler):
             # Extract message details
             activity = turn_context.activity
             text = activity.text.strip() if activity.text else ""
-            
+
             # Handle adaptive card actions
             if activity.value:
                 await self._handle_card_action(turn_context, activity.value)
                 return
-            
+
             # Skip empty messages
             if not text:
                 return
-            
+
+            # Validate and sanitize input
+            if not InputValidator.validate_message_length(text):
+                await turn_context.send_activity(
+                    f"Your message is too long. Maximum length is {InputValidator.MAX_MESSAGE_LENGTH} characters."
+                )
+                return
+
+            # Check for potential injection attacks
+            if InputValidator.detect_potential_injection(text):
+                logger.warning(f"Potential injection attempt detected from user")
+                await turn_context.send_activity(
+                    "Your message contains potentially unsafe content. Please rephrase your question."
+                )
+                return
+
+            # Sanitize message text
+            text = InputValidator.sanitize_message(text)
+
             # Get conversation details
             user_id = activity.from_property.id
             user_name = activity.from_property.name
             channel_id = activity.channel_data.get("channel", {}).get("id", activity.conversation.id)
             tenant_id = activity.channel_data.get("tenant", {}).get("id", "default")
+
+            # Validate IDs
+            if not InputValidator.validate_user_id(user_id):
+                logger.error(f"Invalid user ID format: {user_id}")
+                return
+
+            if not InputValidator.validate_channel_id(channel_id):
+                logger.error(f"Invalid channel ID format: {channel_id}")
+                return
             thread_id = activity.conversation.conversation_type if activity.conversation.is_group else None
             
             # Check if bot was mentioned in a channel
@@ -396,7 +494,7 @@ class TeamsBot(ActivityHandler):
         typing_activity.type = ActivityTypes.typing
         await turn_context.send_activity(typing_activity)
     
-    def _remove_mentions(self, activity: Activity) -> tuple[str, bool]:
+    def _remove_mentions(self, activity: Activity) -> Tuple[str, bool]:
         """Remove bot mentions from text and check if bot was mentioned"""
         text = activity.text or ""
         bot_mentioned = False
@@ -443,7 +541,7 @@ class TeamsBot(ActivityHandler):
     async def on_turn_error(self, context: TurnContext, error: Exception) -> None:
         """Handle errors"""
         logger.error(f"Turn error: {str(error)}")
-        
+
         try:
             # Send error message
             await context.send_activity(
@@ -451,3 +549,186 @@ class TeamsBot(ActivityHandler):
             )
         except Exception:
             pass
+
+    async def _handle_confluence_command(self, turn_context: TurnContext) -> None:
+        """Handle /confluence command - show Confluence integration info"""
+        if not self.confluence_client:
+            await turn_context.send_activity("Confluence integration is not enabled.")
+            return
+
+        try:
+            # Get spaces user has access to
+            spaces = await self.confluence_client.get_spaces(limit=5)
+
+            spaces_list = "\n".join([f"• **{s.get('name')}** ({s.get('key')})" for s in spaces[:5]])
+
+            help_text = f"""**Confluence Integration Active**
+
+**Available Spaces:**
+{spaces_list}
+
+**Commands:**
+• `/search <query>` - Search Confluence content
+• `/confluence` - Show this help
+
+**Example:**
+`/search product roadmap`
+"""
+            await turn_context.send_activity(MessageFactory.text(help_text))
+        except Exception as e:
+            logger.error(f"Error handling confluence command: {e}")
+            await turn_context.send_activity("Error accessing Confluence. Check configuration.")
+
+    async def _handle_confluence_search(self, turn_context: TurnContext) -> None:
+        """Handle /search command - search Confluence"""
+        if not self.confluence_client:
+            await turn_context.send_activity("Confluence integration is not enabled.")
+            return
+
+        # Extract search query
+        text = turn_context.activity.text or ""
+        query = text.replace('/search', '').strip()
+
+        if not query:
+            await turn_context.send_activity("Please provide a search query. Example: `/search product roadmap`")
+            return
+
+        await self._send_typing_indicator(turn_context)
+
+        try:
+            # Search Confluence
+            results = await self.confluence_client.search_by_text(
+                query=query,
+                space_key=Config.CONFLUENCE_DEFAULT_SPACE,
+                limit=Config.CONFLUENCE_SEARCH_LIMIT
+            )
+
+            if not results:
+                await turn_context.send_activity(f"No results found for '{query}'")
+                return
+
+            # Format results
+            formatted_results = []
+            for content in results:
+                formatted = self.confluence_client.format_content_for_teams(content)
+                formatted_results.append(formatted)
+
+            # Create response card with results
+            if Config.ENABLE_ADAPTIVE_CARDS:
+                card = self._create_confluence_results_card(query, formatted_results)
+                await turn_context.send_activity(MessageFactory.attachment(card))
+            else:
+                # Plain text response
+                response_text = f"**Search Results for '{query}':**\n\n"
+                for result in formatted_results:
+                    response_text += f"**{result['title']}**\n"
+                    response_text += f"{result['excerpt']}\n"
+                    response_text += f"📍 {result['space_name']} | 🔗 {result['url']}\n\n"
+
+                await turn_context.send_activity(MessageFactory.text(response_text))
+
+        except Exception as e:
+            logger.error(f"Error searching Confluence: {e}")
+            error_card = AdaptiveCardBuilder.create_error_card(
+                error_message=f"Error searching Confluence for '{query}'",
+                details=str(e) if Config.LOG_LEVEL == "DEBUG" else None
+            )
+            await turn_context.send_activity(MessageFactory.attachment(error_card))
+
+    def _create_confluence_results_card(self, query: str, results: List[Dict]) -> Attachment:
+        """Create adaptive card for Confluence search results"""
+        from botbuilder.schema import Attachment
+
+        card_body = [
+            {
+                "type": "TextBlock",
+                "text": f"Confluence Search Results",
+                "weight": "Bolder",
+                "size": "Large"
+            },
+            {
+                "type": "TextBlock",
+                "text": f"Query: {query}",
+                "isSubtle": True,
+                "spacing": "None"
+            },
+            {
+                "type": "TextBlock",
+                "text": f"Found {len(results)} result(s)",
+                "isSubtle": True,
+                "spacing": "Small"
+            }
+        ]
+
+        # Add results
+        for idx, result in enumerate(results):
+            if idx > 0:
+                card_body.append({"type": "Container", "separator": True, "items": []})
+
+            card_body.append({
+                "type": "TextBlock",
+                "text": result['title'],
+                "weight": "Bolder",
+                "size": "Medium",
+                "wrap": True
+            })
+
+            card_body.append({
+                "type": "TextBlock",
+                "text": result['excerpt'],
+                "wrap": True,
+                "spacing": "Small"
+            })
+
+            card_body.append({
+                "type": "ColumnSet",
+                "spacing": "Small",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "width": "auto",
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": f"📍 {result['space_name']}",
+                                "size": "Small",
+                                "isSubtle": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Column",
+                        "width": "stretch",
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": f"✏️ {result['last_updated_by']}",
+                                "size": "Small",
+                                "isSubtle": True,
+                                "horizontalAlignment": "Right"
+                            }
+                        ]
+                    }
+                ]
+            })
+
+            card_body.append({
+                "type": "ActionSet",
+                "spacing": "Small",
+                "actions": [
+                    {
+                        "type": "Action.OpenUrl",
+                        "title": "Open in Confluence",
+                        "url": result['url']
+                    }
+                ]
+            })
+
+        card = {
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+            "type": "AdaptiveCard",
+            "version": "1.5",
+            "body": card_body
+        }
+
+        return CardFactory.adaptive_card(card)

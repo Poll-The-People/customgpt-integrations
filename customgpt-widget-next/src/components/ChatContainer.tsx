@@ -52,9 +52,12 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
   // Fetch agent settings dynamically
   const { settings: agentSettings, loading: settingsLoading } = useAgentSettings();
 
-  const assistantName = agentSettings?.chatbot_title || 'AI Assistant';
+  const assistantName = agentSettings?.chatbot_title || '';
   const userName = agentSettings?.user_name || 'You';
-  const avatarUrl = agentSettings?.chatbot_avatar;
+  // Proxy external avatar images to bypass COEP restrictions
+  const avatarUrl = agentSettings?.chatbot_avatar
+    ? `/api/proxy/image?url=${encodeURIComponent(agentSettings.chatbot_avatar)}`
+    : undefined;
   const exampleQuestions = agentSettings?.example_questions || [];
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -119,8 +122,11 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
   // Fetch citation details in parallel
   const fetchCitationDetails = async (citationIds: number[]): Promise<Citation[]> => {
     if (!citationIds || citationIds.length === 0) {
+      console.log('[Citations] No citation IDs provided');
       return [];
     }
+
+    console.log('[Citations] Fetching details for IDs:', citationIds);
 
     try {
       // Fetch all citations in parallel
@@ -128,25 +134,27 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
         fetch(`/api/chat/citations/${id}`)
           .then(res => {
             if (!res.ok) {
-              console.error(`Failed to fetch citation ${id}: ${res.status}`);
+              console.error(`[Citations] Failed to fetch citation ${id}: ${res.status}`);
               return null;
             }
             return res.json();
           })
           .catch(err => {
-            console.error(`Error fetching citation ${id}:`, err);
+            console.error(`[Citations] Error fetching citation ${id}:`, err);
             return null;
           })
       );
 
       const results = await Promise.all(citationPromises);
+      console.log('[Citations] Fetch results:', results);
 
       // Filter out failed requests and return valid citations
       const validCitations = results.filter((c): c is Citation => c !== null);
+      console.log('[Citations] Valid citations count:', validCitations.length);
 
       return validCitations;
     } catch (error) {
-      console.error('Failed to fetch citations:', error);
+      console.error('[Citations] Failed to fetch citations:', error);
       return [];
     }
   };
@@ -221,8 +229,11 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
       }
 
       // Fetch citation details after text animation completes
-      if (data.citations && data.citations.length > 0) {
-        const citationDetails = await fetchCitationDetails(data.citations);
+      console.log('[Citations] Message data citations:', messageData.citations);
+      if (messageData.citations && messageData.citations.length > 0) {
+        console.log('[Citations] Starting fetch for message:', assistantMessageId);
+        const citationDetails = await fetchCitationDetails(messageData.citations);
+        console.log('[Citations] Updating message with details:', citationDetails.length);
         setMessages(prev =>
           prev.map(msg =>
             msg.id === assistantMessageId
@@ -230,6 +241,8 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
               : msg
           )
         );
+      } else {
+        console.log('[Citations] No citations to fetch');
       }
     } catch (error) {
       console.error('Chat error:', error);
@@ -388,7 +401,7 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          session_id: sessionId,
+          sessionId: sessionId,  // Use camelCase to match API route expectation
           reaction: newReaction
         })
       });
@@ -546,8 +559,11 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
         }
 
         // Fetch citation details after text animation completes
-        if (data.citations && data.citations.length > 0) {
-          const citationDetails = await fetchCitationDetails(data.citations);
+        console.log('[Citations] Message data citations:', messageData.citations);
+        if (messageData.citations && messageData.citations.length > 0) {
+          console.log('[Citations] Starting fetch for message:', assistantMessageId);
+          const citationDetails = await fetchCitationDetails(messageData.citations);
+          console.log('[Citations] Updating message with details:', citationDetails.length);
           setMessages(prev =>
             prev.map(msg =>
               msg.id === assistantMessageId
@@ -555,6 +571,8 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
                 : msg
             )
           );
+        } else {
+          console.log('[Citations] No citations to fetch');
         }
       } catch (error) {
         console.error('Chat error:', error);
@@ -939,7 +957,7 @@ const ChatContainer = ({ onVoiceMode, theme, capabilities }: ChatContainerProps)
             </div>
             <div className="message-wrapper">
               <div className="message-header">
-                <span className="message-sender">AI Assistant</span>
+                <span className="message-sender">{assistantName}</span>
               </div>
               <div className="message-content">
                 <div className="typing">

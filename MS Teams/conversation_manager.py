@@ -63,10 +63,14 @@ class ConversationManager:
         self.local_storage: Dict[str, ConversationContext] = {}
         self.redis_client: Optional[redis.Redis] = None
         self.cleanup_task: Optional[asyncio.Task] = None
-        
+
+    async def initialize(self):
+        """Initialize conversation manager components"""
         if REDIS_AVAILABLE and Config.REDIS_URL:
-            asyncio.create_task(self._init_redis())
-        
+            await self._init_redis()
+        else:
+            logger.info("Redis not available, using local storage for conversation management")
+
         # Start cleanup task
         self.cleanup_task = asyncio.create_task(self._cleanup_expired_conversations())
     

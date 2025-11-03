@@ -110,6 +110,71 @@ export async function transcribeFromBuffer(
 }
 
 /**
+ * Transcribe audio with word-level timestamps (verbose format)
+ *
+ * NOTE: word-level timestamps require the standard 'whisper-1' model,
+ * not 'gpt-4o-mini-transcribe' which only supports 'json' or 'text' formats
+ *
+ * @param buffer - Audio data buffer
+ * @param mimeType - MIME type of the audio
+ * @param responseFormat - 'verbose_json' for word timestamps
+ * @param timestampGranularities - ['word'] for word-level timestamps
+ * @returns Full Whisper response with word timestamps
+ */
+export async function transcribeWithTimestamps(
+  buffer: Buffer,
+  mimeType: string = 'audio/webm',
+  responseFormat: 'verbose_json' | 'json' = 'verbose_json',
+  timestampGranularities: ('word' | 'segment')[] = ['word']
+): Promise<any> {
+  const startTime = performance.now();
+
+  try {
+    // Determine filename extension from MIME type
+    const extension = getExtensionFromMimeType(mimeType);
+    const filename = `audio.${extension}`;
+
+    // IMPORTANT: Use 'whisper-1' model for word timestamps
+    // gpt-4o-mini-transcribe does NOT support verbose_json format
+    const timestampModel = 'whisper-1';
+
+    console.log('[STT] Processing audio with timestamps:', {
+      size: buffer.length,
+      type: mimeType,
+      filename,
+      model: timestampModel,
+      responseFormat,
+      timestampGranularities
+    });
+
+    // Convert Buffer to Blob and then to File
+    const audioBlob = new Blob([buffer as any], { type: mimeType });
+    const audioFile = new File([audioBlob], filename, { type: mimeType });
+
+    // Call Whisper API with verbose_json format to get word timestamps
+    const response = await client.audio.transcriptions.create({
+      model: timestampModel, // Use whisper-1, not gpt-4o-mini-transcribe
+      file: audioFile,
+      language: LANGUAGE,
+      response_format: responseFormat,
+      timestamp_granularities: timestampGranularities
+    });
+
+    const duration = ((performance.now() - startTime) / 1000).toFixed(3);
+    console.log(`[TIMING] STT with timestamps (${timestampModel}): ${duration}s`);
+    console.log('[STT] Transcription with timestamps:', {
+      text: (response as any).text?.substring(0, 60) + '...',
+      wordCount: (response as any).words?.length || 0
+    });
+
+    return response;
+  } catch (error) {
+    console.error('[STT] Transcription with timestamps failed:', error);
+    throw error;
+  }
+}
+
+/**
  * Validate audio duration (minimum 0.4s to avoid empty recordings)
  *
  * @param audioBlob - Audio blob to validate

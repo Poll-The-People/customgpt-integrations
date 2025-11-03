@@ -5,7 +5,7 @@ Rate Limiter for CustomGPT Microsoft Teams Bot
 import time
 import asyncio
 import logging
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, Any
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from enum import Enum
@@ -33,14 +33,19 @@ class RateLimiter:
     
     def __init__(self, customgpt_client=None):
         self.local_storage: Dict[str, list] = defaultdict(list)
+        self._local_lock = asyncio.Lock()  # Lock for thread-safe local operations
         self.redis_client: Optional[redis.Redis] = None
         self.customgpt_client = customgpt_client
         self.api_limits_cache = {}
         self.api_limits_timestamp = None
         self.api_limits_ttl = 300  # 5 minutes cache
-        
+
+    async def initialize(self):
+        """Initialize rate limiter components"""
         if REDIS_AVAILABLE and Config.REDIS_URL:
-            asyncio.create_task(self._init_redis())
+            await self._init_redis()
+        else:
+            logger.info("Redis not available, using local storage for rate limiting")
     
     async def _init_redis(self):
         """Initialize Redis connection"""
@@ -161,7 +166,7 @@ class RateLimiter:
         if self.redis_client:
             return await self._check_limit_redis(key, current_time, limit, window)
         else:
-            return self._check_limit_local(key, current_time, limit, window)
+            return await self._check_limit_local(key, current_time, limit, window)
     
     async def _check_limit_redis(self, key: str, current_time: float, limit: int, window: int) -> bool:
         """Check rate limit using Redis with sliding window"""
@@ -189,24 +194,25 @@ class RateLimiter:
         except Exception as e:
             logger.error(f"Redis error in rate limiting: {str(e)}")
             # Fallback to local storage
-            return self._check_limit_local(key, current_time, limit, window)
+            return await self._check_limit_local(key, current_time, limit, window)
     
-    def _check_limit_local(self, key: str, current_time: float, limit: int, window: int) -> bool:
-        """Check rate limit using local storage"""
-        # Clean old entries
-        min_time = current_time - window
-        self.local_storage[key] = [
-            timestamp for timestamp in self.local_storage[key]
-            if timestamp > min_time
-        ]
-        
-        # Check limit
-        if len(self.local_storage[key]) >= limit:
-            return False
-        
-        # Add current request
-        self.local_storage[key].append(current_time)
-        return True
+    async def _check_limit_local(self, key: str, current_time: float, limit: int, window: int) -> bool:
+        """Check rate limit using local storage (thread-safe)"""
+        async with self._local_lock:
+            # Clean old entries
+            min_time = current_time - window
+            self.local_storage[key] = [
+                timestamp for timestamp in self.local_storage[key]
+                if timestamp > min_time
+            ]
+
+            # Check limit
+            if len(self.local_storage[key]) >= limit:
+                return False
+
+            # Add current request
+            self.local_storage[key].append(current_time)
+            return True
     
     async def _get_reset_time(self, key: str, window: int) -> int:
         """Get seconds until rate limit resets"""

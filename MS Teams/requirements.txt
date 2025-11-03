@@ -1,11 +1,11 @@
 # Microsoft Bot Framework
-botbuilder-core==4.15.0
-botbuilder-schema==4.15.0
-botbuilder-integration-aiohttp==4.15.0
+botbuilder-core==4.17.0
+botbuilder-schema==4.17.0
+botbuilder-integration-aiohttp==4.17.0
 
 # Web Framework
 flask==3.0.0
-aiohttp==3.9.1
+aiohttp>=3.10,<4.0  # Required by botbuilder-integration-aiohttp 4.17.0
 
 # Async Support
 asyncio==3.4.3
@@ -15,8 +15,7 @@ aiofiles==23.2.1
 httpx==0.25.2
 
 # Redis (optional, for distributed rate limiting)
-redis==5.0.1
-aioredis==2.0.1
+redis==5.0.8  # Includes async support, aioredis is deprecated and merged
 
 # JSON and Data Handling
 jsonschema==4.20.0

@@ -4,6 +4,10 @@ Configuration for CustomGPT Microsoft Teams Bot
 
 import os
 from typing import Optional, List
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class Config:
     """Bot configuration"""
@@ -24,6 +28,16 @@ class Config:
     CUSTOMGPT_API_KEY: str = os.environ.get('CUSTOMGPT_API_KEY', '')
     CUSTOMGPT_PROJECT_ID: str = os.environ.get('CUSTOMGPT_PROJECT_ID', '')
     CUSTOMGPT_API_BASE_URL: str = os.environ.get('CUSTOMGPT_API_BASE_URL', 'https://app.customgpt.ai/api/v1')
+
+    # Confluence Configuration (Optional)
+    CONFLUENCE_ENABLED: bool = os.environ.get('CONFLUENCE_ENABLED', 'false').lower() == 'true'
+    CONFLUENCE_BASE_URL: Optional[str] = os.environ.get('CONFLUENCE_BASE_URL')  # e.g., https://your-domain.atlassian.net
+    CONFLUENCE_USERNAME: Optional[str] = os.environ.get('CONFLUENCE_USERNAME')  # Email for Cloud
+    CONFLUENCE_API_TOKEN: Optional[str] = os.environ.get('CONFLUENCE_API_TOKEN')
+    CONFLUENCE_ACCESS_TOKEN: Optional[str] = os.environ.get('CONFLUENCE_ACCESS_TOKEN')  # OAuth 2.0 token
+    CONFLUENCE_IS_CLOUD: bool = os.environ.get('CONFLUENCE_IS_CLOUD', 'true').lower() == 'true'
+    CONFLUENCE_DEFAULT_SPACE: Optional[str] = os.environ.get('CONFLUENCE_DEFAULT_SPACE')  # Default space key
+    CONFLUENCE_SEARCH_LIMIT: int = int(os.environ.get('CONFLUENCE_SEARCH_LIMIT', '5'))  # Max search results
     
     # Rate Limiting Configuration
     RATE_LIMIT_PER_USER: int = int(os.environ.get('RATE_LIMIT_PER_USER', '20'))  # per minute
