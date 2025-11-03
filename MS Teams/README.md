@@ -128,7 +128,7 @@ You need 4 required credentials to run the bot. Follow these steps to get them.
 7. **IMMEDIATELY COPY THE VALUE** (you can only see it once!)
    ```
    This is your TEAMS_APP_PASSWORD
-   Example: g.V8Q~9dgCiB.46QO6WlTb6t~8hpsYsWHmCiObw.
+   Example: your-secret-value-here
    ```
 
 ⚠️ **Important**:
