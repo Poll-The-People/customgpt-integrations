@@ -4,11 +4,6 @@ A comprehensive collection of integrations, widgets, and tools for CustomGPT.ai,
 
 You will need our API to use any of these below listed integration, [create your API key here](https://app.customgpt.ai/register?utm_source=github_integrations).
 
-![Chrome Extension Demo](images/customgpt_chrome_extension_1.png)
-![Chrome Extension Chat](images/customgpt_chrome_extension_2.png)
-![n8n/Make.com Integration](images/customgpt_n8n_1.png)
-![n8n/Make.com Workflow](images/customgpt_n8n_2.png)
-
 ---
 
 ## 📑 Available Integrations
