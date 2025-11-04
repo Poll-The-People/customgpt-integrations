@@ -31,6 +31,11 @@ A production-ready Microsoft Teams bot that integrates with CustomGPT.ai API to 
 - 🃏 **Adaptive Cards**: Rich, interactive UI elements
 - ⚡ **Slash Commands**: `/help`, `/reset`, `/status`, `/search`
 
+```
+In personal chat: /help
+In channel: @CustomGPT Bot 2 /help
+```
+
 ### Enterprise Features
 - 🔐 **Azure AD Authentication**: Secure enterprise authentication
 - 📋 **Audit Logging**: Track all bot interactions
@@ -53,8 +58,14 @@ A production-ready Microsoft Teams bot that integrates with CustomGPT.ai API to 
 | **[Azure Account](https://azure.microsoft.com/free/)** | ✅ Yes | Bot registration and hosting |
 | **[CustomGPT.ai Account](customgpt.ai/register)** | ✅ Trial | AI knowledge base API |
 | **Microsoft Teams Admin** | - | Install bot in Teams |
-| **Python 3.8+** | ✅ Yes | Local development |
+| **Python 3.8 - 3.11** | ✅ Yes | Local development (tested on 3.8.8) |
 | **Redis** (Optional) | ✅ Yes | Distributed rate limiting |
+
+**Python Version Notes**:
+- ✅ **Tested & Working**: Python 3.8.8
+- ✅ **Supported**: Python 3.8, 3.9, 3.10, 3.11
+- ⚠️ **Not Recommended**: Python 3.12+ (some dependencies may have compatibility issues)
+- ❌ **Not Supported**: Python 3.7 and below
 
 **Estimated Setup Time**: 15-20 minutes (first time)
 
@@ -418,14 +429,26 @@ For testing with Teams while developing locally:
    ngrok http 3978
    ```
 
-4. **Copy the HTTPS URL** (e.g., `https://abc123.ngrok.io`)
+4. **Copy the HTTPS URL from ngrok output**:
+   - Look for the "Forwarding" line in ngrok output
+   - Copy the HTTPS URL (e.g., `https://631af35e4e38.ngrok-free.app`)
+   - **Important**: Add `/api/messages` to the end
 
-5. **Update Azure Bot**:
-   - Go to Azure Portal → Your Bot → Configuration
-   - Update **Messaging endpoint**: `https://abc123.ngrok.io/api/messages`
+5. **Update Azure Bot messaging endpoint**:
+   - Go to [Azure Portal](https://portal.azure.com) → Your Bot → Configuration
+   - Find the **Messaging endpoint** field
+   - Paste: `https://your-ngrok-url.ngrok-free.app/api/messages`
+   - Example: `https://631af35e4e38.ngrok-free.app/api/messages`
    - Click **"Apply"**
 
 6. **Test in Teams** - Your bot is now accessible!
+
+⚠️ **Important Notes**:
+
+- The `/api/messages` path is required - this is where your bot receives messages
+- Free ngrok URLs change every time you restart ngrok
+- You'll need to update the Azure Bot messaging endpoint each time ngrok restarts
+- For persistent URLs, consider ngrok paid plan or deploy to production
 
 ---
 
@@ -552,11 +575,40 @@ docker-compose --profile with-redis up -d
 
 #### Step 2: Upload to Teams
 
+**Method 1: Direct Upload (Simple)**
+
 1. Open **Microsoft Teams**
 2. Go to **Apps** → **Manage your apps** → **Upload an app**
 3. Choose **"Upload a custom app"**
 4. Select `customgpt-bot.zip`
 5. Click **"Add"**
+
+**Method 2: Teams Developer Portal (Recommended for troubleshooting duplicates)**
+
+If you encounter duplicate app errors or upload issues:
+
+1. **Open Teams Developer Portal**:
+   - Visit: https://dev.teams.microsoft.com/apps
+   - Or in Teams: **Apps** → **Developer Portal**
+
+2. **Import your app**:
+   - Click **"Import app"**
+   - Upload your `customgpt-bot.zip`
+   - The portal will detect duplicates and let you overwrite or create new
+
+3. **Manage app details**:
+   - Edit app information in the portal if needed
+   - Preview how it will appear in Teams
+
+4. **Publish**:
+   - Click **"Publish"** → **"Publish to org"**
+   - App will be available in your Teams organization
+
+**Benefits of Developer Portal**:
+- Better handling of duplicate apps
+- Visual editor for manifest properties
+- App validation and testing tools
+- Version management
 
 #### Step 3: Test the Bot
 

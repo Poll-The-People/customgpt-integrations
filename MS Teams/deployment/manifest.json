@@ -1,8 +1,8 @@
 {
     "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
     "manifestVersion": "1.16",
-    "version": "1.0.0",
-    "id": "YOUR-APP-ID-HERE",
+    "version": "1.0.2",
+    "id": "c61c667b-e0bd-47f2-b2fb-72bc1778e3ec",
     "packageName": "com.customgpt.teams.bot",
     "developer": {
         "name": "CustomGPT",
@@ -15,7 +15,7 @@
         "outline": "outline.png"
     },
     "name": {
-        "short": "CustomGPT Bot",
+        "short": "CustomGPT Bot 2",
         "full": "CustomGPT Knowledge Base Assistant"
     },
     "description": {
@@ -25,7 +25,7 @@
     "accentColor": "#FFFFFF",
     "bots": [
         {
-            "botId": "YOUR-APP-ID-HERE",
+            "botId": "c61c667b-e0bd-47f2-b2fb-72bc1778e3ec",
             "scopes": [
                 "personal",
                 "team",
@@ -79,12 +79,8 @@
         "*.azurewebsites.net"
     ],
     "webApplicationInfo": {
-        "id": "YOUR-APP-ID-HERE",
-        "resource": "api://botid-YOUR-APP-ID-HERE"
+        "id": "c61c667b-e0bd-47f2-b2fb-72bc1778e3ec",
+        "resource": "api://botid-c61c667b-e0bd-47f2-b2fb-72bc1778e3ec"
     },
-    "defaultInstallScope": "team",
-    "defaultGroupCapability": {
-        "team": "bot",
-        "groupchat": "bot"
-    }
+    "defaultInstallScope": "personal"
 }

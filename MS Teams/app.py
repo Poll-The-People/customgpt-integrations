@@ -124,33 +124,63 @@ adapter.on_turn_error = on_error
 @app.route("/api/messages", methods=["POST"])
 def messages():
     """Handle incoming messages from Teams"""
+    logger.info("=" * 80)
+    logger.info("Received POST request to /api/messages")
+    logger.info(f"Content-Type: {request.headers.get('Content-Type', 'Not set')}")
+
     if "application/json" not in request.headers.get("Content-Type", ""):
+        logger.warning("Invalid Content-Type, returning 415")
         return Response(status=415)
 
-    body = request.json
-    activity = Activity().deserialize(body)
-    auth_header = request.headers.get("Authorization", "")
-
-    # Process the activity
-    async def aux_func(turn_context):
-        # Ensure bot is initialized
-        await ensure_bot_initialized()
-
-        # Process message
-        await bot.on_message_activity(turn_context)
-
-        # Save state changes
-        await conversation_state.save_changes(turn_context)
-        await user_state.save_changes(turn_context)
-
     try:
-        task = asyncio.create_task(
+        body = request.json
+        logger.info(f"Request body type: {body.get('type', 'unknown')}")
+        logger.info(f"Activity ID: {body.get('id', 'unknown')}")
+
+        activity = Activity().deserialize(body)
+        logger.info(f"Deserialized activity: type={activity.type}, from={activity.from_property.id if activity.from_property else 'unknown'}")
+
+        auth_header = request.headers.get("Authorization", "")
+        logger.info(f"Auth header present: {bool(auth_header)}")
+
+        # Process the activity
+        async def aux_func(turn_context):
+            logger.info("Inside aux_func - ensuring bot initialized")
+            # Ensure bot is initialized
+            await ensure_bot_initialized()
+            logger.info("Bot initialized, processing message")
+
+            # Process message
+            await bot.on_message_activity(turn_context)
+            logger.info("Message processed, saving state changes")
+
+            # Save state changes
+            await conversation_state.save_changes(turn_context)
+            await user_state.save_changes(turn_context)
+            logger.info("State changes saved successfully")
+
+        logger.info("About to process activity with adapter")
+
+        # Get or create event loop for this thread
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+        # Process activity (don't close the loop - aiohttp needs it)
+        loop.run_until_complete(
             adapter.process_activity(activity, auth_header, aux_func)
         )
-        asyncio.get_event_loop().run_until_complete(task)
+        logger.info("Activity processed successfully, returning 201")
         return Response(status=201)
+
     except Exception as e:
         logger.error(f"Error processing activity: {e}", exc_info=True)
+        logger.error(f"Error type: {type(e).__name__}")
         return Response(status=500)
 
 

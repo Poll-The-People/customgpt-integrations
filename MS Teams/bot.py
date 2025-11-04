@@ -142,18 +142,25 @@ class CustomGPTTeamsBot(ActivityHandler):
     
     async def on_message_activity(self, turn_context: TurnContext) -> None:
         """Handle incoming messages"""
+        logger.info("=" * 60)
+        logger.info("on_message_activity called")
         try:
             # Extract message details
             activity = turn_context.activity
+            logger.info(f"Activity type: {activity.type}")
+            logger.info(f"Activity text: {activity.text[:100] if activity.text else 'None'}...")
+
             text = activity.text.strip() if activity.text else ""
 
             # Handle adaptive card actions
             if activity.value:
+                logger.info(f"Handling adaptive card action: {activity.value}")
                 await self._handle_card_action(turn_context, activity.value)
                 return
 
             # Skip empty messages
             if not text:
+                logger.info("Empty message, skipping")
                 return
 
             # Validate and sanitize input
@@ -173,12 +180,20 @@ class CustomGPTTeamsBot(ActivityHandler):
 
             # Sanitize message text
             text = InputValidator.sanitize_message(text)
+            logger.info(f"Sanitized text: {text[:100]}...")
 
             # Get conversation details
             user_id = activity.from_property.id
             user_name = activity.from_property.name
-            channel_id = activity.channel_data.get("channel", {}).get("id", activity.conversation.id)
-            tenant_id = activity.channel_data.get("tenant", {}).get("id", "default")
+
+            # Safely get channel_data (may be None in personal chats)
+            channel_data = activity.channel_data or {}
+            channel_id = channel_data.get("channel", {}).get("id", activity.conversation.id) if isinstance(channel_data.get("channel"), dict) else activity.conversation.id
+            tenant_id = channel_data.get("tenant", {}).get("id", "default") if isinstance(channel_data.get("tenant"), dict) else "default"
+
+            logger.info(f"User: {user_name} ({user_id})")
+            logger.info(f"Channel: {channel_id}")
+            logger.info(f"Tenant: {tenant_id}")
 
             # Validate IDs
             if not InputValidator.validate_user_id(user_id):
@@ -193,35 +208,46 @@ class CustomGPTTeamsBot(ActivityHandler):
             # Check if bot was mentioned in a channel
             is_channel = activity.conversation.is_group
             bot_mentioned = False
-            
+
+            logger.info(f"Is channel/group: {is_channel}")
+
             if is_channel:
                 # Remove bot mentions from text
                 text, bot_mentioned = self._remove_mentions(activity)
-                
+                logger.info(f"Bot mentioned: {bot_mentioned}, Text after mention removal: {text[:50]}...")
+
                 # Skip if bot wasn't mentioned and mentions are required
                 if Config.REQUIRE_MENTION_IN_CHANNELS and not bot_mentioned:
+                    logger.info("Bot not mentioned in channel, skipping (REQUIRE_MENTION_IN_CHANNELS=true)")
                     return
-            
+
             # Check if sender is a bot and we should ignore
-            if activity.from_property.properties.get("isBot") and not Config.RESPOND_TO_OTHER_BOTS:
+            from_properties = getattr(activity.from_property, "properties", None) or {}
+            if from_properties.get("isBot") and not Config.RESPOND_TO_OTHER_BOTS:
+                logger.info("Sender is a bot and RESPOND_TO_OTHER_BOTS=false, skipping")
                 return
-            
+
             # Security checks
             if Config.is_user_blocked(user_id):
+                logger.warning(f"User {user_id} is blocked")
                 await turn_context.send_activity("Sorry, you don't have permission to use this bot.")
                 return
-            
+
             if not Config.is_tenant_allowed(tenant_id):
+                logger.warning(f"Tenant {tenant_id} is not allowed")
                 await turn_context.send_activity("Sorry, this bot is not available for your organization.")
                 return
-            
+
             if not Config.is_channel_allowed(channel_id):
+                logger.warning(f"Channel {channel_id} is not allowed")
                 await turn_context.send_activity("Sorry, this bot is not enabled for this channel.")
                 return
-            
+
             # Check for commands
             command = text.lower().split()[0] if text else ""
+            logger.info(f"Checking for command: '{command}'")
             if command in self.command_patterns:
+                logger.info(f"Command matched: {command}")
                 await self.command_patterns[command](turn_context)
                 return
             
@@ -292,9 +318,19 @@ class CustomGPTTeamsBot(ActivityHandler):
                         session_id=conversation.session_id
                     )
                     
-                    # Extract response
+                    # Extract response from OpenAI format
+                    logger.info(f"OpenAI response data keys: {list(response_data.keys())}")
                     response_text = response_data['choices'][0]['message']['content']
-                    citations = response_data.get('citations', [])
+
+                    # Safely extract citations - ensure it's a list of dicts
+                    citations_raw = response_data.get('citations', [])
+                    logger.info(f"Citations type: {type(citations_raw)}, value: {citations_raw}")
+                    if isinstance(citations_raw, list):
+                        citations = [c for c in citations_raw if isinstance(c, dict)]
+                    else:
+                        citations = []
+                    logger.info(f"Processed {len(citations)} citations")
+
                     session_id = response_data.get('session_id', conversation.session_id)
                     message_id = response_data.get('id')
                 else:
@@ -306,11 +342,25 @@ class CustomGPTTeamsBot(ActivityHandler):
                         lang=Config.DEFAULT_LANGUAGE,
                         user_info=user_info
                     )
-                    
-                    response_text = response_data['openai_response']
-                    citations = response_data.get('citations', [])
-                    session_id = response_data['session_id']
-                    message_id = response_data['id']
+
+                    logger.info(f"Response data keys: {list(response_data.keys())}")
+
+                    response_text = response_data.get('openai_response', '')
+                    if not response_text:
+                        # Try alternative field names
+                        response_text = response_data.get('response', response_data.get('content', ''))
+
+                    # Safely extract citations - ensure it's a list of dicts
+                    citations_raw = response_data.get('citations', [])
+                    logger.info(f"Citations type: {type(citations_raw)}, value: {citations_raw}")
+                    if isinstance(citations_raw, list):
+                        citations = [c for c in citations_raw if isinstance(c, dict)]
+                    else:
+                        citations = []
+                    logger.info(f"Processed {len(citations)} citations")
+
+                    session_id = response_data.get('session_id', conversation.session_id)
+                    message_id = response_data.get('id')
                 
                 # Update session ID if it changed
                 if session_id != conversation.session_id:
@@ -365,7 +415,7 @@ class CustomGPTTeamsBot(ActivityHandler):
                 await turn_context.send_activity(MessageFactory.attachment(error_card))
         
         except Exception as e:
-            logger.error(f"Unexpected error in message handler: {str(e)}")
+            logger.error(f"Unexpected error in message handler: {str(e)}", exc_info=True)
             await turn_context.send_activity("An unexpected error occurred. Please try again later.")
     
     async def on_members_added_activity(
@@ -448,7 +498,10 @@ class CustomGPTTeamsBot(ActivityHandler):
         """Handle /clear command"""
         activity = turn_context.activity
         user_id = activity.from_property.id
-        channel_id = activity.channel_data.get("channel", {}).get("id", activity.conversation.id)
+
+        # Safely get channel_data
+        channel_data = activity.channel_data or {}
+        channel_id = channel_data.get("channel", {}).get("id", activity.conversation.id) if isinstance(channel_data.get("channel"), dict) else activity.conversation.id
         thread_id = activity.conversation.conversation_type if activity.conversation.is_group else None
         
         # Clear conversation
@@ -464,7 +517,10 @@ class CustomGPTTeamsBot(ActivityHandler):
         """Handle /status command"""
         activity = turn_context.activity
         user_id = activity.from_property.id
-        tenant_id = activity.channel_data.get("tenant", {}).get("id", "default")
+
+        # Safely get channel_data
+        channel_data = activity.channel_data or {}
+        tenant_id = channel_data.get("tenant", {}).get("id", "default") if isinstance(channel_data.get("tenant"), dict) else "default"
         
         # Get quota information
         quota_info = await self.rate_limiter.get_remaining_quota(user_id, tenant_id)
@@ -473,10 +529,10 @@ class CustomGPTTeamsBot(ActivityHandler):
         conversation_count = await self.conversation_manager.get_active_conversations_count(tenant_id)
         
         status_text = f"""**Bot Status**
-        
+
 **Rate Limits:**
 • User messages remaining: {quota_info['user_remaining']}/{quota_info['user_limit']} (per minute)
-• API queries remaining: {quota_info['api_remaining']}/{quota_info['api_limit']} if quota_info['api_remaining'] else 'N/A'
+• API queries remaining: {quota_info['api_remaining'] if quota_info['api_remaining'] else 'N/A'}/{quota_info['api_limit'] if quota_info['api_limit'] else 'N/A'}
 
 **Active Conversations:** {conversation_count}
 
@@ -498,17 +554,34 @@ class CustomGPTTeamsBot(ActivityHandler):
         """Remove bot mentions from text and check if bot was mentioned"""
         text = activity.text or ""
         bot_mentioned = False
-        
+
         if activity.entities:
             for entity in activity.entities:
                 if entity.type == "mention":
-                    mentioned = entity.properties.get("mentioned", {})
-                    if mentioned.get("id") == activity.recipient.id:
+                    # Try to get mention information - entities can have additional_properties dict
+                    mentioned_id = None
+                    mention_text = None
+
+                    # Try different ways to access entity data
+                    if hasattr(entity, "additional_properties"):
+                        mentioned = entity.additional_properties.get("mentioned", {})
+                        mentioned_id = mentioned.get("id")
+                        mention_text = entity.additional_properties.get("text", "")
+                    elif hasattr(entity, "mentioned"):
+                        mentioned = entity.mentioned
+                        mentioned_id = getattr(mentioned, "id", None)
+                        mention_text = getattr(entity, "text", "")
+
+                    # Check if bot was mentioned
+                    if mentioned_id == activity.recipient.id:
                         bot_mentioned = True
-                        # Remove mention text
-                        mention_text = entity.properties.get("text", "")
+                        logger.info(f"Bot was mentioned! Mention ID: {mentioned_id}")
+
+                    # Remove mention text from message
+                    if mention_text:
                         text = text.replace(mention_text, "").strip()
-        
+                        logger.info(f"Removed mention text: '{mention_text}'")
+
         return text, bot_mentioned
     
     async def _get_starter_questions(self) -> List[str]:

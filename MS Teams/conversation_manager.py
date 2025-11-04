@@ -71,8 +71,12 @@ class ConversationManager:
         else:
             logger.info("Redis not available, using local storage for conversation management")
 
-        # Start cleanup task
-        self.cleanup_task = asyncio.create_task(self._cleanup_expired_conversations())
+        # Start cleanup task (only if not already running)
+        if self.cleanup_task is None or self.cleanup_task.done():
+            try:
+                self.cleanup_task = asyncio.create_task(self._cleanup_expired_conversations())
+            except RuntimeError as e:
+                logger.warning(f"Could not start cleanup task: {e}. Will retry on next call.")
     
     async def _init_redis(self):
         """Initialize Redis connection"""

@@ -26,15 +26,53 @@ class CustomGPTClient:
             'User-Agent': 'CustomGPT-Teams-Bot/1.0'
         }
         self._session: Optional[aiohttp.ClientSession] = None
-        self._session_lock = asyncio.Lock()
+        self._session_lock = None  # Will be created on first use
         self._usage_cache = {}
         self._cache_timestamp = None
         self._cache_ttl = 300  # 5 minutes cache for usage data
 
+    def _get_or_create_lock(self) -> asyncio.Lock:
+        """Get or create lock for current event loop"""
+        try:
+            # Try to get the existing lock
+            if self._session_lock is not None:
+                return self._session_lock
+        except RuntimeError:
+            # Lock was created in a different event loop
+            pass
+
+        # Create new lock for current event loop
+        self._session_lock = asyncio.Lock()
+        return self._session_lock
+
     async def _ensure_session(self) -> aiohttp.ClientSession:
         """Ensure session exists within event loop context"""
-        async with self._session_lock:
-            if self._session is None or self._session.closed:
+        lock = self._get_or_create_lock()
+        async with lock:
+            # Check if session needs to be recreated
+            needs_new_session = False
+
+            if self._session is None:
+                needs_new_session = True
+            elif self._session.closed:
+                needs_new_session = True
+            else:
+                # Check if session's loop matches current loop
+                try:
+                    current_loop = asyncio.get_event_loop()
+                    session_loop = self._session._loop
+                    if session_loop != current_loop or session_loop.is_closed():
+                        logger.info("Session event loop mismatch or closed, recreating session")
+                        # Close old session if possible
+                        try:
+                            await self._session.close()
+                        except:
+                            pass
+                        needs_new_session = True
+                except:
+                    needs_new_session = True
+
+            if needs_new_session:
                 timeout = aiohttp.ClientTimeout(total=Config.RESPONSE_TIMEOUT)
                 connector = aiohttp.TCPConnector(
                     limit=100,
@@ -57,11 +95,13 @@ class CustomGPTClient:
             await asyncio.sleep(0.25)
             logger.info("aiohttp session closed")
     
-    async def create_conversation(self, project_id: str, metadata: Optional[Dict] = None) -> Dict[str, Any]:
+    async def create_conversation(self, project_id: str, metadata: Optional[Dict] = None, name: str = "Teams Conversation") -> Dict[str, Any]:
         """Create a new conversation with optional metadata"""
         url = f"{self.base_url}/projects/{project_id}/conversations"
-        
-        payload = {}
+
+        payload = {
+            'name': name  # Required by API
+        }
         if metadata:
             payload['metadata'] = metadata
         
@@ -95,7 +135,9 @@ class CustomGPTClient:
         # Create conversation if no session_id provided
         if not session_id:
             metadata = {'source': 'teams', 'user_info': user_info} if user_info else {'source': 'teams'}
-            conversation = await self.create_conversation(project_id, metadata)
+            # Create name from user info if available
+            conversation_name = f"Teams - {user_info.get('name', 'User')}" if user_info else "Teams Conversation"
+            conversation = await self.create_conversation(project_id, metadata, name=conversation_name)
             session_id = conversation['session_id']
         
         url = f"{self.base_url}/projects/{project_id}/conversations/{session_id}/messages"
@@ -139,7 +181,9 @@ class CustomGPTClient:
         # Create conversation if no session_id provided
         if not session_id:
             metadata = {'source': 'teams', 'user_info': user_info} if user_info else {'source': 'teams'}
-            conversation = await self.create_conversation(project_id, metadata)
+            # Create name from user info if available
+            conversation_name = f"Teams - {user_info.get('name', 'User')}" if user_info else "Teams Conversation"
+            conversation = await self.create_conversation(project_id, metadata, name=conversation_name)
             session_id = conversation['session_id']
         
         url = f"{self.base_url}/projects/{project_id}/conversations/{session_id}/messages"
@@ -203,9 +247,10 @@ class CustomGPTClient:
         try:
             session = await self._ensure_session()
             async with session.post(url, json=payload) as response:
-                if response.status == 200:
+                # Accept both 200 (OK) and 201 (Created) as success
+                if response.status in [200, 201]:
                     data = await response.json()
-                    logger.info("OpenAI format message sent successfully")
+                    logger.info(f"OpenAI format message sent successfully (status: {response.status})")
                     return data
                 else:
                     error_text = await response.text()

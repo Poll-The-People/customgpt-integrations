@@ -33,12 +33,22 @@ class RateLimiter:
     
     def __init__(self, customgpt_client=None):
         self.local_storage: Dict[str, list] = defaultdict(list)
-        self._local_lock = asyncio.Lock()  # Lock for thread-safe local operations
+        self._local_lock = None  # Will be created on first use
         self.redis_client: Optional[redis.Redis] = None
         self.customgpt_client = customgpt_client
         self.api_limits_cache = {}
         self.api_limits_timestamp = None
         self.api_limits_ttl = 300  # 5 minutes cache
+
+    def _get_or_create_lock(self) -> asyncio.Lock:
+        """Get or create lock for current event loop"""
+        try:
+            if self._local_lock is not None:
+                return self._local_lock
+        except RuntimeError:
+            pass
+        self._local_lock = asyncio.Lock()
+        return self._local_lock
 
     async def initialize(self):
         """Initialize rate limiter components"""
@@ -198,7 +208,8 @@ class RateLimiter:
     
     async def _check_limit_local(self, key: str, current_time: float, limit: int, window: int) -> bool:
         """Check rate limit using local storage (thread-safe)"""
-        async with self._local_lock:
+        lock = self._get_or_create_lock()
+        async with lock:
             # Clean old entries
             min_time = current_time - window
             self.local_storage[key] = [
