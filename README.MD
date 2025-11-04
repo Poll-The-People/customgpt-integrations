@@ -1,260 +1,164 @@
-# CustomGPT Integrations (beta)
+# CustomGPT Integrations & Tools
 
-A collection of chatbot integrations for CustomGPT, allowing you to deploy AI-powered bots across multiple platforms using your CustomGPT agent's knowledge base.
+A comprehensive collection of integrations, widgets, and tools for CustomGPT.ai, allowing you to deploy AI-powered experiences across multiple platforms, websites, and messaging apps using your CustomGPT.ai agent's knowledge base.
 
----
+You will need our API to use any of these below listed integration, [create your API key here](https://app.customgpt.ai/register?utm_source=github_integrations).
 
-## 1. Available Integrations
-
-### 1.1 WhatsApp Bot
-
-Integrate CustomGPT with WhatsApp using Twilio's WhatsApp Business API.
-
-![CustomGPT WhatsApp Bot](images/customgpt_whatsapp.jpeg)
-
-* **Features**: Rich media support, rate limiting, session management, starter questions
-* **Setup Time**: 15-30 minutes
-* **Hosting Options**: Railway, Render, Fly.io, Google Apps Script
-* **[Full Documentation](Whatsapp-Bot/README.md)**
+![Chrome Extension Demo](images/customgpt_chrome_extension_1.png)
+![Chrome Extension Chat](images/customgpt_chrome_extension_2.png) 
 
 ---
 
-### 1.2 Discord Bot
+## 📑 Available Integrations
 
-A powerful Discord bot that brings CustomGPT's intelligence to your Discord servers.
+### 🤖 Messaging Platform Integrations
 
-![CustomGPT Discord Bot](images/customgpt_discord.jpeg)
+| Integration | Description | Key Features | Status |
+|------------|-------------|--------------|---------|
+| **[WhatsApp Bot](Whatsapp-Bot/README.md)** | Integrate with WhatsApp Business using Twilio API | Rich media, rate limiting, session management, starter questions | ✅ Ready |
+| **[Discord Bot](Discord-Bot/README.md)** | AI-powered Discord server bot with slash commands | Slash commands, conversation memory, interactive UI, citations | ✅ Ready |
+| **[Slack Bot](Slack-Bot/README.md)** | Enterprise Slack integration with multi-agent support | Multi-agent, threading, rate limiting, analytics | ✅ Ready |
+| **[Telegram Bot](Telegram-Bot/README.md)** | Fast Telegram bot with polling and webhook support | Inline keyboards, conversation management, usage stats | ✅ Ready |
+| **[MS Teams Bot](MS%20Teams/README.md)** | Enterprise Microsoft Teams bot with Adaptive Cards | @mentions, threading, Confluence integration, file attachments | ✅ Ready |
+| **[Google Chat Bot](Google%20Chat-Bot/README.md)** | Native Google Workspace integration | Direct messages, space conversations, multi-agent support | ✅ Ready |
+| **[Rocket.Chat Bot](Rocket%20Chat%20Bot/README.md)** | Self-hosted chat platform integration | AI responses, citation support, thread support, analytics | ✅ Ready |
+| **[Instagram Bot](Instagram%20Chat%20Bot/README.md)** | Instagram DM bot with planned comment replies | Multi-agent, starter questions, rate limiting, typing indicators | 🚧 Beta |
+| **[FB Messenger Bot](Facebook%20Messenger-Bot/README.md)** | Facebook Messenger integration | Quick replies, persistent menu, typing indicators, media support | 🚧 WIP |
 
-* **Features**: Slash commands, conversation memory, interactive UI, source citations
-* **Setup Time**: 10-20 minutes
-* **Hosting Options**: Railway, Fly.io, Docker, Replit
-* **[Full Documentation](Discord-Bot/README.md)**
+### 💻 Website Widgets & Embeds
 
----
+| Integration | Description | Key Features | Status |
+|------------|-------------|--------------|---------|
+| **[CustomGPT Widget (Python)](customgpt-widget/README.md)** | Voice-enabled AI assistant with 3D avatar and particle animations | Voice mode (VAD), 3D avatar with lip-sync, multiple TTS providers, chat mode, floating/inline embed | ✅ Ready |
+| **[CustomGPT Widget (Next.js)](customgpt-widget-next/README.md)** | Modern Next.js widget with voice and with one-click Vercel deployment | Next.js App Router, voice mode, TTS support, serverless functions, TypeScript | ✅ Ready |
 
-### 1.3 Slack Bot
+### 🔧 Browser Extensions & Automation
 
-Enterprise-ready Slack integration with multi-agent support and advanced features.
-
-![CustomGPT Slack Bot](images/customgpt_slack.jpeg)
-![CustomGPT Slack Bot Interface](images/customgpt_slack2.jpeg)
-
-* **Features**: Multi-agent support, thread conversations, rate limiting, analytics
-* **Setup Time**: 20-30 minutes
-* **Hosting Options**: Google Apps Script, Railway, Docker, Kubernetes
-* **[Full Documentation](Slack-Bot/README.md)**
-
----
-
-### 1.4 Telegram Bot
-
-Fast and reliable Telegram bot with polling and webhook support.
-
-![CustomGPT Telegram Bot](images/customgpt_telegram.jpeg)
-
-* **Features**: Inline keyboards, conversation management, usage statistics, SSL support
-* **Setup Time**: 10-15 minutes
-* **Hosting Options**: Replit, Vercel, Railway, any VPS
-* **[Full Documentation](Telegram-Bot/README.md)**
+| Integration | Description | Key Features | Status |
+|------------|-------------|--------------|---------|
+| **[Chrome Extension](chrome-extension/README.md)** | White-label Chrome extension with Vercel proxy | Zero user setup, white-label ready, modern UI, citations, Vercel backend | ✅ Ready |
+| **[n8n/Make.com](n8n-make.com%20integration/)** | Workflow automation templates and blueprints | Google Sheets integration, workflow templates, API examples | ✅ Ready |
 
 ---
 
-### 1.5 Google Chat Bot
+## 🎯 Quick Navigation
 
-Native Google Workspace integration for enterprise environments.
-
-* **Features**: Direct messages, space conversations, multi-agent support
-* **Setup Time**: 15-20 minutes
-* **Hosting**: Google Apps Script (free)
-* **[Full Documentation](Google%20Chat-Bot/README.md)**
-
----
-
-### 1.6 Microsoft Teams Bot
-
-Enterprise-grade Microsoft Teams integration with advanced collaboration features.
-
-![CustomGPT MS Teams Bot](images/customgpt_ms_teams_1.png)
-![CustomGPT MS Teams Bot Interface](images/customgpt_ms_teams_2.png)
-
-* **Features**: Adaptive Cards, @mentions, threading, meeting support, file attachments, Confluence integration
-* **Setup Time**: 20-30 minutes
-* **Hosting Options**: Azure Bot Service, Railway, Render, Docker
-* **[Full Documentation](MS%20Teams/README.md)**
+- [Overview](#overview)
+- [Feature Comparison](#feature-comparison)
+- [Quick Start Guide](#quick-start-guide)
+- [Prerequisites](#prerequisites)
+- [Deployment Options](#deployment-options)
+- [Security Best Practices](#security-best-practices)
+- [Support & Resources](#support--resources)
+- [Contributing](#contributing)
 
 ---
 
-### 1.7 Instagram Chat Bot (Work in Progress)
+## Overview
 
-AI-powered Instagram DM bot with planned comment reply functionality.
+This monorepo contains **13 production-ready integrations** for CustomGPT across four major categories:
 
-* **Status**: 🚧 DM support complete, comment replies in development
-* **Features**: Multi-agent support, starter questions, rate limiting, typing indicators
-* **Planned**: Comment webhooks, mention detection, auto-moderation
-* **Setup Time**: 15-20 minutes  
-* **Hosting Options**: Railway, Render, Google Cloud Platform, Docker
-* **[Full Documentation](Instagram%20Chat%20Bot/README.md)**
+1. **Messaging Platforms** (9) - Deploy AI bots on WhatsApp, Slack, Discord, Teams, Telegram, and more
+2. **Website Widgets** (2) - Embeddable chat widgets with voice, 3D avatars, and modern UI
+3. **Browser Extensions** (1) - Chrome extension with white-label capabilities
+4. **Workflow Automation** (1) - n8n/Make.com integration templates
 
----
-
-### 1.8 Facebook Messenger Bot (Work in Progress)
-
-Connect CustomGPT with Facebook Messenger for seamless customer interactions.
-
-* **Status**: 🚧 Currently under development
-* **Features**: Quick replies, persistent menu, typing indicators, media support
-* **Setup Time**: 20-30 minutes (estimated)
-* **Hosting Options**: Vercel, Google Apps Script, Node.js hosting
-* **[Full Documentation](Facebook%20Messenger-Bot/README.md)**
+All integrations are designed for easy deployment, customization, and white-labeling.
 
 ---
 
-## 2. Quick Start
+## Quick Start
 
-1. **Choose Your Platform**: Select the messaging platform you want to integrate with.
-2. **Get CustomGPT Credentials**:
-
-   * Sign up at [CustomGPT.ai](https://customgpt.ai)
-   * Create an agent/project
-   * Get your API key and Project ID
-3. **Follow Platform Guide**: Each integration has detailed setup instructions.
-4. **Deploy**: Multiple free hosting options available for each platform.
+1. **Get CustomGPT API Key**: [Sign up](https://app.customgpt.ai/register?utm_source=github_integrations) and create an agent
+2. **Choose Integration**: Pick from the tables above
+3. **Follow Setup Guide**: Each integration has detailed documentation
+4. **Deploy**: Use free hosting options (Vercel, Railway, Google Apps Script, Docker Hub)
 
 ---
 
-## 3. Prerequisites
+## Feature Comparison
 
-### 3.1 Required for All Integrations
+### Messaging Platform Features
 
-* CustomGPT account with API access
-* API Key and Project/Agent ID
-* Basic command line knowledge
+| Feature | WhatsApp | Discord | Slack | Telegram | Google Chat | MS Teams | Rocket.Chat | Instagram | FB Messenger |
+|---------|----------|---------|-------|----------|-------------|----------|-------------|-----------|--------------|
+| Free Hosting | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | 🚧 WIP |
+| Rate Limiting | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | 🚧 WIP |
+| Multi-Agent | ✖ | ✖ | ✔ | ✖ | ✔ | ✖ | ✖ | ✔ | 🚧 WIP |
+| Rich Media | ✔ | ✔ | ✔ | ✔ | Limited | ✔ | ✔ | Limited | 🚧 WIP |
+| Threading | ✖ | ✔ | ✔ | ✖ | ✔ | ✔ | ✔ | ✖ | 🚧 WIP |
+| Analytics | ✔ | ✖ | ✔ | ✔ | ✖ | ✔ | ✔ | ✔ | 🚧 WIP |
+| Confluence | ✖ | ✖ | ✖ | ✖ | ✖ | ✔ | ✖ | ✖ | 🚧 WIP |
+| Setup Complexity | Medium | Easy | Medium | Easy | Easy | Medium | Medium | Medium | 🚧 WIP |
 
-### 3.2 Platform-Specific Requirements
+### Widget & Extension Features
 
-* **WhatsApp**: Twilio account (free trial available)
-* **Discord**: Discord bot token and server
-* **Slack**: Slack workspace with admin access
-* **Telegram**: Telegram Bot Father token
-* **Google Chat**: Google Workspace account
-* **Microsoft Teams**: Azure account (free tier available), Teams admin access
-* **Instagram**: Instagram Business Account, Facebook Page connection
-* **Facebook Messenger**: Facebook Page and App (developer account)
-
----
-
-## 4. Feature Comparison
-
-| Feature          | WhatsApp | Discord | Slack  | Telegram | Google Chat | MS Teams | Instagram | FB Messenger |
-| ---------------- | -------- | ------- | ------ | -------- | ----------- | -------- | --------- | ------------ |
-| Free Hosting     | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | ✔         | 🚧 WIP       |
-| Rate Limiting    | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | ✔         | 🚧 WIP       |
-| Multi-Agent      | ✖        | ✖       | ✔      | ✖        | ✔           | ✖        | ✔         | 🚧 WIP       |
-| Rich Media       | ✔        | ✔       | ✔      | ✔        | Limited     | ✔        | Limited   | 🚧 WIP       |
-| Threading        | ✖        | ✔       | ✔      | ✖        | ✔           | ✔        | ✖         | 🚧 WIP       |
-| Analytics        | ✔        | ✖       | ✔      | ✔        | ✖           | ✔        | ✔         | 🚧 WIP       |
-| Comment Replies  | ✖        | ✖       | ✖      | ✖        | ✖           | ✖        | 🚧 Planned | 🚧 WIP       |
-| Setup Complexity | Medium   | Easy    | Medium | Easy     | Easy        | Medium   | Medium    | 🚧 WIP       |
-| Confluence       | ✖        | ✖       | ✖      | ✖        | ✖           | ✔        | ✖         | 🚧 WIP       |
+| Feature | Widget (Python) | Widget (Next.js) | Chrome Extension |
+|---------|----------------|------------------|------------------|
+| Voice Mode | ✔ (VAD) | ✔ (WebM) | ✖ |
+| 3D Avatar | ✔ | ✖ | ✖ |
+| Chat Mode | ✔ | ✔ | ✔ |
+| TTS Support | ✔ Multiple | ✔ Multiple | ✖ |
+| Citations | ✔ | ✔ | ✔ |
+| Reactions | ✔ | ✔ | ✔ |
+| White-Label | ✔ | ✔ | ✔ |
+| Docker Ready | ✔ | ✔ | ✖ |
+| One-Click Deploy | ✔ | ✔ (Vercel) | ✔ (Vercel proxy) |
+| Framework | FastAPI + Vue | Next.js | Vanilla JS |
 
 ---
 
-## 5. Common Features
+## Deployment
 
-All integrations include:
+All integrations support multiple deployment options. See individual README files for detailed instructions.
 
-* ✔ Conversation context management
-* ✔ Rate limiting to prevent abuse
-* ✔ Error handling and logging
-* ✔ Configurable responses
-* ✔ Security features (input validation, authentication)
-* ✔ Docker support (where applicable)
+**Free Hosting**: Vercel, Railway, Render, Fly.io, Google Apps Script, Docker Hub
+**Self-Hosting**: Docker, VPS, Kubernetes, Azure
 
 ---
 
-## 6. Deployment Options
+## Support & Resources
 
-### 6.1 Free Hosting Platforms
+### CustomGPT Resources
 
-* **Google Apps Script**: Best for Slack and Google Chat (always free)
-* **Railway**: \$5 free credit/month, easy GitHub integration
-* **Render**: 750 free hours/month, automatic deploys
-* **Fly.io**: 3 free VMs, global deployment
-* **Replit**: Good for Telegram bots, built-in hosting
-* **Vercel**: Serverless functions for webhooks
-
-### 6.2 Self-Hosting
-
-* Docker containers available for most integrations
-* SystemD service files for VPS deployment
-* Detailed deployment guides in each bot's folder
-
----
-
-## 7. Documentation Structure
-
-Each integration includes:
-
-* `README.md` - Setup and usage instructions
-* `DEPLOYMENT.md` - Detailed hosting guides
-* `CLAUDE.md` - Technical documentation for developers
-* `.env.example` - Required environment variables
-* Platform-specific deployment files (Dockerfile, etc.)
-
----
-
-## 8. Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Follow existing code patterns
-4. Add documentation
-5. Submit a pull request
-
----
-
-## 9. Security Best Practices
-
-* Never commit `.env` files or API keys
-* Use environment variables for all secrets
-* Implement rate limiting on all bots
-* Validate and sanitize user inputs
-* Keep dependencies updated
-* Use HTTPS/SSL for webhooks
-
----
-
-## 10. Support
-
-* **CustomGPT Issues**: Check [CustomGPT docs](https://docs.customgpt.ai)
-* **Integration Issues**: Open an issue in this repository
-* **Platform-Specific Help**: Refer to platform documentation
-
----
-
-## 11. Resources
-
-### General Links
-* **[CustomGPT Landing Page](https://customgpt.ai)**
-* **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
-* **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
-* **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-* **[API Documentation](https://docs.customgpt.ai/api-reference)**
-* **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-* **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-* **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
-* **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
+- **Landing Page**: [customgpt.ai](https://customgpt.ai)
+- **Dashboard**: [app.customgpt.ai](https://app.customgpt.ai)
+- **Live Demo**: [app.customgpt.ai/agents?demo=chat](https://app.customgpt.ai/agents?demo=chat)
+- **API Documentation**: [docs.customgpt.ai/api-reference](https://docs.customgpt.ai/api-reference)
+- **Postman Collection**: [postman.com/customgpt/customgpt/overview](https://www.postman.com/customgpt/customgpt/overview)
+- **MCP Documentation**: [docs.customgpt.ai/model-content-protocol](https://docs.customgpt.ai/model-content-protocol)
+- **Office Hours**: [calendly.com/pollthepeople/office-hours](https://calendly.com/pollthepeople/office-hours)
+- **YouTube Channel**: [youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)
 
 ### Integration-Specific Video Tutorials
-* **[Slack Bot Setup Video](https://youtu.be/5x2NMQ7qIvg)**
-* **[Discord Bot Setup Video](https://youtu.be/mhqIJZ8fFAk)**
-* **[Telegram Bot Setup Video](https://youtu.be/yqGZGcnqtg0)**
+
+- **Slack Bot Setup**: [youtu.be/5x2NMQ7qIvg](https://youtu.be/5x2NMQ7qIvg)
+- **Discord Bot Setup**: [youtu.be/mhqIJZ8fFAk](https://youtu.be/mhqIJZ8fFAk)
+- **Telegram Bot Setup**: [youtu.be/yqGZGcnqtg0](https://youtu.be/yqGZGcnqtg0)
+
+### GitHub Resources
+
+- **CustomGPT Starter Kit**: [github.com/Poll-The-People/customgpt-starter-kit](https://github.com/Poll-The-People/customgpt-starter-kit)
+- **CustomGPT Integrations**: [github.com/Poll-The-People/customgpt-integrations](https://github.com/Poll-The-People/customgpt-integrations)
+
+### Getting Help
+
+- **CustomGPT Issues**: Check [CustomGPT docs](https://docs.customgpt.ai)
+- **Integration Issues**: Open an issue in this repository
+- **Platform-Specific Help**: Refer to platform documentation
 
 ---
 
-## 12. License
+## Contributing
+
+Contributions welcome! Fork the repo, create a feature branch, and submit a PR. Follow existing patterns and add documentation.
+
+---
+
+## License
 
 MIT License
 
+---
+
+**Total Integrations**: 13 (9 messaging platforms, 2 website widgets, 1 browser extension, 1 automation tool)

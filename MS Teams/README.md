@@ -59,18 +59,10 @@ In channel: @CustomGPT Bot 2 /help
 | Requirement | Free Tier Available | Purpose |
 |-------------|-------------------|---------|
 | **[Azure Account](https://azure.microsoft.com/free/)** | ✅ Yes | Bot registration and hosting |
-| **[CustomGPT.ai Account](customgpt.ai/register)** | ✅ Trial | AI knowledge base API |
+| **[CustomGPT.ai Account](https://app.customgpt.ai/register)** | ✅ Trial | AI knowledge base API |
 | **Microsoft Teams Admin** | - | Install bot in Teams |
-| **Python 3.8 - 3.11** | ✅ Yes | Local development (tested on 3.8.8) |
+| **Python 3.8 - 3.11** | ✅ Yes | Local development |
 | **Redis** (Optional) | ✅ Yes | Distributed rate limiting |
-
-**Python Version Notes**:
-- ✅ **Tested & Working**: Python 3.8.8
-- ✅ **Supported**: Python 3.8, 3.9, 3.10, 3.11
-- ⚠️ **Not Recommended**: Python 3.12+ (some dependencies may have compatibility issues)
-- ❌ **Not Supported**: Python 3.7 and below
-
-**Estimated Setup Time**: 15-20 minutes (first time)
 
 ---
 
@@ -80,121 +72,46 @@ You need 4 required credentials to run the bot. Follow these steps to get them.
 
 ### 1. Microsoft Teams Credentials (Azure Portal)
 
-#### Step 1: Create App Registration FIRST (Recommended Method)
-
-**This approach avoids tenant confusion issues:**
+#### Step 1: Create App Registration
 
 1. Go to [Azure Portal](https://portal.azure.com)
-2. Search for **"Microsoft Entra ID"** in the top search bar
-3. Click **"App registrations"** in the left menu
-4. Click **"+ New registration"**
-5. Fill in:
+2. Search for **"Microsoft Entra ID"** → **"App registrations"** → **"+ New registration"**
+3. Fill in:
    ```
    Name: customgpt-teams-bot
-   Supported account types: Accounts in this organizational directory only (Single tenant)
+   Supported account types: Single tenant (recommended) or Multi-tenant
    Redirect URI: Leave blank
    ```
-6. Click **"Register"**
-7. **COPY THE APPLICATION (CLIENT) ID** - Save this as your `TEAMS_APP_ID`
-8. Now continue to Step 2 below to create the client secret
+4. Click **"Register"**
+5. **COPY THE APPLICATION (CLIENT) ID** - Save this as your `TEAMS_APP_ID`
 
-#### Alternative: Create Azure Bot First (May Have Tenant Issues)
+#### Step 2: Create Client Secret
 
-1. Go to [Azure Portal](https://portal.azure.com)
-2. Click **"Create a resource"** → Search for **"Azure Bot"**
-3. Click **"Create"** and fill in:
-   ```
-   Bot handle: customgpt-teams-bot
-   Subscription: Your subscription
-   Resource group: Create new → "customgpt-rg"
-   Location: Closest region (e.g., East US)
-   Pricing tier: F0 (Free) - 10,000 messages/month
-   Type of App: Single Tenant (recommended) or Multi Tenant
-   Creation type: Create new Microsoft App ID
-   ```
-4. Click **"Review + Create"** → **"Create"**
-5. ⚠️ **Note**: If you use this method, you may see "owned by another organization" errors when trying to access certificates & secrets manually
+1. In the left menu, click **"Certificates & secrets"** → **"Client secrets"** tab
+2. Click **"+ New client secret"**
+3. Description: `Teams Bot Secret`, Expires: **24 months**
+4. Click **"Add"**
+5. **IMMEDIATELY COPY THE VALUE** - Save this as your `TEAMS_APP_PASSWORD`
 
-⚠️ **Important**: When asked for "Type of App" or "Microsoft App ID":
-
-- ✅ Select **"Create new Microsoft App ID"**
-- ✅ Choose **"Single Tenant"** (for internal use only) OR **"Multi Tenant"** (to share with other organizations)
-- ❌ Do NOT select "User-assigned managed identity" (requires MSI Resource ID - advanced option)
-
-**Which tenant type to choose:**
-
-- **Single Tenant**: Bot only works in YOUR organization's Teams (simpler, recommended for personal/company use)
-- **Multi Tenant**: Bot can be installed by any organization (needed for public distribution/App Store)
-- **User-Assigned Managed Identity**: Advanced authentication using Azure Managed Identity (requires MSI Resource ID)
-
-#### Step 2: Create Client Secret (Get TEAMS_APP_PASSWORD)
-
-**If you created App Registration first (recommended):**
-
-1. You should already be on the app registration page
-2. In the left menu, click **"Certificates & secrets"**
-3. Click the **"Client secrets"** tab
-4. Click **"+ New client secret"**
-5. Fill in:
-   - Description: `Teams Bot Secret`
-   - Expires: **24 months** (recommended)
-6. Click **"Add"**
-7. **IMMEDIATELY COPY THE VALUE** (you can only see it once!)
-   ```
-   This is your TEAMS_APP_PASSWORD
-   Example: your-secret-value-here
-   ```
-
-⚠️ **Important**:
-
-- Copy the **Value**, NOT the "Secret ID"
-- The Value is your `TEAMS_APP_PASSWORD`
-- The Secret ID (UUID format) is just an identifier and is NOT used
-- If you lose the secret value, you must create a new one
-
-**If you created Azure Bot first:**
-
-See Option A below for using the (Manage) link.
+⚠️ Copy the **Value**, NOT the "Secret ID". You can only see it once!
 
 #### Step 3: Create Azure Bot Resource
 
-**Now create the Azure Bot to connect your app registration to Teams:**
-
-1. Go to [Azure Portal](https://portal.azure.com)
-2. Click **"Create a resource"** → Search for **"Azure Bot"**
-3. Click **"Create"** and fill in:
-
-   ```text
-   Bot handle: customgpt-teams-bot
-   Subscription: Your subscription
-   Resource group: Use existing "customgpt-rg" or create new
-   Location: Same region as your app registration
-   Pricing tier: F0 (Free)
-   Microsoft App ID: Enter the Application (Client) ID from Step 1
-   ```
-
-4. Click **"Review + Create"** → **"Create"**
-5. After deployment, go to the bot → Configuration
-6. Verify the Microsoft App ID matches what you created in Step 1
-7. You'll add the messaging endpoint later when you deploy your bot code
-
-⚠️ **Note**: The Azure Bot resource is required for Teams integration, even though you already created the app registration manually.
+1. [Azure Portal](https://portal.azure.com) → **"Create a resource"** → **"Azure Bot"**
+2. Fill in:
+   - Bot handle: `customgpt-teams-bot`
+   - Pricing tier: **F0 (Free)**
+   - Microsoft App ID: Enter the ID from Step 1
+3. **"Review + Create"** → **"Create"**
+4. You'll add the messaging endpoint later when you deploy
 
 #### Step 4: Enable Teams Channel
 
-Now enable the Microsoft Teams channel for your bot:
+1. Go to your Azure Bot → **"Channels"** → **"Microsoft Teams"** icon → **"Apply"**
 
-1. Go to your Azure Bot resource
-2. Click **"Channels"** in the left menu
-3. Click the **"Microsoft Teams"** icon
-4. Click **"Apply"**
-
-✅ **You now have:**
-
-- `TEAMS_APP_ID`: The Application (Client) ID from Step 1
-- `TEAMS_APP_PASSWORD`: The client secret value from Step 2
-- Azure Bot resource linked to your app registration
-- Teams channel enabled
+✅ **Credentials ready:**
+- `TEAMS_APP_ID` from Step 1
+- `TEAMS_APP_PASSWORD` from Step 2
 
 ---
 

@@ -1,12 +1,15 @@
 # CustomGPT Chrome Extension (White-Label Solution)
 
-**Pure JavaScript Chrome extension with Vercel serverless proxy** for CustomGPT API integration. Designed for your API customers to create their own branded Chrome extensions with zero user setup.
+**Pure JavaScript Chrome extension with Vercel serverless proxy** for CustomGPT.ai API integration. Designed for your API customers to create their own branded Chrome extensions with zero user setup.
 
+
+![Chrome Extension Demo](../images/customgpt_chrome_extension_1.png)
+![Chrome Extension Chat](../images/customgpt_chrome_extension_2.png)
 ---
 
 ## 🎯 Overview
 
-This is a **white-label solution** enabling your CustomGPT API customers to:
+This is a **white-label solution** enabling your CustomGPT.ai API customers to:
 
 1. Deploy a Vercel proxy server with their CustomGPT API credentials
 2. Configure the extension with their proxy URL
@@ -16,7 +19,7 @@ This is a **white-label solution** enabling your CustomGPT API customers to:
 
 ---
 
-## 🚀 Quick Start (5 Minutes)
+## Quick Start (5 Minutes)
 
 ### Step 1: Deploy Vercel Proxy
 
@@ -69,15 +72,17 @@ VERCEL_PROXY_URL: 'https://your-proxy.vercel.app'
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Chat Interface
+
 - **Welcome Screen**: Clean welcome with agent avatar and suggested questions
 - **Active Chat**: Modern message bubbles with timestamps and actions
 - **Citations**: Collapsible sources section with rich previews
 - **Send Button**: Prominent "Send" button with animated paper plane icon
 
 ### UI Features Showcase
+
 - Purple gradient theme with smooth animations
 - WCAG AA accessible color contrast
 - Smooth scroll and fade-in animations
@@ -87,46 +92,10 @@ VERCEL_PROXY_URL: 'https://your-proxy.vercel.app'
 
 ## 🏗️ Technical Architecture
 
-### Frontend (Chrome Extension)
-
-**Tech Stack**:
-- Pure Vanilla JavaScript (ES6+)
-- CSS3 with CSS Variables for theming
-- Chrome Extension Manifest V3
-- Chrome Storage API for persistence
-
-**Key Components**:
-- `popup.js` - Main UI logic and event handling
-- `popup.css` - Modern styling with purple theme
-- `config.js` - Configuration and feature flags
-- `session.js` - Session and conversation management
-- `markdown.js` - Markdown rendering for AI responses
-
-**Performance Optimizations**:
-- `requestAnimationFrame` for smooth animations
-- Smooth scroll with `behavior: 'smooth'`
-- Efficient event delegation
-- Timestamp updates every 10 seconds (not on every render)
-- Non-blocking initialization with loading screen
-
-### Backend (Vercel Serverless)
-
-**Tech Stack**:
-- Node.js serverless functions
-- Vercel deployment platform
-- CustomGPT API integration
-
-**API Endpoints**:
-- `/api/chat` - Main chat endpoint with streaming support
-- `/api/health` - Health check and configuration validation
-- `/api/settings` - Agent configuration and metadata
-- `/api/feedback` - Message reactions (thumbs up/down)
-- `/api/citations` - Citation detail retrieval
-
-**Security**:
-- API keys stored in Vercel environment variables
-- CORS configured for Chrome extension origin
-- No sensitive data in frontend code
+**Frontend**: Vanilla JavaScript (ES6+), Chrome Manifest V3, CSS3 with theming
+**Backend**: Vercel serverless functions, Node.js
+**API**: CustomGPT integration via proxy (chat, health, settings, feedback, citations)
+**Security**: Environment variables for secrets, CORS configured, no frontend API keys
 
 ---
 
@@ -149,14 +118,114 @@ const CONFIG = {
 
   // OPTIONAL: Feature flags
   FEATURES: {
-    AUTO_SCROLL: true,
-    SHOW_USAGE_COUNTER: true,
     AUTO_SCROLL: true
   }
 };
 ```
 
-#### 3. Branding Customization
+**Note**: The agent name, avatar, and suggested questions are **automatically fetched** from your CustomGPT agent settings via the `/api/settings` endpoint. No hardcoded agent information in the extension.
+
+#### 2. Host Permissions Configuration
+
+**CRITICAL**: Update `extension/manifest.json` to match your proxy domain.
+
+**Current default**:
+```json
+"host_permissions": [
+  "https://*.vercel.app/*"
+]
+```
+
+**⚠️ This MUST be updated if:**
+
+- Using a custom domain (not Vercel)
+- Using a specific subdomain for security
+- Hosting on Railway, Render, or other platforms
+
+**Examples for different hosting:**
+
+**Vercel with custom domain:**
+```json
+"host_permissions": [
+  "https://api.yourdomain.com/*"
+]
+```
+
+**Railway:**
+```json
+"host_permissions": [
+  "https://your-app.railway.app/*"
+]
+```
+
+**Render:**
+```json
+"host_permissions": [
+  "https://your-app.onrender.com/*"
+]
+```
+
+**Multiple domains (development + production):**
+```json
+"host_permissions": [
+  "https://your-proxy-dev.vercel.app/*",
+  "https://api.yourdomain.com/*"
+]
+```
+
+**🔒 Security Best Practice:**
+- ✅ Use specific domain: `https://your-specific-app.vercel.app/*`
+- ❌ Avoid wildcards: `https://*.vercel.app/*` (too broad, allows any Vercel app)
+
+**Why this matters:**
+
+- Chrome requires explicit permission for the extension to communicate with your proxy
+- Wrong domain = Extension can't fetch responses from your API
+- Users will see "Failed to fetch" errors if misconfigured
+
+---
+
+#### 3. Manifest Customization Checklist
+
+Edit `extension/manifest.json` before publishing:
+
+**Required Updates:**
+- [ ] Update `host_permissions` to match your proxy URL (see above)
+- [ ] Change `name` (line 3): Your extension name
+- [ ] Change `description` (line 4): Your extension description
+- [ ] Update `version` (line 5): Your version number (e.g., "1.0.0")
+
+**Optional Updates:**
+- [ ] Update `icons` paths if using custom icon filenames
+- [ ] Change `action.default_title` (tooltip on extension icon)
+- [ ] Modify `permissions` if adding features (be minimal!)
+
+**Example manifest.json key fields:**
+```json
+{
+  "name": "My Company AI Assistant",
+  "description": "Get instant answers from our knowledge base",
+  "version": "1.0.0",
+  "host_permissions": [
+    "https://api.mycompany.com/*"
+  ]
+}
+```
+
+**⚠️ Content Security Policy (CSP):**
+```json
+"content_security_policy": {
+  "extension_pages": "script-src 'self'; object-src 'self'"
+}
+```
+- **Purpose**: Security policy that only allows scripts from the extension itself
+- **Don't modify** unless you know what you're doing
+- **Why exists**: Chrome Manifest V3 security requirement
+- **What it prevents**: Inline scripts, external scripts, eval()
+
+---
+
+#### 4. Branding Customization
 
 **Extension Name & Description**:
 - Edit `extension/manifest.json` (lines 3-5)
@@ -217,7 +286,7 @@ Expected response:
 
 ---
 
-## 📦 Publishing to Chrome Web Store
+## Publishing to Chrome Web Store
 
 ### Prerequisites
 
@@ -271,57 +340,30 @@ Get extension ID after publishing to Chrome Web Store.
 
 ---
 
-## ✨ Features
+## Troubleshooting
 
-### Core Functionality ✅
+### "Failed to fetch" Errors
 
-- **Chat Interface**: Clean, modern chat UI with CustomGPT API integration
-- **Session Management**: UUID-based session tracking across conversations
-- **Conversation History**: Persistent chat history using Chrome storage
-- **Message Actions**: Copy messages, thumbs up/down reactions
-- **Citations & Sources**: Collapsible sources section with citation details
-- **Suggested Questions**: One-click starter questions for quick engagement
-- **Real-time Typing Indicator**: Visual feedback during AI response
-- **Markdown Support**: Rich text rendering for AI responses
+- **Cause**: `host_permissions` in [manifest.json](extension/manifest.json) doesn't match your proxy URL
+- **Fix**: Update `host_permissions` to match your deployed Vercel proxy domain (see [Host Permissions Configuration](#2-host-permissions-configuration))
 
-### UI/UX Excellence ✅
+### CORS Errors
 
-- **World-Class Send Button**: Prominent, animated button with "Send" label
-- **Message Timestamps**: Relative timestamps ("Just now", "2m ago", "5h ago") that auto-update
-- **Smooth Animations**: Fade-in messages, smooth scrolling, hover effects
-- **Professional Design**: No emojis, icon-based interface, WCAG AA accessible
-- **Responsive Layout**: Optimized 400x600px popup with proper spacing
-- **Purple Theme**: Modern purple color scheme with gradient effects
-- **Auto-Focus**: Smart input focus management
-- **Loading States**: Visual feedback during initialization and message sending
+- **Cause**: Incorrect proxy URL in [config.js](extension/js/config.js)
+- **Fix**: Verify `VERCEL_PROXY_URL` matches your deployed Vercel URL exactly
 
-### Accessibility ✅
+### Extension Not Loading
 
-- **WCAG AA Compliant**: Proper color contrast ratios (4.5:1+)
-- **ARIA Labels**: Complete screen reader support
-- **Keyboard Navigation**: Full keyboard accessibility with focus indicators
-- **Semantic HTML**: Proper roles and live regions
+- **Cause**: Invalid [manifest.json](extension/manifest.json) syntax
+- **Fix**: Validate JSON syntax, ensure all required fields are present
 
-### Developer Experience ✅
+### Agent Name Not Showing
 
-- **Zero User Setup**: Pre-configured with Vercel proxy URL
-- **White-Label Ready**: Easy branding customization
-- **Modern Stack**: Vanilla JavaScript, no framework dependencies
-- **Vercel Serverless**: Scalable proxy deployment
-- **CORS Handled**: Pre-configured for Chrome extensions
+- **Cause**: `/api/settings` endpoint not accessible
+- **Fix**: Test endpoint with `curl https://your-proxy.vercel.app/api/settings`, verify API credentials in Vercel environment variables
 
----
+### Manifest Validation Errors
 
-## 🚧 Roadmap & Future Features
+- **Cause**: Incorrect CSP or permissions format
+- **Fix**: Don't modify `content_security_policy` unless necessary, keep permissions minimal
 
-### Planned Enhancements
-
-- [ ] Multi-language support for international users
-- [ ] Voice input/output capabilities
-- [ ] File upload support for document analysis
-- [ ] Dark mode theme option
-- [ ] Conversation export (JSON, PDF, TXT)
-- [ ] Custom CSS theme injection
-- [ ] Analytics dashboard integration
-- [ ] Rate limiting & usage quotas
-- [ ] Offline mode with queue

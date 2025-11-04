@@ -107,10 +107,14 @@ def _customgpt_api_call_sync(url, params, headers, payload):
         Response object
     """
     def _make_request():
+        # Timeout set to 30s to accommodate CustomGPT's processing time for complex queries
+        # stream=CUSTOMGPT_STREAM enables Server-Sent Events for real-time responses
         response = requests.post(url, params=params, json=payload, headers=headers, timeout=30, stream=CUSTOMGPT_STREAM)
+        # raise_for_status() triggers retry logic on HTTP errors (4xx, 5xx)
         response.raise_for_status()
         return response
 
+    # Retry with exponential backoff for transient failures (network, rate limits, server errors)
     return retry_sync(
         _make_request,
         config=RETRY_CONFIG_AI,
@@ -141,21 +145,39 @@ def _get_or_create_session_id(conversation_thus_far):
     """
     Get or create a CustomGPT session ID based on conversation history.
     Uses conversation hash to maintain consistent session across related messages.
+
+    Design rationale:
+    - Hash-based instead of sequential IDs to ensure same conversation always maps to same session
+    - Enables stateless backend: multiple requests with same history get same session
+    - CustomGPT uses sessions to maintain context and conversation memory
+
+    Cache lifecycle:
+    - Stored in-memory (customgpt_sessions dict) for app lifetime
+    - Cleared on app restart
+    - Hash collisions: Extremely unlikely with MD5 for conversation text (2^128 space)
+
+    Thread safety:
+    - Not thread-safe - relies on GIL for dict operations
+    - For production with multiple workers, use Redis or distributed cache
     """
     # Generate a hash of the conversation to use as session key
     # If no conversation history, use a default key (new conversation)
     if not conversation_thus_far:
         conversation_key = "new_conversation"
     else:
+        # MD5 hash provides consistent key for same conversation content
+        # Not for security - just for deterministic session mapping
         conversation_key = hashlib.md5(conversation_thus_far.encode()).hexdigest()
 
     # Check if we already have a session for this conversation
     if conversation_key not in customgpt_sessions:
         # Create a new session ID
         session_id = str(uuid.uuid4())
+        # Store in cache: conversation_hash -> session_id
         customgpt_sessions[conversation_key] = session_id
         logging.info(f"Created new CustomGPT session: {session_id}")
     else:
+        # Reuse existing session for this conversation
         session_id = customgpt_sessions[conversation_key]
         logging.debug(f"Reusing CustomGPT session: {session_id}")
 

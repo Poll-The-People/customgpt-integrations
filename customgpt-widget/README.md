@@ -19,52 +19,256 @@ A dual-mode AI assistant with voice and chat interfaces. Interact naturally thro
 ## Features
 
 ### Voice Mode
-- 🎤 **Voice Activity Detection** - Automatic speech detection, no button pressing required
-- 👤 **3D Avatar with Lip-Sync** - Realistic avatar with facial expressions and gestures (NEW!)
-- 🎨 **Particle Animation Interface** - Visual feedback with dynamic particle effects
-- 🔊 **Multiple TTS Providers** - Choose from OpenAI TTS, gTTS, ElevenLabs, Edge TTS, or StreamElements
-- 🎭 **Avatar States** - Dynamic mood changes and gestures during conversation (listening, thinking, speaking)
+
+- **Voice Activity Detection** - Automatic speech detection, no button pressing required
+- **3D Avatar with Lip-Sync** - Realistic avatar with facial expressions and gestures (NEW!)
+- **Particle Animation Interface** - Visual feedback with dynamic particle effects
+- **Multiple TTS Providers** - Choose from OpenAI TTS, gTTS, ElevenLabs, Edge TTS, or StreamElements
+- **Avatar States** - Dynamic mood changes and gestures during conversation (listening, thinking, speaking)
 
 ### Chat Mode
-- 💬 **Text-Based Chat** - Full-featured chat interface with markdown support
-- 👍 **Message Reactions** - Like/dislike AI responses for feedback
-- 📚 **Citations** - Hover over citations to see source details
-- 🔊 **Per-Message TTS** - Play any message as audio with speaker button
-- 🎤 **Speech Input** - Use microphone button for voice-to-text input
+
+- **Text-Based Chat** - Full-featured chat interface with markdown support
+- **Message Reactions** - Like/dislike AI responses for feedback
+- **Citations** - Hover over citations to see source details
+- **Per-Message TTS** - Play any message as audio with speaker button
+- **Speech Input** - Use microphone button for voice-to-text input
 
 ### Shared Features
-- 🤖 **AI-Powered Responses** - Powered by CustomGPT for RAG-based responses or OpenAI for general chat
-- 💭 **Conversation Memory** - Maintains context across the conversation
-- 🌍 **Multi-language Support** - Configure language for both speech recognition and synthesis
-- 🐳 **Docker Ready** - Easy deployment with Docker
+
+- **AI-Powered Responses** - Powered by CustomGPT for RAG-based responses or OpenAI for general chat
+- **Conversation Memory** - Maintains context across the conversation
+- **Multi-language Support** - Configure language for both speech recognition and synthesis
+- **Docker Ready** - Easy deployment with Docker
 
 ## Prerequisites
 
-**For Docker:**
-- Docker installed on your system
+**For Docker Deployment:**
+- Docker 20.10+ installed ([Download](https://www.docker.com/get-started))
+- OpenAI API key ([Get one](https://platform.openai.com/api-keys))
 
 **For Local Development:**
 - Python 3.10+
 - Node.js 18+
-- FFmpeg
-- Yarn
+- FFmpeg ([Install guide](https://ffmpeg.org/download.html))
+- Yarn (`npm install -g yarn`)
+- OpenAI API key
 
-## Documentation
+## Table of Contents
 
-### 📦 Deployment
-- **[Docker Hub Deployment Guide](docs/deployment/DOCKER_HUB_DEPLOYMENT.md)** - Deploy using pre-built images from Docker Hub
-- **Docker Image**: `zriyansh/customgpt-widget:latest` (AMD64 + ARM64)
+- [Quick Start (Docker)](#quick-start-docker)
+- [Docker Hub Deployment](#docker-hub-deployment)
+- [Local Development](#local-development)
+- [Website Integration](#website-integration)
+- [Avatar Mode](#avatar-mode-3d-talking-avatar)
+- [Configuration](#configuration)
+- [TTS Provider Options](#tts-provider-options)
+- [CustomGPT Integration](#customgpt-integration)
+- [AI Model Configuration](#ai-model-configuration)
+- [Troubleshooting](#troubleshooting)
 
-### 🔌 Integration
-- **[Widget Integration Guide](examples/README.md)** - Add the widget to your website
-  - Quick 2-step integration
-  - Platform-specific instructions (WordPress, Shopify, Wix, etc.)
-  - Customization options (colors, position, visibility)
-  - Framework integration (Next.js, React, Vue)
+## Quick Start (Docker)
 
-### 📚 Additional Resources
-- **[Examples & Test Pages](examples/)** - Integration examples and test scripts
-- **[Architecture Documentation](docs/)** - Technical documentation
+### 1. Create `.env` file
+
+```bash
+# Required
+OPENAI_API_KEY=sk-your-key-here
+
+# Recommended
+AI_COMPLETION_MODEL=gpt-4o-mini
+TTS_PROVIDER=OPENAI
+OPENAI_TTS_VOICE=nova
+LANGUAGE=en
+```
+
+### 2. Run container
+
+```bash
+chmod +x run.sh  # First time only
+./run.sh
+```
+
+### 3. Open browser
+
+Visit `http://localhost:8000` and allow microphone access.
+
+---
+
+## Docker Hub Deployment
+
+### Using Pre-built Image
+
+The fastest way to deploy is using the pre-built Docker image:
+
+```bash
+docker pull zriyansh/customgpt-widget:latest
+```
+
+**Supported Architectures**: AMD64, ARM64 (Mac M1/M2, Raspberry Pi)
+
+### Method 1: Docker Run (Simple)
+
+```bash
+docker run -d \
+  --name customgpt-widget \
+  -p 8000:8000 \
+  -e OPENAI_API_KEY=your_key_here \
+  -e AI_COMPLETION_MODEL=gpt-4o-mini \
+  -e TTS_PROVIDER=OPENAI \
+  -e LANGUAGE=en \
+  zriyansh/customgpt-widget:latest
+```
+
+### Method 2: Docker Compose (Recommended)
+
+Create `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+services:
+  widget:
+    image: zriyansh/customgpt-widget:latest
+    container_name: customgpt-widget
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: unless-stopped
+```
+
+Run:
+
+```bash
+docker-compose up -d
+```
+
+### Production Deployment
+
+**With Nginx Reverse Proxy:**
+
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+**With SSL (Let's Encrypt):**
+
+```bash
+# Install certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Get certificate
+sudo certbot --nginx -d yourdomain.com
+
+# Auto-renewal
+sudo certbot renew --dry-run
+```
+
+---
+
+## Website Integration
+
+### Script Tag Embed (2 Steps)
+
+**Step 1**: Add to your HTML (before `</body>`):
+
+```html
+<script>
+  window.customGPTConfig = {
+    serverUrl: 'https://your-server.com',  // Your backend URL
+    position: 'bottom-right',              // bottom-right, bottom-left
+    theme: 'dark',                         // dark or light
+    initialMode: 'chat',                   // chat or voice
+    showBranding: true                     // Show "Powered by CustomGPT"
+  };
+</script>
+<script src="https://your-server.com/widget.js" defer></script>
+```
+
+**Step 2**: Deploy your backend with Docker (see above)
+
+### Customization Options
+
+```javascript
+window.customGPTConfig = {
+  // Required
+  serverUrl: 'https://your-server.com',
+
+  // Optional UI
+  position: 'bottom-right',       // bottom-right, bottom-left, bottom-center
+  theme: 'dark',                  // dark, light
+  primaryColor: '#8b5cf6',        // Brand color
+  initialMode: 'chat',            // chat, voice
+  showBranding: true,             // Show branding
+
+  // Optional Behavior
+  autoOpen: false,                // Auto-open on page load
+  openDelay: 3000,                // Delay before auto-open (ms)
+  greeting: 'Hi! How can I help?', // Initial greeting message
+
+  // Optional Features
+  enableVoiceMode: true,          // Show voice mode button
+  enableSTT: true,                // Enable speech input
+  enableTTS: true,                // Enable audio output
+  enableAvatar: true              // Enable 3D avatar mode
+};
+```
+
+### Platform-Specific Integration
+
+**WordPress:**
+1. Install "Insert Headers and Footers" plugin
+2. Paste script in footer section
+3. Save and clear cache
+
+**Shopify:**
+1. Go to Online Store �� Themes �� Edit Code
+2. Open `theme.liquid`
+3. Add script before `</body>`
+4. Save
+
+**Wix:**
+1. Add "Custom Code" element
+2. Paste script in HTML iframe
+3. Position the element
+
+**Next.js / React:**
+
+```jsx
+import { useEffect } from 'react';
+
+export default function MyApp() {
+  useEffect(() => {
+    window.customGPTConfig = {
+      serverUrl: process.env.NEXT_PUBLIC_WIDGET_URL,
+      theme: 'dark'
+    };
+
+    const script = document.createElement('script');
+    script.src = `${process.env.NEXT_PUBLIC_WIDGET_URL}/widget.js`;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    return () => document.body.removeChild(script);
+  }, []);
+
+  return <YourApp />;
+}
+```
+
+---
 
 ## Avatar Mode (3D Talking Avatar)
 
@@ -72,34 +276,11 @@ A dual-mode AI assistant with voice and chat interfaces. Interact naturally thro
 
 Avatar Mode replaces the particle animation interface with a realistic 3D animated avatar that provides visual feedback through facial expressions, gestures, and lip-sync animation during your conversation. The avatar creates a more human-like and engaging interaction experience.
 
-**Key Features:**
-- **Realistic Lip-Sync**: Mouth movements synchronized with AI speech in real-time
-- **Emotional States**: Dynamic facial expressions (happy, neutral) that change based on conversation context
-- **Interactive Gestures**: Hand animations that signal different conversation phases
-- **WebGL-Powered**: High-quality 3D rendering using Ready Player Me avatars
-- **Seamless Integration**: Works with all existing voice mode features (VAD, STT, TTS)
-
-### How to Use Avatar Mode
-
-1. **Enter Voice Mode**: Click the "Voice Mode" button from the chat interface
-2. **Toggle Display**: Click the mode selector at the top-right corner
-3. **Choose Avatar**: Select "Avatar" from the dropdown menu
-4. **Start Talking**: The avatar will respond to your conversation with animations
-
-The avatar automatically transitions between four distinct states:
-
-| State | Visual Indicator | When It Happens |
-|-------|-----------------|-----------------|
-| **Idle** 😌 | Neutral expression, subtle breathing | Waiting for user input |
-| **Listening** 👂 | Happy/attentive mood, slight thinking gesture | User is speaking (VAD active) |
-| **Processing** 🤔 | Neutral/focused mood, contemplative gesture | AI is generating response |
-| **Speaking** 🗣️ | Animated lip-sync, expressive gestures | Avatar is delivering AI response |
-
 ### Browser Requirements
 
 Avatar Mode requires a modern browser with WebGL support:
 
-**✅ Fully Supported:**
+** Fully Supported:**
 - Chrome/Edge 90+ (Desktop & Mobile)
 - Firefox 88+ (Desktop & Mobile)
 - Safari 14+ (Desktop & Mobile)
@@ -153,77 +334,18 @@ VITE_AVATAR_GLB_URL=https://models.readyplayer.me/YOUR_AVATAR_ID.glb
 - **Lip-Sync**: Word-based phoneme animation with English language support
 - **State Management**: React hooks with global method exposure
 
-**File Structure:**
-- [frontend/src/components/AvatarMode.tsx](frontend/src/components/AvatarMode.tsx) - Avatar component
-- [frontend/src/hooks/useTalkingHead.ts](frontend/src/hooks/useTalkingHead.ts) - Avatar state management
-- [frontend/src/types/avatar.d.ts](frontend/src/types/avatar.d.ts) - TypeScript definitions
-- [frontend/src/utils/avatarConfig.ts](frontend/src/utils/avatarConfig.ts) - Configuration and constants
 
 **CDN Dependencies:**
 - TalkingHead: `https://cdn.jsdelivr.net/npm/@met4citizen/talkinghead@1.6.0/modules/talkinghead.mjs`
 - Avatar Model: `https://models.readyplayer.me/*.glb`
 - Three.js: Bundled with TalkingHead library
 
-## Quick Start (Docker)
-
-### 1. Set up environment variables
-
-Create a `.env` file in the project root:
-
-```bash
-# Required: OpenAI API Key
-OPENAI_API_KEY=your_openai_api_key_here
-
-# Optional: AI Model Configuration (only for OpenAI, ignored if using CustomGPT)
-AI_COMPLETION_MODEL=gpt-4o-mini  # Recommended: gpt-4o-mini, gpt-4o, gpt-3.5-turbo
-
-# Optional: Language (ISO-639-1 code)
-LANGUAGE=en  # en, es, fr, de, ja, etc.
-
-# Optional: Speech-to-Text Model
-STT_MODEL=gpt-4o-mini-transcribe  # gpt-4o-mini-transcribe (default), gpt-4o-transcribe, whisper-1
-
-# Optional: TTS Provider
-TTS_PROVIDER=OPENAI  # OPENAI, gTTS, ELEVENLABS, STREAMELEMENTS, EDGETTS
-
-# Optional: OpenAI TTS Configuration (if TTS_PROVIDER=OPENAI)
-OPENAI_TTS_MODEL=tts-1  # tts-1 (fast) or tts-1-hd (high quality)
-OPENAI_TTS_VOICE=nova  # alloy, echo, fable, onyx, nova, shimmer
-
-# Optional: CustomGPT Configuration (for RAG-based responses)
-USE_CUSTOMGPT=false
-CUSTOMGPT_PROJECT_ID=your_project_id  # Only needed if USE_CUSTOMGPT=true
-CUSTOMGPT_API_KEY=your_customgpt_key  # Only needed if USE_CUSTOMGPT=true
-CUSTOMGPT_STREAM=true  # Enable streaming for faster responses
-
-# Optional: Feature Flags
-VITE_UI_THEME=dark  # dark or light
-VITE_ENABLE_VOICE_MODE=true
-VITE_ENABLE_STT=true
-VITE_ENABLE_TTS=true
-
-# Optional: Avatar Configuration
-VITE_AVATAR_GLB_URL=https://models.readyplayer.me/YOUR_AVATAR_ID.glb  # Custom avatar model
-```
-
-### 2. Run the application
-
-```bash
-chmod +x run.sh  # Make script executable (first time only)
-./run.sh
-```
-
-The script will automatically load environment variables from `.env` file.
-
-### 3. Access the application
-
-Open your browser to `http://localhost:8000`
-
-Allow microphone access when prompted and start speaking.
+---
 
 ## TTS Provider Options
 
 ### OpenAI TTS (Recommended)
+
 - High quality, natural-sounding voices
 - Streaming support for low latency
 - Requires OpenAI API key
@@ -460,7 +582,7 @@ INITIAL_PROMPT = f"You are CustomGPT Widget - a helpful assistant with a voice i
 ### Avatar Mode issues
 
 **Avatar not loading / stuck on loading screen**:
-- Check browser console for WebGL errors: Press F12 → Console tab
+- Check browser console for WebGL errors: Press F12 �� Console tab
 - Verify WebGL support: Visit [https://get.webgl.org/](https://get.webgl.org/)
 - Clear browser cache and reload the page
 - Check network connectivity (avatar loads from CDN)
@@ -485,7 +607,7 @@ INITIAL_PROMPT = f"You are CustomGPT Widget - a helpful assistant with a voice i
 - Verify `hasSetMood` and `hasPlayGesture` are both `true` in logs
 - Check that avatar initialization completed successfully
 - Try reloading the page to reinitialize the avatar
-- Report any `[Avatar] ❌ Failed to set` errors
+- Report any `[Avatar] � Failed to set` errors
 
 **Performance issues / choppy animation**:
 - Lower your browser window size (fewer pixels to render)
@@ -510,7 +632,7 @@ console.log('TalkingHead loaded:', !!window.TalkingHead);
 
 **Debugging tips**:
 - Enable verbose logging: Look for `[Avatar]` prefixed console logs
-- Check initialization sequence: Library load → Instance create → Model load
+- Check initialization sequence: Library load �� Instance create �� Model load
 - Verify global methods: Check `window.avatarSetListening` exists
 - Test WebGL independently: Visit [https://threejs.org/examples/](https://threejs.org/examples/)
 - Report issues with full browser console logs
@@ -519,11 +641,3 @@ console.log('TalkingHead loaded:', !!window.TalkingHead);
 
 This project is licensed under the MIT License.
 
-## Acknowledgments
-
-- Voice Activity Detection: @ricky0123/vad-react
-- 3D Avatar System: @met4citizen/talkinghead
-- Avatar 3D Models: Ready Player Me
-- OpenAI for Whisper and GPT models
-- FastAPI for the excellent web framework
-- All TTS provider services

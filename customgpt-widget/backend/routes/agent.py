@@ -1,3 +1,13 @@
+"""
+Agent Settings and Capabilities API Endpoints
+
+This module provides endpoints for retrieving CustomGPT agent configuration:
+- /api/agent/settings - Fetch agent display settings (avatar, title, example questions)
+- /api/agent/capabilities - Get system feature availability (TTS providers, models)
+
+Used by frontend to dynamically configure the chat interface based on agent settings.
+"""
+
 import logging
 import os
 import requests
