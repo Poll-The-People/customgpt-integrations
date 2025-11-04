@@ -2,6 +2,8 @@
 
 A dual-mode AI assistant with voice and chat interfaces. Interact naturally through voice with real-time particle animations or 3D avatar, or use the text-based chat interface with message reactions and citations.
 
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
+
 ## Screenshots
 
 <div align="center">
@@ -268,6 +270,22 @@ export default function MyApp() {
 }
 ```
 
+### Working Examples
+
+For complete integration examples and step-by-step guides, see the [`examples/`](examples/) directory:
+
+- **[Integration Guide](examples/README.md)** - Complete documentation for website integration
+- **[Floating Widget Example](examples/test-pages/test-floating-chatbot.html)** - Test floating chatbot interface
+- **[Inline Embed Example](examples/test-pages/test-inline-embed.html)** - Test inline page embedding
+
+The examples directory includes:
+
+- Platform-specific integration instructions (WordPress, Shopify, Wix, etc.)
+- Framework integration examples (Next.js, React, Vue)
+- Customization options and CSS examples
+- Analytics tracking setup
+- Troubleshooting common issues
+
 ---
 
 ## Avatar Mode (3D Talking Avatar)
@@ -426,12 +444,12 @@ Frontend will be available at `http://localhost:5173`
 
 When using standard OpenAI (not CustomGPT), you can choose from several models:
 
-| Model | Best For | Speed | Context |
-|-------|----------|-------|---------|
-| **gpt-4o-mini** | Most use cases, voice assistants | Very Fast | 128k |
-| **gpt-4o** | High-quality responses | Fast | 128k |
-| **gpt-4-turbo** | Maximum quality | Medium | 128k |
-| **gpt-3.5-turbo** | Budget option | Very Fast | 16k |
+| Model             | Best For                         | Speed     | Context |
+| ----------------- | -------------------------------- | --------- | ------- |
+| **gpt-4o-mini**   | Most use cases, voice assistants | Very Fast | 128k    |
+| **gpt-4o**        | High-quality responses           | Fast      | 128k    |
+| **gpt-4-turbo**   | Maximum quality                  | Medium    | 128k    |
+| **gpt-3.5-turbo** | Budget option                    | Very Fast | 16k     |
 
 **Recommended for voice assistants:** gpt-4o-mini (best balance of speed, quality, and cost)
 
@@ -444,11 +462,11 @@ AI_COMPLETION_MODEL=gpt-4o-mini
 
 OpenAI's latest speech-to-text models (Released March 2025):
 
-| Model | Speed | Accuracy | Best For |
-|-------|-------|----------|----------|
-| **gpt-4o-mini-transcribe** | Very Fast | Excellent | Voice assistants (Default) |
-| **gpt-4o-transcribe** | Fast | Best | Maximum accuracy, challenging audio |
-| **whisper-1** | Fast | Good | Whisper v2 model |
+| Model                      | Speed     | Accuracy  | Best For                            |
+| -------------------------- | --------- | --------- | ----------------------------------- |
+| **gpt-4o-mini-transcribe** | Very Fast | Excellent | Voice assistants (Default)          |
+| **gpt-4o-transcribe**      | Fast      | Best      | Maximum accuracy, challenging audio |
+| **whisper-1**              | Fast      | Good      | Whisper v2 model                    |
 
 **Default:** gpt-4o-mini-transcribe (best balance for voice assistants)
 
@@ -500,27 +518,27 @@ AI_COMPLETION_MODEL=gpt-4o-mini
 
 ### Environment Variables
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `OPENAI_API_KEY` | Yes | - | Your OpenAI API key (required for STT and TTS if using OpenAI) |
-| `STT_MODEL` | No | `gpt-4o-mini-transcribe` | Speech-to-text model |
-| `USE_CUSTOMGPT` | No | `false` | Enable CustomGPT for AI completions |
-| `CUSTOMGPT_PROJECT_ID` | Conditional | - | Required if USE_CUSTOMGPT=true |
-| `CUSTOMGPT_API_KEY` | Conditional | - | Required if USE_CUSTOMGPT=true |
-| `CUSTOMGPT_STREAM` | No | `true` | Enable streaming for faster responses |
-| `AI_COMPLETION_MODEL` | No | `gpt-3.5-turbo` | Model to use (only for OpenAI, not CustomGPT) |
-| `LANGUAGE` | No | `en` | ISO-639-1 language code for STT/TTS |
-| `TTS_PROVIDER` | No | `OPENAI` | TTS provider: OPENAI, gTTS, ELEVENLABS, STREAMELEMENTS, EDGETTS |
-| `OPENAI_TTS_MODEL` | No | `tts-1` | OpenAI TTS model: tts-1 (fast) or tts-1-hd (quality) |
-| `OPENAI_TTS_VOICE` | No | `nova` | OpenAI TTS voice: alloy, echo, fable, onyx, nova, shimmer |
-| `EDGETTS_VOICE` | No | `en-US-EricNeural` | Voice for Edge TTS |
-| `ELEVENLABS_API_KEY` | Conditional | - | Required if using ELEVENLABS |
-| `ELEVENLABS_VOICE` | No | `EXAVITQu4vr4xnSDxMaL` | Voice ID for ElevenLabs |
-| `VITE_UI_THEME` | No | `dark` | UI theme: dark or light |
-| `VITE_ENABLE_VOICE_MODE` | No | `true` | Show voice mode button |
-| `VITE_ENABLE_STT` | No | `true` | Show microphone button for STT |
-| `VITE_ENABLE_TTS` | No | `true` | Show speaker button for TTS |
-| `VITE_AVATAR_GLB_URL` | No | Default avatar | Custom Ready Player Me avatar GLB URL |
+| Variable                 | Required    | Default                  | Description                                                     |
+| ------------------------ | ----------- | ------------------------ | --------------------------------------------------------------- |
+| `OPENAI_API_KEY`         | Yes         | -                        | Your OpenAI API key (required for STT and TTS if using OpenAI)  |
+| `STT_MODEL`              | No          | `gpt-4o-mini-transcribe` | Speech-to-text model                                            |
+| `USE_CUSTOMGPT`          | No          | `false`                  | Enable CustomGPT for AI completions                             |
+| `CUSTOMGPT_PROJECT_ID`   | Conditional | -                        | Required if USE_CUSTOMGPT=true                                  |
+| `CUSTOMGPT_API_KEY`      | Conditional | -                        | Required if USE_CUSTOMGPT=true                                  |
+| `CUSTOMGPT_STREAM`       | No          | `true`                   | Enable streaming for faster responses                           |
+| `AI_COMPLETION_MODEL`    | No          | `gpt-3.5-turbo`          | Model to use (only for OpenAI, not CustomGPT)                   |
+| `LANGUAGE`               | No          | `en`                     | ISO-639-1 language code for STT/TTS                             |
+| `TTS_PROVIDER`           | No          | `OPENAI`                 | TTS provider: OPENAI, gTTS, ELEVENLABS, STREAMELEMENTS, EDGETTS |
+| `OPENAI_TTS_MODEL`       | No          | `tts-1`                  | OpenAI TTS model: tts-1 (fast) or tts-1-hd (quality)            |
+| `OPENAI_TTS_VOICE`       | No          | `nova`                   | OpenAI TTS voice: alloy, echo, fable, onyx, nova, shimmer       |
+| `EDGETTS_VOICE`          | No          | `en-US-EricNeural`       | Voice for Edge TTS                                              |
+| `ELEVENLABS_API_KEY`     | Conditional | -                        | Required if using ELEVENLABS                                    |
+| `ELEVENLABS_VOICE`       | No          | `EXAVITQu4vr4xnSDxMaL`   | Voice ID for ElevenLabs                                         |
+| `VITE_UI_THEME`          | No          | `dark`                   | UI theme: dark or light                                         |
+| `VITE_ENABLE_VOICE_MODE` | No          | `true`                   | Show voice mode button                                          |
+| `VITE_ENABLE_STT`        | No          | `true`                   | Show microphone button for STT                                  |
+| `VITE_ENABLE_TTS`        | No          | `true`                   | Show speaker button for TTS                                     |
+| `VITE_AVATAR_GLB_URL`    | No          | Default avatar           | Custom Ready Player Me avatar GLB URL                           |
 
 ### Customizing the AI Personality
 

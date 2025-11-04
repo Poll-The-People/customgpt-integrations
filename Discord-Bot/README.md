@@ -2,6 +2,8 @@
 
 A Discord bot that integrates with CustomGPT's API to answer questions using your agent's knowledge base.
 
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
+
 ![CustomGPT Discord Bot](../images/customgpt_discord.jpeg)
 
 ## Features
@@ -209,9 +211,3 @@ For distributed rate limiting across multiple bot instances:
 ### Platform Documentation
 - Discord.py Documentation: [discordpy.readthedocs.io](https://discordpy.readthedocs.io)
 
-## Support
-
-For issues related to:
-- Discord Bot: Check Discord.py documentation
-- CustomGPT API: Check the resources above or contact CustomGPT support
-- This integration: Open an issue on GitHub

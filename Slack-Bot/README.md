@@ -2,6 +2,9 @@
 
 A Slack bot that integrates with CustomGPT's RAG (Retrieval-Augmented Generation) platform to provide intelligent responses based on your agent's knowledge base.
 
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
+
+
 ![CustomGPT Slack Bot](../images/customgpt_slack.jpeg)
 ![CustomGPT Slack Bot Interface](../images/customgpt_slack2.jpeg)
 

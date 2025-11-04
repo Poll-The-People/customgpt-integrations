@@ -2,6 +2,9 @@
 
 A powerful Rocket Chat bot that integrates with CustomGPT's API to provide AI-powered responses with built-in rate limiting, session management, and advanced features.
 
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
+
+
 ## Features
 
 - 🤖 **AI-Powered Responses**: Leverages CustomGPT's knowledge base for intelligent answers

@@ -6,6 +6,9 @@ A comprehensive Google Apps Script solution that integrates CustomGPT with Googl
 - 📊 **Google Sheets Integration** - Use CustomGPT from spreadsheets
 - 📧 **Gmail Add-on** - AI responses in Gmail
 
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
+
+
 ## Features
 
 ### Google Chat Bot

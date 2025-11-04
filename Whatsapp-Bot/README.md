@@ -2,15 +2,9 @@
 
 A WhatsApp bot that integrates with CustomGPT's API to provide intelligent responses from your agent's knowledge base.
 
+Get your [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration.
+
 ![CustomGPT WhatsApp Bot](../images/customgpt_whatsapp.jpeg)
-
-## 📚 Documentation
-
-- [🚀 **Deployment Guide**](DEPLOYMENT.md) - Deploy to Railway, Render, Fly.io, or Google Apps Script
-- [🌐 **ngrok Setup Guide**](NGROK_SETUP.md) - Detailed instructions for local testing with ngrok
-- [❓ **Why Twilio & Redis?**](WHY_TWILIO_REDIS.md) - Explanation of technology choices and alternatives
-- [👩‍💻 **Developer Guide**](CLAUDE.md) - Technical documentation for developers
-- [📱 **Google Apps Script**](google-apps-script/README.md) - Alternative free hosting option
 
 ## Features
 
@@ -24,11 +18,11 @@ A WhatsApp bot that integrates with CustomGPT's API to provide intelligent respo
 
 ## Prerequisites
 
-- Python 3.8+ 
+- Python 3.8+
 - CustomGPT API credentials (API key and Agent ID)
 - Twilio account with WhatsApp sandbox access
 
-## Quick Start
+## Quick Start (15 minutes)
 
 ### 1. Clone and Install
 
@@ -72,7 +66,26 @@ ENABLE_LOCATION_SHARING=false
 DEFAULT_LANGUAGE=en
 ```
 
-### 3. Run the Bot
+### 3. Set Up Twilio WhatsApp Sandbox
+
+#### Get Twilio Credentials
+
+1. Sign up at [twilio.com](https://www.twilio.com) (free trial with $15 credit)
+2. Log in to [Twilio Console](https://console.twilio.com)
+3. Go to "Account" → "API keys & tokens" OR click Phone Number section (choose "developer" when logging in)
+4. Note your:
+   - **Account SID** (starts with "AC")
+   - **Auth Token**
+   - **WhatsApp number**
+
+#### Join WhatsApp Sandbox
+
+1. In Twilio Console, go to "Messaging" → "Try it out" → "Send a WhatsApp message"
+2. Follow instructions to join the sandbox
+3. You'll send "join [your-keyword]" to the Twilio WhatsApp number
+4. Note your sandbox number (e.g., `whatsapp:+14155238886`)
+
+### 4. Run the Bot
 
 **Important**: You need TWO terminal windows for local development:
 
@@ -96,20 +109,72 @@ ngrok http 8000
 
 📌 **Both must be running simultaneously** for the bot to work!
 
-### 4. Configure Twilio Webhook
+### 5. Configure Twilio Webhook
 
 1. Copy the HTTPS URL from ngrok (e.g., `https://abc123.ngrok-free.app`)
 2. In [Twilio Console](https://console.twilio.com), go to Messaging → Try it out → Send a WhatsApp message
-3. Set the webhook URL to: `https://YOUR-NGROK-URL.ngrok-free.app/webhook/whatsapp`
-4. Save the configuration
-5. Join the sandbox by sending "join [your-keyword]" to the Twilio WhatsApp number
+3. In "Sandbox Configuration", set webhook URL to: `https://YOUR-NGROK-URL.ngrok-free.app/webhook/whatsapp`
+4. Method: POST
+5. Save the configuration
 6. Test by sending a message!
 
 ⚠️ **Note**: ngrok URL changes each time you restart it. Update Twilio webhook accordingly.
 
-📖 **Detailed setup guide**: See [NGROK_SETUP.md](NGROK_SETUP.md)
+### 6. Test Your Bot
 
-### 5. Important: WhatsApp Sandbox Limitations
+1. Send "Hi" to your Twilio WhatsApp number
+2. You should receive a welcome message
+3. Try asking questions related to your CustomGPT knowledge base
+
+## ngrok Setup Guide (Detailed)
+
+### Step 1: Create ngrok Account
+
+1. Go to https://dashboard.ngrok.com/signup
+2. Sign up for a free account (no credit card required)
+3. Verify your email
+
+### Step 2: Get Your Auth Token
+
+1. After signing in, go to: https://dashboard.ngrok.com/get-started/your-authtoken
+2. Copy your authtoken (looks like: `2abc123XYZ...`)
+
+### Step 3: Configure ngrok
+
+```bash
+ngrok config add-authtoken YOUR_AUTH_TOKEN_HERE
+```
+
+### Step 4: Start ngrok
+
+```bash
+ngrok http 8000
+```
+
+You'll see output like:
+```
+Session Status                online
+Account                       your-email@example.com
+Forwarding                    https://abc123.ngrok-free.app -> http://localhost:8000
+```
+
+### Troubleshooting ngrok
+
+**Bot not responding?**
+1. Check ngrok is still running
+2. Check your bot is running (`python bot.py`)
+3. Check Twilio webhook URL is correct
+4. Look for errors in bot terminal
+
+**ngrok URL changed?**
+- ngrok free tier gives you a new URL each time
+- When you restart ngrok: copy new URL → update in Twilio Console → save
+
+**Want a permanent URL?**
+- Upgrade to ngrok paid plan for custom domains
+- Or use deployment options (Railway, Render, etc.)
+
+## WhatsApp Sandbox Limitations
 
 **You're currently using the FREE Twilio WhatsApp Sandbox**, which has these limitations:
 
@@ -119,15 +184,6 @@ ngrok http 8000
 - **Development Only**: Not suitable for production use
 
 **After 24 hours of inactivity**, you can only send pre-approved template messages (requires paid account).
-
-**To get your own WhatsApp Business number** (Required for production):
-1. **Upgrade to paid Twilio account** (trial accounts can't register WhatsApp senders)
-2. Register your WhatsApp Business Profile
-3. Get Facebook Business verification
-4. Submit message templates for approval
-5. Monthly fees apply + per-message costs
-
-Learn more: [Twilio WhatsApp API Docs](https://www.twilio.com/docs/whatsapp/api)
 
 ### Sandbox vs Production Comparison
 
@@ -142,6 +198,297 @@ Learn more: [Twilio WhatsApp API Docs](https://www.twilio.com/docs/whatsapp/api)
 | **Account Type** | Trial account OK | Paid account required |
 | **Setup Time** | 5 minutes | 2-5 days (verification) |
 
+### Getting Your Own WhatsApp Business Number
+
+**To get your own WhatsApp Business number** (Required for production):
+1. **Upgrade to paid Twilio account** (trial accounts can't register WhatsApp senders)
+2. Register your WhatsApp Business Profile
+3. Get Facebook Business verification
+4. Submit message templates for approval
+5. Monthly fees apply + per-message costs
+
+Learn more: [Twilio WhatsApp API Docs](https://www.twilio.com/docs/whatsapp/api)
+
+---
+
+## Deployment Options
+
+Complete guide for deploying your CustomGPT WhatsApp bot to various free hosting providers.
+
+### Option 1: Railway (Recommended)
+
+**Free Tier**: 500 hours/month, $5 credit
+
+#### Steps:
+
+1. **Sign up** at [railway.app](https://railway.app)
+
+2. **Install Railway CLI** (optional):
+   ```bash
+   npm install -g @railway/cli
+   ```
+
+3. **Deploy via GitHub**:
+   - Push your code to GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your repository
+   - Railway auto-detects Python
+
+4. **Configure Environment Variables**:
+   - Go to your project → Variables
+   - Add all variables from `.env`:
+     ```
+     CUSTOMGPT_API_KEY=your_key
+     CUSTOMGPT_PROJECT_ID=your_id
+     TWILIO_ACCOUNT_SID=your_sid
+     TWILIO_AUTH_TOKEN=your_token
+     TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+     RATE_LIMIT_DAILY=100
+     # ... add all other variables
+     ```
+
+5. **Get your URL**:
+   - Go to Settings → Domains
+   - Your URL will be like: `https://your-app.up.railway.app`
+
+6. **Configure Twilio Webhook**:
+   - In Twilio Sandbox settings
+   - Set webhook URL: `https://your-app.up.railway.app/webhook/whatsapp`
+   - Method: POST
+   - Save
+
+#### CLI Deployment:
+
+```bash
+# Login
+railway login
+
+# Initialize project
+railway init
+
+# Link to existing project
+railway link
+
+# Deploy
+railway up
+
+# View logs
+railway logs
+```
+
+### Option 2: Render
+
+**Free Tier**: 750 hours/month
+
+#### Steps:
+
+1. **Sign up** at [render.com](https://render.com)
+
+2. **Create New Web Service**:
+   - Click "New +" → "Web Service"
+   - Connect GitHub repository
+   - Select your repo
+
+3. **Configure Service**:
+   - Name: `customgpt-whatsapp-bot`
+   - Environment: `Python 3`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `python bot.py`
+
+4. **Add Environment Variables**:
+   - Go to Environment tab
+   - Add all variables from `.env`
+
+5. **Deploy**:
+   - Click "Create Web Service"
+   - Wait for deployment
+   - Note your URL: `https://your-app.onrender.com`
+
+6. **Configure Twilio**:
+   - Set webhook: `https://your-app.onrender.com/webhook/whatsapp`
+
+### Option 3: Fly.io
+
+**Free Tier**: 3 shared-cpu-1x VMs
+
+#### Steps:
+
+1. **Install Fly CLI**:
+   ```bash
+   curl -L https://fly.io/install.sh | sh
+   ```
+
+2. **Sign up and login**:
+   ```bash
+   fly auth signup
+   # or
+   fly auth login
+   ```
+
+3. **Launch app**:
+   ```bash
+   cd whatsapp
+   fly launch
+   ```
+   - Choose app name
+   - Select region (closest to you)
+   - Don't deploy yet
+
+4. **Configure secrets**:
+   ```bash
+   fly secrets set CUSTOMGPT_API_KEY="your_key"
+   fly secrets set CUSTOMGPT_PROJECT_ID="your_id"
+   fly secrets set TWILIO_ACCOUNT_SID="your_sid"
+   fly secrets set TWILIO_AUTH_TOKEN="your_token"
+   fly secrets set TWILIO_WHATSAPP_NUMBER="whatsapp:+14155238886"
+   # Set all other secrets
+   ```
+
+5. **Deploy**:
+   ```bash
+   fly deploy
+   ```
+
+6. **Get URL**:
+   ```bash
+   fly status
+   # Your URL: https://your-app.fly.dev
+   ```
+
+7. **Configure Twilio**:
+   - Set webhook: `https://your-app.fly.dev/webhook/whatsapp`
+
+### Option 4: Google Apps Script
+
+**Free Tier**: Unlimited (with quotas)
+
+Simplest option - no server needed!
+
+#### Steps:
+
+1. **Go to** [script.google.com](https://script.google.com)
+
+2. **Create new project**
+
+3. **Copy code** from `google-apps-script/Code.gs`
+
+4. **Set Script Properties**:
+   - Project Settings → Script Properties
+   - Add all required properties
+
+5. **Deploy**:
+   - Deploy → New Deployment
+   - Type: Web app
+   - Execute as: Me
+   - Access: Anyone
+
+6. **Get URL** and configure in Twilio
+
+**⚠️ Warning**: May timeout with complex queries (only "Thinking..." message sent)
+
+See detailed instructions in `google-apps-script/README.md`
+
+### Other Free Alternatives
+
+#### Koyeb
+
+**Free Tier**: 2 services, 1 vCPU, 256MB RAM
+
+```bash
+# Install CLI
+curl -fsSL https://cli.koyeb.com/install.sh | sh
+
+# Deploy
+koyeb app create customgpt-whatsapp
+koyeb service create customgpt-whatsapp \
+  --git github.com/yourusername/yourrepo \
+  --git-branch main \
+  --ports 8000:http \
+  --routes /:8000
+```
+
+#### Cyclic.sh
+
+**Free Tier**: 10,000 requests/month
+
+1. Connect GitHub at [cyclic.sh](https://cyclic.sh)
+2. Select repository
+3. Add environment variables
+4. Deploy
+
+#### Deta Space
+
+**Free Tier**: Always free, 10GB storage
+
+```bash
+# Install Space CLI
+curl -fsSL https://get.deta.dev/space-cli.sh | sh
+
+# Deploy
+space new
+space push
+```
+
+### Deployment Comparison
+
+| Platform | Free Tier | Best For | Persistent Storage | Setup Time |
+|----------|-----------|----------|-------------------|------------|
+| **Railway** | $5 credit/month | Production | Yes | 10 min |
+| **Render** | 750 hrs/month | Web services | Yes | 15 min |
+| **Fly.io** | 3 shared VMs | Performance | Yes | 10 min |
+| **Google Apps Script** | Unlimited* | Simple bots | No | 5 min |
+| **Koyeb** | 2 services | Small projects | Yes | 10 min |
+
+*With quotas
+
+---
+
+## Post-Deployment
+
+### 1. Test Your Bot
+
+1. Send "Hi" to your Twilio WhatsApp number
+2. Check for welcome message
+3. Test all commands
+
+### 2. Monitor Logs
+
+- **Railway**: `railway logs`
+- **Render**: Dashboard → Logs
+- **Fly.io**: `fly logs`
+- **Apps Script**: View → Logs
+
+### 3. Set Up Monitoring
+
+1. **Uptime monitoring**:
+   - Use [uptimerobot.com](https://uptimerobot.com) (free)
+   - Monitor: `https://your-app.com/health`
+
+2. **Error tracking**:
+   - Add Sentry (free tier)
+   - Or use built-in logging
+
+### 4. Configure Production WhatsApp
+
+Once tested, apply for WhatsApp Business API:
+1. Apply through Twilio
+2. Get approved number
+3. Update webhook URL
+
+---
+
+## Bot Commands
+
+- `/start` - Start conversation and show menu
+- `/help` - Show available commands
+- `/examples` - Show example questions
+- `/stats` - View usage statistics
+- `/language [code]` - Change response language
+- `/clear` - Clear conversation history
+- `/feedback` - Submit feedback
+
+---
+
 ## Implementation Options
 
 ### Option 1: Twilio WhatsApp API (Currently Implemented) ✅
@@ -153,81 +500,199 @@ Learn more: [Twilio WhatsApp API Docs](https://www.twilio.com/docs/whatsapp/api)
 ### Option 2: Meta WhatsApp Business API (Direct)
 
 - **Pros**: Direct integration, no middleman fees
-- **Cons**: Complex setup, business verification required, longer approval
+- **Cons**: Complex setup, business verification required (2-4 weeks), hosting requirements
 - **Best for**: Large enterprises with dedicated infrastructure
+
+**Why Not Use Meta's Direct API?**
+
+You absolutely can! But consider:
+- **Business Verification**: Meta requires extensive business documentation
+- **Setup Complexity**: Multiple steps across Meta Business, Facebook App, WhatsApp Manager
+- **Hosting Requirements**: Need HTTPS webhooks, SSL certificates
+- **Approval Process**: Can take 2-4 weeks for production access
+
+**Twilio Alternatives**:
+1. **MessageBird** - Similar to Twilio, good European option
+2. **Vonage (Nexmo)** - Enterprise-focused
+3. **CM.com** - Good for high-volume
+4. **360dialog** - Direct WhatsApp BSP
+5. **WATI** - No-code option with UI
 
 ### Option 3: Google Apps Script (Alternative Implementation)
 
 - **Pros**: Free hosting, easy deployment, no server needed
 - **Cons**: Limited features, requires Twilio, **may timeout on long responses**
 - **Best for**: Simple bots, testing, short responses
-- **⚠️ Warning**: May timeout with complex queries (only "Thinking..." message sent)
 
-## Free Hosting Options
+---
 
-📖 **Full deployment guide with step-by-step instructions**: [DEPLOYMENT.md](DEPLOYMENT.md)
+## Why Twilio and Redis?
 
-### 1. Railway.app (Recommended)
-- Free tier: $5 credit/month
-- Easy deployment with GitHub
-- Persistent storage support
-- [Quick Deploy Guide](DEPLOYMENT.md#railway-recommended)
+### Why Twilio for WhatsApp?
 
-### 2. Render.com
-- Free tier: 750 hours/month
-- Automatic deploys from GitHub
-- Good for web services
-- [Quick Deploy Guide](DEPLOYMENT.md#render)
+WhatsApp has strict policies about third-party integrations. There are only two official ways to create WhatsApp bots:
 
-### 3. Fly.io
-- Free tier: 3 shared VMs
-- Global deployment
-- Good performance
-- [Quick Deploy Guide](DEPLOYMENT.md#flyio)
+1. **WhatsApp Business API (Direct)**
+   - Requires business verification (can take weeks)
+   - Complex setup with Facebook Business Manager
+   - Need to host your own webhook server
+   - Monthly fees even for small usage
+   - Best for: Large enterprises
 
-### 4. Google Apps Script
-- Always free (with quotas)
-- No server needed
-- Simple implementation
-- [Full Guide](google-apps-script/README.md)
+2. **WhatsApp Business API (via Providers like Twilio)**
+   - Quick setup (minutes, not weeks)
+   - Free sandbox for testing
+   - Twilio handles the complex Meta/WhatsApp integration
+   - Pay-as-you-go pricing
+   - Best for: Most businesses and developers
 
-### 5. Other Free Options
-- **Koyeb**: 2 apps free
-- **Cyclic.sh**: Generous free tier
-- **Deta Space**: Always free
-- [See all options](DEPLOYMENT.md#other-free-alternatives)
+### Why Redis?
 
-## Deployment Guide
+**Redis is OPTIONAL!** The bot includes built-in memory storage that works perfectly for:
+- Personal use
+- Small teams (< 100 users)
+- Single server deployments
+- Testing and development
 
-### Deploy to Railway
+Redis is only beneficial when you need:
+- Multiple bot instances (load balancing)
+- Persistent rate limiting across restarts
+- Shared session data between servers
+- Very high user volumes (> 1000 users)
 
-```bash
-# Install Railway CLI
-npm install -g @railway/cli
+### Running Without Redis
 
-# Login and deploy
-railway login
-railway init
-railway up
+This is already implemented! Just run the bot without setting `REDIS_URL`:
+
+```python
+# The bot automatically uses in-memory storage when Redis is not available
+# No configuration needed - it just works!
 ```
 
-### Deploy to Render
+### Cost Comparison
 
-1. Push code to GitHub
-2. Connect GitHub repo in Render dashboard
-3. Set environment variables
-4. Deploy
+#### Twilio Costs (Pay as you go)
+- **Sandbox**: FREE (perfect for testing)
+- **Production**: ~$0.005 per message
+- **Monthly**: $0 (no minimum fees)
 
-### Deploy to Fly.io
+#### Direct Meta API Costs
+- **API Access**: FREE
+- **But you need**:
+  - SSL certificate (~$10-100/year)
+  - Server hosting (~$5-20/month)
+  - Domain name (~$12/year)
+  - Time for verification (2-4 weeks)
+
+#### Redis Costs
+- **Development**: FREE (built-in memory storage)
+- **Production Options**:
+  - Redis Cloud: FREE tier (30MB)
+  - Self-hosted: FREE (on your server)
+  - Only needed for high-scale deployments
+
+---
+
+## Architecture & Development
+
+### Core Components
+
+1. **Bot Entry Point** (`bot.py`)
+   - FastAPI application handling Twilio webhooks at `/webhook/whatsapp`
+   - Async message processing with `process_message()` function
+   - Health check endpoint at `/health`
+
+2. **CustomGPT Integration** (`customgpt_client.py`)
+   - Async client for CustomGPT API
+   - Session creation and message handling
+   - Supports both streaming and regular responses
+   - OpenAI format compatibility
+
+3. **Security Layer** (`security_manager.py`)
+   - Phone number whitelist/blocklist validation
+   - Message content validation (SQL injection, XSS, command injection)
+   - Rate limit multiplier for admin users
+   - Profanity filtering (optional)
+
+4. **Rate Limiting** (`rate_limiter.py`)
+   - Redis-backed with in-memory fallback
+   - Daily, hourly, and minute limits
+   - Per-user tracking and statistics
+
+5. **Session Management** (`session_manager.py`)
+   - Conversation context storage
+   - Language preferences
+   - TTL-based session expiry
+
+### Development Commands
+
+#### Local Development
 
 ```bash
-# Install Fly CLI
-curl -L https://fly.io/install.sh | sh
+# Install dependencies
+pip install -r requirements.txt
 
-# Deploy
-fly launch
-fly deploy
+# Run locally (development mode)
+python bot.py
+
+# Run with uvicorn (production mode)
+uvicorn bot:app --host 0.0.0.0 --port 8000 --reload
 ```
+
+#### Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=. --cov-report=html
+
+# Run specific test file
+pytest test_bot.py -v
+```
+
+#### Code Quality
+
+```bash
+# Format code
+black .
+
+# Sort imports
+isort .
+
+# Lint code
+flake8 .
+
+# Type checking
+mypy .
+```
+
+#### Docker
+
+```bash
+# Build image
+docker build -t customgpt-whatsapp-bot .
+
+# Run container
+docker run -p 8000:8000 --env-file .env customgpt-whatsapp-bot
+```
+
+### Twilio Webhook Flow
+
+1. Twilio sends POST request to `/webhook/whatsapp` with form data
+2. Bot extracts message details from form data (From, Body, MessageSid)
+3. Returns immediate TwiML response to acknowledge receipt
+4. Processes message asynchronously to avoid timeout
+
+### CustomGPT API Integration
+
+- Uses session-based conversations (session_id required)
+- Conversation creation requires a "name" field
+- Messages API endpoint: `/api/v1/projects/{project_id}/conversations/{session_id}/messages`
+- Supports streaming responses (not currently used in WhatsApp implementation)
+
+---
 
 ## Security Features
 
@@ -252,15 +717,7 @@ fly deploy
    - Encrypted session storage
    - GDPR compliance ready
 
-## Bot Commands
-
-- `/start` - Start conversation and show menu
-- `/help` - Show available commands
-- `/examples` - Show example questions
-- `/stats` - View usage statistics
-- `/language [code]` - Change response language
-- `/clear` - Clear conversation history
-- `/feedback` - Submit feedback
+---
 
 ## Advanced Features
 
@@ -287,23 +744,7 @@ The bot automatically suggests relevant questions based on:
 - Response times
 - Error tracking
 
-## Google Apps Script Alternative
-
-For a simpler implementation using Google Apps Script:
-
-1. Uses Twilio for WhatsApp integration
-2. Free Google hosting
-3. Limited to 6 minutes execution time
-4. See `google-apps-script/` folder for implementation
-
-## Quick Setup Checklist
-
-Before troubleshooting, ensure:
-- [ ] Bot is running (`python bot.py`) - Terminal 1
-- [ ] ngrok is running (`ngrok http 8000`) - Terminal 2
-- [ ] Webhook URL is updated in Twilio Console
-- [ ] You've joined the sandbox (sent "join [keyword]")
-- [ ] Your phone number is in `ALLOWED_NUMBERS` in `.env`
+---
 
 ## Troubleshooting
 
@@ -347,39 +788,15 @@ Replace:
 - `+1234567890`: Your WhatsApp number (recipient)
 - `+14155238886`: Your Twilio sandbox number (or your WhatsApp Business number)
 
-**Example Request**:
-```bash
-curl 'https://api.twilio.com/2010-04-01/Accounts/ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/Messages.json' -X POST \
---data-urlencode 'To=whatsapp:+917978307903' \
---data-urlencode 'From=whatsapp:+14155238886' \
---data-urlencode 'Body=Your appointment is coming up on July 21 at 3PM' \
--u ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx:your_auth_token_here
-```
-
 **Example Response** (201 - CREATED):
 ```json
 {
   "account_sid": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   "api_version": "2010-04-01",
   "body": "Your appointment is coming up on July 21 at 3PM",
-  "date_created": "Tue, 19 Aug 2025 10:11:51 +0000",
-  "date_sent": null,
-  "date_updated": "Tue, 19 Aug 2025 10:11:51 +0000",
-  "direction": "outbound-api",
-  "error_code": null,
-  "error_message": null,
-  "from": "whatsapp:+14155238886",
-  "num_media": "0",
-  "num_segments": "1",
-  "price": null,
-  "price_unit": null,
-  "sid": "SM13a915bc4fc70addfd159d4cba2b67d8",
   "status": "queued",
-  "subresource_uris": {
-    "media": "/2010-04-01/Accounts/.../Messages/.../Media.json"
-  },
   "to": "whatsapp:+917978307903",
-  "uri": "/2010-04-01/Accounts/.../Messages/SM13a915bc4fc70addfd159d4cba2b67d8.json"
+  "from": "whatsapp:+14155238886"
 }
 ```
 
@@ -396,9 +813,115 @@ curl 'https://api.twilio.com/2010-04-01/Accounts/ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 3. **Verify webhook**: Messages should appear in terminal
 4. **Check Twilio Console**: Look for webhook logs and errors
 
-## Contributing
+### Debugging Webhook Issues
 
-Feel free to submit issues and enhancement requests!
+```bash
+# Test webhook locally
+curl -X POST http://localhost:8000/webhook/whatsapp \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "From=whatsapp:+1234567890&Body=test&MessageSid=123"
+```
+
+### Bot Not Responding
+
+1. **Check webhook URL**:
+   ```bash
+   curl -X POST https://your-app.com/webhook/whatsapp \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "From=whatsapp:+1234567890&Body=test"
+   ```
+
+2. **Check logs** for errors
+
+3. **Verify environment variables** are set
+
+4. **Test Twilio connection**:
+   ```python
+   # Test script
+   from twilio.rest import Client
+   client = Client(account_sid, auth_token)
+   message = client.messages.create(
+     to='whatsapp:+1234567890',
+     from_='whatsapp:+14155238886',
+     body='Test message'
+   )
+   ```
+
+### Rate Limiting Issues
+
+1. Increase limits in environment variables
+2. Implement Redis for production
+3. Monitor usage with `/stats` command
+
+### Memory Issues
+
+1. **Add Redis** for session/rate limit storage
+2. **Optimize code**:
+   - Remove unused imports
+   - Use connection pooling
+   - Implement caching
+
+### SSL/Security Issues
+
+1. All platforms provide free SSL
+2. Never expose sensitive credentials
+3. Use environment variables only
+
+---
+
+## Scaling Considerations
+
+When you outgrow free tiers:
+
+1. **Upgrade hosting**:
+   - Railway: Pay as you go
+   - Render: $7/month starter
+   - Fly.io: Pay for additional resources
+
+2. **Add Redis**:
+   - Redis Cloud free tier (30MB)
+   - Or upgrade to paid Redis
+
+3. **Implement queuing**:
+   - For high message volume
+   - Use Redis + background workers
+
+4. **Multiple instances**:
+   - Load balance across instances
+   - Share Redis for state
+
+---
+
+## Security Best Practices
+
+1. **Environment Variables**:
+   - Never commit `.env` file
+   - Use platform secret management
+
+2. **Webhook Security**:
+   - Validate Twilio signatures
+   - Implement request validation
+
+3. **Rate Limiting**:
+   - Always enabled
+   - Monitor for abuse
+
+4. **Access Control**:
+   - Implement phone number whitelist
+   - Admin commands protection
+
+---
+
+## Quick Setup Checklist
+
+Before troubleshooting, ensure:
+- [ ] Bot is running (`python bot.py`) - Terminal 1
+- [ ] ngrok is running (`ngrok http 8000`) - Terminal 2
+- [ ] Webhook URL is updated in Twilio Console
+- [ ] You've joined the sandbox (sent "join [keyword]")
+- [ ] Your phone number is in `ALLOWED_NUMBERS` in `.env`
+
+---
 
 ## Resources
 
@@ -415,6 +938,12 @@ Feel free to submit issues and enhancement requests!
 
 ### Platform Documentation
 - Twilio WhatsApp API Documentation: [twilio.com/docs/whatsapp/api](https://www.twilio.com/docs/whatsapp/api)
+
+---
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
 
 ## License
 

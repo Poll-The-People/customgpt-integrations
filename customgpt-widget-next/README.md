@@ -2,58 +2,28 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/customgpt-widget-next&env=OPENAI_API_KEY,CUSTOMGPT_PROJECT_ID,CUSTOMGPT_API_KEY&envDescription=API%20keys%20required%20for%20CustomGPT%20Widget&project-name=customgpt-widget)
 
-**Status**: ✅ **PRODUCTION READY** - Build successful, ready to deploy!
+A modern Next.js voice-enabled AI assistant widget with voice and chat interfaces. Built with TypeScript, React, and serverless API routes for easy deployment on Vercel or Railway.
 
----
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
 
-## 🎉 Migration Complete (80-85%)
+## Screenshots
 
-**Build Status**: ✅ SUCCESS
-**All Core Features**: ✅ Working
-**Ready for**: Production deployment
+<div align="center">
+  <img src="images/widget-avatar.png" alt="Avatar Mode - 3D talking avatar with lip-sync" width="45%">
+  <img src="images/widget-voice.png" alt="Voice Mode - Particle animation interface" width="45%">
+</div>
 
-### ✅ Completed
-- ✅ Phase 1: Project Setup (100%)
-- ✅ Phase 2: Backend Migration (100%)
-- ✅ Phase 3: API Routes (100%)
-- ✅ Phase 4: Frontend Migration (100%)
-- ✅ Phase 5: Build Fixes (100%)
-- ✅ Phase 6: Deployment Config (100%)
+<div align="center">
+  <img src="images/widget-floating.png" alt="Floating Chatbot - Intercom-style widget" width="45%">
+  <img src="images/windget-embed.png" alt="Inline Embed - Chat interface in page flow" width="45%">
+</div>
 
-### ⏳ Optional
-- ⏳ Phase 7: Optimization (post-launch)
-- ⏳ Phase 8: Beta Testing (optional)
+*Clockwise from top-left: Avatar mode with 3D character, Voice mode with particle animations, Inline embedded chat, Floating chatbot widget*
 
-## 📋 Project Structure
-
-```
-customgpt-widget-next/
-├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── page.tsx           # Main page
-│   │   └── api/               # API Routes
-│   │       ├── inference/     # Voice mode endpoint
-│   │       ├── chat/          # Chat mode endpoints
-│   │       ├── tts/           # TTS endpoints
-│   │       └── agent/         # Agent settings
-│   ├── components/            # React components
-│   │   └── AudioRecorderTest.tsx
-│   ├── hooks/                 # Custom React hooks
-│   ├── lib/                   # Backend logic (TypeScript)
-│   │   ├── ai/               # AI completion logic
-│   │   └── audio/            # STT/TTS logic
-│   ├── types/                # TypeScript type definitions
-│   └── utils/                # Utility functions
-├── public/                   # Static assets
-│   └── avatars/             # Avatar fallback files
-├── .env.local               # Environment variables
-├── next.config.ts           # Next.js configuration
-└── tsconfig.json            # TypeScript configuration
-```
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ installed
 - OpenAI API key
 - CustomGPT API key (optional, for AI completions)
@@ -81,35 +51,13 @@ customgpt-widget-next/
 ### Testing WebM Audio Recording
 
 The current development page includes a WebM audio recording test component that:
+
 - Detects browser support for audio formats (WebM Opus, WebM, MP4, MPEG)
 - Tests MediaRecorder API functionality
 - Validates audio recording and playback
 - Provides fallback format detection
 
-## 📦 Dependencies
-
-### Core Dependencies
-- `next` - Next.js framework (v14+)
-- `react` - React library
-- `react-dom` - React DOM
-- `openai` - OpenAI SDK (STT/TTS/AI)
-- `google-tts-api` - Google Text-to-Speech
-- `@elevenlabs/elevenlabs-js` - ElevenLabs TTS SDK
-- `edge-tts` - Microsoft Edge TTS
-- `formdata-node` - FormData implementation for Node.js
-- `@vercel/blob` - Vercel Blob Storage (optional)
-- `@aws-sdk/client-s3` - AWS S3 SDK for R2 storage (optional)
-
-### Dev Dependencies
-- `typescript` - TypeScript
-- `@types/node` - Node.js type definitions
-- `@types/react` - React type definitions
-- `@types/react-dom` - React DOM type definitions
-- `tailwindcss` - Tailwind CSS
-- `eslint` - ESLint
-- `eslint-config-next` - Next.js ESLint configuration
-
-## 🔧 Development Commands
+## Development Commands
 
 ```bash
 # Development server
@@ -125,55 +73,198 @@ npm start
 npm run lint
 ```
 
-## 📚 Documentation
+## Environment Variables
 
-- [Migration Plan](../customgpt-widget/MIGRATION_PLAN.md)
-- [PRD - Next.js Migration](../customgpt-widget/docs/guides/PRD_NEXTJS_MIGRATION.md)
-- [Original Project](../customgpt-widget/)
+Create `.env.local` file:
 
-## 🎯 Key Differences from Python Version
+```bash
+# Required - OpenAI API Key
+OPENAI_API_KEY=sk-your-key-here
 
-### Architecture
-- **Unified Codebase**: Single TypeScript codebase for frontend + backend
-- **Serverless Functions**: API routes deployed as serverless functions
-- **No Docker**: No containerization required for deployment
+# Optional - CustomGPT Integration
+USE_CUSTOMGPT=false
+CUSTOMGPT_PROJECT_ID=your_project_id
+CUSTOMGPT_API_KEY=your_api_key
 
-### Audio Processing
-- **Browser-Native**: MediaRecorder API outputs WebM directly
-- **No FFmpeg**: Eliminated server-side audio conversion (unless needed)
-- **Format Detection**: Automatic fallback to MP4/MPEG for Safari
+# Optional - AI Configuration
+AI_COMPLETION_MODEL=gpt-4o-mini
+LANGUAGE=en
+STT_MODEL=gpt-4o-mini-transcribe
 
-### Deployment
-- **Vercel**: Primary deployment target with one-click deploy
-- **Railway**: Secondary option for Docker-based deployment
-- **Edge Functions**: Optional global edge deployment
+# Optional - TTS Configuration
+TTS_PROVIDER=OPENAI
+OPENAI_TTS_MODEL=tts-1
+OPENAI_TTS_VOICE=nova
+EDGETTS_VOICE=en-US-EricNeural
 
-## 🚨 Known Issues
+# Optional - UI Configuration
+NEXT_PUBLIC_UI_THEME=dark
+NEXT_PUBLIC_ENABLE_VOICE_MODE=true
+```
 
-### Security Vulnerabilities
-- ⚠️ `google-tts-api` has dependency on vulnerable `axios` version
-- 📝 Will be addressed in Phase 7 (Optimization)
-- 🔄 Consider alternative TTS library or axios upgrade
+## Deployment
 
-### Browser Compatibility
-- Safari may require MP4 fallback (tested in Phase 1)
-- iOS Safari specific testing needed
+### Deploy to Vercel (Recommended)
 
-## 📈 Migration Progress
+**Option 1: One-Click Deploy**
 
-See [MIGRATION_PLAN.json](../customgpt-widget/MIGRATION_PLAN.json) for detailed task tracking.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/customgpt-widget-next)
 
-**Total Progress**: 7/99 tasks completed (7.07%)
+**Option 2: Vercel CLI**
 
-## 🤝 Contributing
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-This is an active migration project. Please refer to the original [customgpt-widget](../customgpt-widget/) repository for stable production code.
+# Deploy
+vercel
 
-## 📄 License
+# Add environment variables in Vercel dashboard
+# Go to: Project Settings → Environment Variables
+```
 
-Same license as the original CustomGPT Widget project.
+**Option 3: GitHub Integration**
+
+1. Push code to GitHub
+2. Import project in Vercel dashboard
+3. Configure environment variables
+4. Deploy automatically on git push
+
+### Deploy to Railway
+
+```bash
+# Install Railway CLI
+npm i -g @railway/cli
+
+# Login
+railway login
+
+# Deploy
+railway up
+
+# Add environment variables
+railway variables set OPENAI_API_KEY=sk-...
+```
+
+### Environment Variables for Production
+
+Add these in your deployment platform:
+
+```
+OPENAI_API_KEY=sk-your-key-here
+USE_CUSTOMGPT=false
+AI_COMPLETION_MODEL=gpt-4o-mini
+TTS_PROVIDER=OPENAI
+LANGUAGE=en
+```
+
+### Important: Domain & CORS Configuration
+
+**After deployment, your widget will be accessible at:**
+
+- Vercel: `https://your-project.vercel.app`
+- Railway: `https://your-project.railway.app`
+- Custom domain: `https://yourdomain.com`
+
+**CORS is pre-configured** - No additional setup needed. The widget automatically handles cross-origin requests from any domain.
+
+**For Website Integration:**
+
+If you want to embed this widget on your website:
+
+```html
+<!-- Add this to your website's HTML -->
+<script>
+  window.customGPTConfig = {
+    serverUrl: 'https://your-project.vercel.app',  // Your deployed widget URL
+    position: 'bottom-right',
+    theme: 'dark',
+    initialMode: 'chat'
+  };
+</script>
+<script src="https://your-project.vercel.app/widget.js" defer></script>
+```
+
+**Note**: Replace `your-project.vercel.app` with your actual deployment URL.
+
+### Working Examples
+
+For complete integration examples and step-by-step guides, see the [`examples/`](examples/) directory:
+
+- **[Integration Guide](examples/README.md)** - Complete documentation for website integration
+- **[Floating Widget Example](examples/test-pages/test-floating-chatbot.html)** - Test floating chatbot interface
+- **[Inline Embed Example](examples/test-pages/test-inline-embed.html)** - Test inline page embedding
+
+The examples directory includes:
+
+- Platform-specific integration instructions (WordPress, Shopify, Wix, etc.)
+- Framework integration examples (Next.js, React, Vue)
+- Customization options and CSS examples
+- Analytics tracking setup
+- Troubleshooting common issues
 
 ---
 
-**Last Updated**: 2025-01-30
-**Migration Phase**: 1 of 8
+## Troubleshooting
+
+### Build Issues
+
+**"Module not found" errors**:
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**TypeScript errors**:
+```bash
+npm run build
+# Fix reported errors
+```
+
+### Runtime Issues
+
+**Agent name not showing**:
+- Check `CUSTOMGPT_PROJECT_ID` is set correctly
+- Verify `CUSTOMGPT_API_KEY` is valid
+- Ensure `USE_CUSTOMGPT=true` if using CustomGPT
+
+**Audio recording not working**:
+- Check browser supports MediaRecorder API
+- Allow microphone permissions
+- Try HTTPS (required for microphone access)
+
+**TTS not playing**:
+- Verify `OPENAI_API_KEY` is configured
+- Check browser console for errors
+- Test with different TTS provider
+
+### Browser Compatibility
+
+**Safari/iOS**:
+- WebM not supported - automatic fallback to MP4
+- Microphone requires HTTPS
+- Check for codec support issues
+
+**Firefox**:
+- WebM Opus fully supported
+- No known issues
+
+**Chrome/Edge**:
+- Full support for all features
+- Recommended browsers
+
+---
+
+## Known Issues
+
+### Security
+- `google-tts-api` has vulnerable `axios` dependency
+- Consider upgrading or using alternative TTS library
+
+### Browser Compatibility
+- Safari requires MP4 audio fallback
+- iOS Safari specific testing needed
+- WebM not supported on all platforms
+
+---
+

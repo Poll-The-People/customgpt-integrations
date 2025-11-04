@@ -2,6 +2,9 @@
 
 A production-ready Microsoft Teams bot that integrates with CustomGPT.ai API to bring your AI-powered knowledge base directly into Teams conversations.
 
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
+
+
 ![CustomGPT MS Teams Bot](../images/customgpt_ms_teams_1.png)
 ![CustomGPT MS Teams Bot Interface](../images/customgpt_ms_teams_2.png)
 

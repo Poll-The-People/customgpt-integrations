@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floating Chatbot Test - CustomGPT Widget Next.js</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .intro {
+            font-size: 1.5rem;
+            color: #6b7280;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.75;
+            color: #4b5563;
+            margin-bottom: 16px;
+        }
+
+        .demo-callout {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .demo-callout h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .demo-callout p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.25rem;
+            margin-bottom: 24px;
+        }
+
+        .arrow-pointer {
+            font-size: 3rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .feature-card h3 {
+            color: #8b5cf6;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .feature-card li {
+            font-size: 1rem;
+            color: #4b5563;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .feature-card li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            position: absolute;
+            left: -20px;
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #10b981;
+            padding: 24px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 24px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        footer {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #6b7280;
+            margin-top: 60px;
+        }
+
+        .scroll-hint {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: fadeOut 3s forwards;
+            pointer-events: none;
+            z-index: 999997;
+        }
+
+        @keyframes fadeOut {
+
+            0%,
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Initial hint -->
+    <div class="scroll-hint">
+        Look for the floating button in the bottom-right corner!
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>CustomGPT Voice Assistant</h1>
+            <p class="intro">
+                Experience our AI-powered voice assistant with a familiar chat widget interface.
+                Look for the floating button in the bottom-right corner!
+            </p>
+        </header>
+
+        <div class="demo-callout">
+            <h2>Try the Voice Assistant</h2>
+            <p>Click the floating microphone button in the bottom-right corner</p>
+            <div class="arrow-pointer">👉</div>
+        </div>
+
+        <div class="content-section">
+            <h2>Floating Widget Integration</h2>
+            <p>
+                This integration style provides a floating chat widget that appears as a button in the
+                bottom-right corner of your screen. It's the same pattern used by popular chat platforms.
+            </p>
+            <p>
+                <strong>Key advantages of this approach:</strong>
+            </p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Always Accessible</h3>
+                    <ul>
+                        <li>Visible on every page</li>
+                        <li>Doesn't interrupt content</li>
+                        <li>Familiar chat interface</li>
+                        <li>Easy to open and close</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3>Responsive Design</h3>
+                    <ul>
+                        <li>Full-screen on mobile</li>
+                        <li>Widget on desktop</li>
+                        <li>Smooth animations</li>
+                        <li>Touch-friendly controls</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3>Quick Integration</h3>
+                    <ul>
+                        <li>Single script tag</li>
+                        <li>No HTML changes needed</li>
+                        <li>Works on any page</li>
+                        <li>Fully customizable</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>How to Integrate</h2>
+            <p>
+                Adding the floating chatbot to your website is incredibly simple. Just include
+                one script configuration in your HTML - no complex setup required.
+            </p>
+
+            <div class="code-block">&lt;!-- Add this script to your HTML --&gt;
+&lt;script&gt;
+  window.customGPTConfig = {
+    serverUrl: 'https://your-project.vercel.app',  // Your deployed widget URL
+    position: 'bottom-right',
+    theme: 'dark',
+    initialMode: 'chat'
+  };
+&lt;/script&gt;
+&lt;script src="https://your-project.vercel.app/widget.js" defer&gt;&lt;/script&gt;
+
+&lt;!-- That's it! The widget will appear automatically --&gt;</div>
+
+            <p>
+                The script creates:
+            </p>
+            <ul style="padding-left: 20px; margin-top: 16px;">
+                <li style="margin-bottom: 8px;">A floating button in the bottom-right corner</li>
+                <li style="margin-bottom: 8px;">A chat widget that slides in smoothly</li>
+                <li style="margin-bottom: 8px;">Voice and text interaction capabilities</li>
+                <li style="margin-bottom: 8px;">Mobile-responsive behavior</li>
+                <li style="margin-bottom: 8px;">Keyboard shortcuts (ESC to close)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Deployment URLs</h2>
+            <p>
+                After deploying to Vercel or Railway, replace the placeholder URL with your actual deployment:
+            </p>
+            <ul style="padding-left: 20px; margin-top: 16px;">
+                <li style="margin-bottom: 8px;"><strong>Vercel:</strong> https://your-project.vercel.app</li>
+                <li style="margin-bottom: 8px;"><strong>Railway:</strong> https://your-project.railway.app</li>
+                <li style="margin-bottom: 8px;"><strong>Custom Domain:</strong> https://yourdomain.com</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Customization Options</h2>
+            <p>
+                You can customize the appearance and behavior through the config object:
+            </p>
+
+            <div class="code-block">window.customGPTConfig = {
+  serverUrl: 'https://your-project.vercel.app',
+  position: 'bottom-right',  // bottom-right, bottom-left
+  theme: 'dark',              // dark, light
+  initialMode: 'chat',        // chat, voice
+  primaryColor: '#8b5cf6',    // Your brand color
+  width: '400px',             // Widget width
+  height: '600px'             // Widget height
+};</div>
+        </div>
+
+        <div class="content-section">
+            <h2>Features in Action</h2>
+            <p>
+                Try these interactions with the floating widget:
+            </p>
+            <ul style="padding-left: 20px; margin-top: 16px;">
+                <li style="margin-bottom: 12px;">
+                    <strong>Click the floating button</strong> - Opens the widget with a smooth slide-in animation
+                </li>
+                <li style="margin-bottom: 12px;">
+                    <strong>Activate Voice Mode</strong> - Click the microphone in the widget to start voice
+                    interaction
+                </li>
+                <li style="margin-bottom: 12px;">
+                    <strong>Press ESC</strong> - Quickly close the widget using keyboard shortcut
+                </li>
+                <li style="margin-bottom: 12px;">
+                    <strong>Click X button</strong> - Close the widget with the header button
+                </li>
+                <li style="margin-bottom: 12px;">
+                    <strong>Resize window</strong> - See how it adapts to mobile screens
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Perfect For</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Business Websites</h3>
+                    <p>Add voice support to your entire site without changing existing layouts</p>
+                </div>
+                <div class="feature-card">
+                    <h3>E-commerce</h3>
+                    <p>Let customers ask questions about products using their voice</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Documentation</h3>
+                    <p>Voice-enabled help system accessible from every page</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Education</h3>
+                    <p>Interactive voice assistant for learning platforms</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Best Practices</h2>
+            <p>
+                <strong>For production deployment:</strong>
+            </p>
+            <ul style="padding-left: 20px; margin-top: 16px;">
+                <li style="margin-bottom: 8px;">Update <code>serverUrl</code> to your deployed widget URL</li>
+                <li style="margin-bottom: 8px;">Match <code>primaryColor</code> to your brand colors</li>
+                <li style="margin-bottom: 8px;">Test microphone permissions on HTTPS (required)</li>
+                <li style="margin-bottom: 8px;">Customize theme to match your brand style</li>
+                <li style="margin-bottom: 8px;">Consider mobile users - test on various screen sizes</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 CustomGPT. All rights reserved.</p>
+            <p style="margin-top: 8px; font-size: 0.875rem;">
+                Don't forget to click the floating button! (bottom-right corner)
+            </p>
+        </footer>
+    </div>
+
+    <!-- Load the floating chatbot - Replace with your deployed URL -->
+    <script>
+        window.customGPTConfig = {
+            serverUrl: 'http://localhost:3000',  // Change to your deployed URL
+            position: 'bottom-right',
+            theme: 'dark',
+            initialMode: 'chat'
+        };
+    </script>
+    <script src="http://localhost:3000/widget.js" defer></script>
+</body>
+
+</html>

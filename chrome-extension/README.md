@@ -2,6 +2,8 @@
 
 **Pure JavaScript Chrome extension with Vercel serverless proxy** for CustomGPT.ai API integration. Designed for your API customers to create their own branded Chrome extensions with zero user setup.
 
+Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_source=github_integrations), needed to use this integration. 
+
 
 ![Chrome Extension Demo](../images/customgpt_chrome_extension_1.png)
 ![Chrome Extension Chat](../images/customgpt_chrome_extension_2.png)
