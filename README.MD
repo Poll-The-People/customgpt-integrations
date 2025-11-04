@@ -70,12 +70,14 @@ Native Google Workspace integration for enterprise environments.
 
 ---
 
-### 1.6 Microsoft Teams Bot (Work in Progress)
+### 1.6 Microsoft Teams Bot
 
 Enterprise-grade Microsoft Teams integration with advanced collaboration features.
 
-* **Status**: 🚧 Currently under development
-* **Features**: Adaptive Cards, @mentions, threading, meeting support, file attachments
+![CustomGPT MS Teams Bot](images/customgpt_ms_teams_1.png)
+![CustomGPT MS Teams Bot Interface](images/customgpt_ms_teams_2.png)
+
+* **Features**: Adaptive Cards, @mentions, threading, meeting support, file attachments, Confluence integration
 * **Setup Time**: 20-30 minutes
 * **Hosting Options**: Azure Bot Service, Railway, Render, Docker
 * **[Full Documentation](MS%20Teams/README.md)**
@@ -153,6 +155,7 @@ Connect CustomGPT with Facebook Messenger for seamless customer interactions.
 | Analytics        | ✔        | ✖       | ✔      | ✔        | ✖           | ✔        | ✔         | 🚧 WIP       |
 | Comment Replies  | ✖        | ✖       | ✖      | ✖        | ✖           | ✖        | 🚧 Planned | 🚧 WIP       |
 | Setup Complexity | Medium   | Easy    | Medium | Easy     | Easy        | Medium   | Medium    | 🚧 WIP       |
+| Confluence       | ✖        | ✖       | ✖      | ✖        | ✖           | ✔        | ✖         | 🚧 WIP       |
 
 ---
 
