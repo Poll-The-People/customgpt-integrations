@@ -40,7 +40,7 @@ cp .env.example .env
 
 # Deploy to Vercel
 npm run deploy
-# Or: vercel --prod
+# Or: vercel dev 
 
 # Note the deployment URL: https://your-proxy.vercel.app
 ```

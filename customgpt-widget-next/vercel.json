@@ -6,17 +6,5 @@
       "maxDuration": 60,
       "memory": 1024
     }
-  },
-  "env": {
-    "OPENAI_API_KEY": "@openai-api-key",
-    "CUSTOMGPT_PROJECT_ID": "@customgpt-project-id",
-    "CUSTOMGPT_API_KEY": "@customgpt-api-key",
-    "USE_CUSTOMGPT": "true",
-    "CUSTOMGPT_STREAM": "true",
-    "TTS_PROVIDER": "OPENAI",
-    "OPENAI_TTS_MODEL": "tts-1",
-    "OPENAI_TTS_VOICE": "nova",
-    "STT_MODEL": "gpt-4o-mini-transcribe",
-    "LANGUAGE": "en"
   }
 }
