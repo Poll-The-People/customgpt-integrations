@@ -16,24 +16,6 @@ Get your [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_s
 - **Session Management**: 30-minute conversation timeout with auto-cleanup
 - **Security**: SSL certificate handling and secure API communication
 
-## Project Structure
-
-```
-Telegram-Bot/
-├── bot.py                 # Main bot implementation (polling mode)
-├── customgpt_client.py    # CustomGPT API client
-├── simple_cache.py        # In-memory rate limiting & session management
-├── requirements.txt       # Python dependencies
-├── .env                   # Environment variables (create your own)
-├── README.md             # This file
-└── vercel-bot/           # Vercel webhook deployment
-    ├── api/
-    │   └── webhook.py    # Webhook handler for Vercel
-    ├── vercel.json       # Vercel configuration
-    └── set_webhook.py    # Webhook setup script
-```
-
----
 
 ## Quick Start
 
@@ -485,19 +467,6 @@ logging.basicConfig(level=logging.DEBUG)
 4. **Monitor usage** with `/stats` command
 5. **Set appropriate rate limits** based on your needs
 
----
-
-## Future Enhancements
-
-- [ ] Persistent storage (PostgreSQL/Redis)
-- [ ] User authentication
-- [ ] Admin dashboard
-- [ ] Multiple language support
-- [ ] Voice message support
-- [ ] Image analysis capabilities
-- [ ] Docker containerization
-
----
 
 ## Support
 
