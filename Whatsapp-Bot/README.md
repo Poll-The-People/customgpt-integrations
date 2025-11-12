@@ -187,16 +187,16 @@ Forwarding                    https://abc123.ngrok-free.app -> http://localhost:
 
 ### Sandbox vs Production Comparison
 
-| Feature | Sandbox (Free) | Production (Paid) |
-|---------|---------------|-------------------|
-| **Cost** | Free | ~$15/month + $0.005/message |
-| **Phone Number** | Twilio's shared number | Your own business number |
-| **User Onboarding** | Must send "join [keyword]" | Direct messaging |
-| **Message Window** | 24 hours after user message | 24 hours + templates |
-| **Business Profile** | Twilio's profile | Your verified business |
-| **Suitable For** | Development & testing | Real customers |
-| **Account Type** | Trial account OK | Paid account required |
-| **Setup Time** | 5 minutes | 2-5 days (verification) |
+| Feature              | Sandbox (Free)              | Production (Paid)           |
+| -------------------- | --------------------------- | --------------------------- |
+| **Cost**             | Free                        | ~$15/month + $0.005/message |
+| **Phone Number**     | Twilio's shared number      | Your own business number    |
+| **User Onboarding**  | Must send "join [keyword]"  | Direct messaging            |
+| **Message Window**   | 24 hours after user message | 24 hours + templates        |
+| **Business Profile** | Twilio's profile            | Your verified business      |
+| **Suitable For**     | Development & testing       | Real customers              |
+| **Account Type**     | Trial account OK            | Paid account required       |
+| **Setup Time**       | 5 minutes                   | 2-5 days (verification)     |
 
 ### Getting Your Own WhatsApp Business Number
 
@@ -431,13 +431,13 @@ space push
 
 ### Deployment Comparison
 
-| Platform | Free Tier | Best For | Persistent Storage | Setup Time |
-|----------|-----------|----------|-------------------|------------|
-| **Railway** | $5 credit/month | Production | Yes | 10 min |
-| **Render** | 750 hrs/month | Web services | Yes | 15 min |
-| **Fly.io** | 3 shared VMs | Performance | Yes | 10 min |
-| **Google Apps Script** | Unlimited* | Simple bots | No | 5 min |
-| **Koyeb** | 2 services | Small projects | Yes | 10 min |
+| Platform               | Free Tier       | Best For       | Persistent Storage | Setup Time |
+| ---------------------- | --------------- | -------------- | ------------------ | ---------- |
+| **Railway**            | $5 credit/month | Production     | Yes                | 10 min     |
+| **Render**             | 750 hrs/month   | Web services   | Yes                | 15 min     |
+| **Fly.io**             | 3 shared VMs    | Performance    | Yes                | 10 min     |
+| **Google Apps Script** | Unlimited*      | Simple bots    | No                 | 5 min      |
+| **Koyeb**              | 2 services      | Small projects | Yes                | 10 min     |
 
 *With quotas
 
@@ -926,14 +926,13 @@ Before troubleshooting, ensure:
 ## Resources
 
 ### CustomGPT Links
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Platform Documentation

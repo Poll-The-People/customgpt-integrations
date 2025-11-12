@@ -23,7 +23,7 @@ Get you [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_so
 
 - Python 3.8 or higher
 - Discord Bot Token ([Create a bot here](https://discord.com/developers/applications))
-- CustomGPT API Key and Agent ID ([Get from CustomGPT](https://app.customgpt.ai))
+- CustomGPT API Key and Agent ID ([Get from CustomGPT](https://app.customgpt.ai/register?utm_source=github_integrations))
 
 ### 2. Installation
 
@@ -195,19 +195,16 @@ For distributed rate limiting across multiple bot instances:
 ## Resources
 
 ### CustomGPT Links
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
+
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Video Tutorial
-- **[Discord Bot Setup Video](https://youtu.be/mhqIJZ8fFAk)**
-
-### Platform Documentation
-- Discord.py Documentation: [discordpy.readthedocs.io](https://discordpy.readthedocs.io)
+- **[Discord Bot Setup Video](https://youtu.be/pVjQpesZLRw?si=vcq8NbmftecIoRA_)**
 

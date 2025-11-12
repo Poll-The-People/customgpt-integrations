@@ -53,13 +53,13 @@ cp .env.example .env
 
 ### Required Settings
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `ROCKET_CHAT_URL` | Your Rocket Chat server URL | `https://chat.example.com` |
-| `ROCKET_CHAT_USER` | Bot username | `customgpt-bot` |
-| `ROCKET_CHAT_PASSWORD` | Bot password | `secure-password` |
-| `CUSTOMGPT_API_KEY` | Your CustomGPT API key | `cgpt_...` |
-| `CUSTOMGPT_PROJECT_ID` | Your CustomGPT project/agent ID | `12345` |
+| Variable               | Description                     | Example                    |
+| ---------------------- | ------------------------------- | -------------------------- |
+| `ROCKET_CHAT_URL`      | Your Rocket Chat server URL     | `https://chat.example.com` |
+| `ROCKET_CHAT_USER`     | Bot username                    | `customgpt-bot`            |
+| `ROCKET_CHAT_PASSWORD` | Bot password                    | `secure-password`          |
+| `CUSTOMGPT_API_KEY`    | Your CustomGPT API key          | `cgpt_...`                 |
+| `CUSTOMGPT_PROJECT_ID` | Your CustomGPT project/agent ID | `12345`                    |
 
 ### Optional Settings
 
@@ -296,14 +296,13 @@ MIT License - see LICENSE file for details
 ## Support
 
 ### CustomGPT Links
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Platform Documentation

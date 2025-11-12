@@ -355,12 +355,12 @@ WantedBy=multi-user.target
 
 ### Deployment Comparison
 
-| Platform | Best For | Cost | Persistent Storage | Rate Limiting | Timeout |
-|----------|----------|------|-------------------|---------------|---------|
-| **Vercel** | Simple bots | Free | No | No | 10s |
-| **Replit** | Development | Free* | Yes | Yes | None |
-| **Railway** | Production | Paid | Yes | Yes | None |
-| **VPS** | Full control | Varies | Yes | Yes | None |
+| Platform    | Best For     | Cost   | Persistent Storage | Rate Limiting | Timeout |
+| ----------- | ------------ | ------ | ------------------ | ------------- | ------- |
+| **Vercel**  | Simple bots  | Free   | No                 | No            | 10s     |
+| **Replit**  | Development  | Free*  | Yes                | Yes           | None    |
+| **Railway** | Production   | Paid   | Yes                | Yes           | None    |
+| **VPS**     | Full control | Varies | Yes                | Yes           | None    |
 
 *Free tier sleeps after inactivity
 
@@ -467,24 +467,24 @@ logging.basicConfig(level=logging.DEBUG)
 4. **Monitor usage** with `/stats` command
 5. **Set appropriate rate limits** based on your needs
 
+---
 
 ## Support
 
 ### CustomGPT Links
 
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Video Tutorial
 
-- **[Telegram Bot Setup Video](https://youtu.be/yqGZGcnqtg0)**
+- **[Telegram Bot Setup Video](https://youtu.be/WUwSy7nsP4o?si=Ii2BEx-ltxvFXNQ7)**
 
 ### Platform Documentation
 

@@ -89,7 +89,7 @@ Done! Test your bot.
 
 ### 2. CustomGPT Setup
 
-1. Get your API key from [CustomGPT](https://app.customgpt.ai)
+1. Get your API key from [CustomGPT](https://app.customgpt.ai/register?utm_source=github_integrations)
 2. Note your Agent ID (project ID)
 
 ### 3. Environment Variables
@@ -311,14 +311,14 @@ fly deploy
 
 ### Deployment Recommendation Summary
 
-| Platform | Best For | Cost | Reliability |
-|----------|----------|------|-------------|
-| **Vercel** | Production | Free | Excellent |
-| **Google Apps Script** | Simple bots | Free | Good |
-| Render | Small projects | Free* | Good |
-| Glitch | Development | Free | Poor |
-| Replit | Learning | Free | Poor |
-| VPS | Full control | $5+ | Excellent |
+| Platform               | Best For       | Cost  | Reliability |
+| ---------------------- | -------------- | ----- | ----------- |
+| **Vercel**             | Production     | Free  | Excellent   |
+| **Google Apps Script** | Simple bots    | Free  | Good        |
+| Render                 | Small projects | Free* | Good        |
+| Glitch                 | Development    | Free  | Poor        |
+| Replit                 | Learning       | Free  | Poor        |
+| VPS                    | Full control   | $5+   | Excellent   |
 
 *Free tier limitations apply
 
@@ -568,15 +568,6 @@ async function respondInLanguage(userId, response, language) {
 ```
 
 ---
-
-## Security Features
-
-- Webhook signature verification
-- Rate limiting per user
-- Input sanitization
-- API key encryption
-- Request validation
-- User whitelisting/blocking
 
 ### Enhanced Rate Limiting
 
@@ -873,14 +864,13 @@ app.post('/api/broadcast', async (req, res) => {
 
 ### CustomGPT Links
 
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Platform Documentation

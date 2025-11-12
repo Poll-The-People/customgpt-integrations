@@ -30,7 +30,7 @@ Get your [CustomGPT.ai RAG API key here](https://app.customgpt.ai/register?utm_s
 
 1. **Instagram Business Account** linked to a Facebook Page
 2. **Facebook Developer Account** ([create here](https://developers.facebook.com/))
-3. **CustomGPT Account** with API access ([get API key](https://app.customgpt.ai/))
+3. **CustomGPT Account** with API access ([get API key](https://app.customgpt.ai/register?utm_source=github_integrations/))
 
 ### Step 1: Facebook App Setup (3 minutes)
 
@@ -105,12 +105,12 @@ You're done! Your bot is now live and responding to Instagram DMs.
 
 ## Bot Commands
 
-| Command | Description | Example |
-|---------|-------------|---------|
-| `/help` | Show help and starter questions | `/help` |
-| `/agent [id]` | Switch to different CustomGPT agent | `/agent 123` |
-| `1`, `2`, `3...` | Select starter question by number | `1` |
-| Any text | Ask the AI assistant | `What is machine learning?` |
+| Command          | Description                         | Example                     |
+| ---------------- | ----------------------------------- | --------------------------- |
+| `/help`          | Show help and starter questions     | `/help`                     |
+| `/agent [id]`    | Switch to different CustomGPT agent | `/agent 123`                |
+| `1`, `2`, `3...` | Select starter question by number   | `1`                         |
+| Any text         | Ask the AI assistant                | `What is machine learning?` |
 
 ---
 
@@ -452,13 +452,13 @@ sudo certbot --nginx -d your-domain.com
 
 ### Deployment Comparison
 
-| Platform | Best For | Cost | Reliability |
-|----------|----------|------|-------------|
-| **Railway** | Quick deployment | $5/month credit | Excellent |
-| **Render** | Simple projects | 500 build hours/month free | Good |
-| **GCP App Engine** | Scalable production | 28 hours/day free | Excellent |
-| **GCP Cloud Run** | Event-driven bots | 2M requests/month free | Excellent |
-| **VPS/Docker** | Full control | $5-50+/month | Excellent |
+| Platform           | Best For            | Cost                       | Reliability |
+| ------------------ | ------------------- | -------------------------- | ----------- |
+| **Railway**        | Quick deployment    | $5/month credit            | Excellent   |
+| **Render**         | Simple projects     | 500 build hours/month free | Good        |
+| **GCP App Engine** | Scalable production | 28 hours/day free          | Excellent   |
+| **GCP Cloud Run**  | Event-driven bots   | 2M requests/month free     | Excellent   |
+| **VPS/Docker**     | Full control        | $5-50+/month               | Excellent   |
 
 ### Recommended Strategy
 
@@ -692,50 +692,6 @@ def process_comment_webhook(comment_data):
 - Need to treat all comments as top-level due to API limitations
 - Requires proper webhook verification and HTTPS endpoints
 
----
-
-## Production Checklist
-
-### Security
-
-- [ ] Enable HTTPS (automatically handled by platforms)
-- [ ] Set strong `WEBHOOK_VERIFY_TOKEN`
-- [ ] Configure user allowlists if needed
-- [ ] Enable rate limiting with Redis
-- [ ] Monitor for unusual activity
-
-### Performance
-
-- [ ] Enable Redis for session caching
-- [ ] Set appropriate rate limits
-- [ ] Monitor response times
-- [ ] Set up health checks
-
-### Monitoring
-
-- [ ] Configure log aggregation
-- [ ] Set up uptime monitoring
-- [ ] Monitor CustomGPT API usage
-- [ ] Track user engagement metrics
-
----
-
-## Future Enhancements
-
-**Phase 1 - Comment Support (Next Release)**:
-- [ ] Comment webhook processing with real-time notifications
-- [ ] Mention-based replies (@your_account to trigger responses)
-- [ ] Comment moderation (hide/unhide inappropriate comments)
-- [ ] Thread-aware replies (maintain conversation context)
-
-**Phase 2 - Advanced Features**:
-- [ ] Voice message support (when Instagram API supports it)
-- [ ] Image/media handling capabilities
-- [ ] Multi-language support for international audiences
-- [ ] Advanced analytics dashboard with user insights
-- [ ] A/B testing framework for response optimization
-- [ ] Scheduled messages and automated campaigns
-- [ ] Integration with CRM systems for business users
 
 ---
 
@@ -743,14 +699,13 @@ def process_comment_webhook(comment_data):
 
 ### CustomGPT Links
 
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Platform Documentation
@@ -776,7 +731,3 @@ MIT License - see LICENSE file for details
 ## Contributing
 
 Contributions welcome! Please feel free to submit a Pull Request.
-
----
-
-**Ready to deploy?** Choose your hosting option above and follow the deployment guide!

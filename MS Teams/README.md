@@ -59,13 +59,13 @@ In channel: @CustomGPT Bot 2 /help
 
 ## Prerequisites
 
-| Requirement | Free Tier Available | Purpose |
-|-------------|-------------------|---------|
-| **[Azure Account](https://azure.microsoft.com/free/)** | ✅ Yes | Bot registration and hosting |
-| **[CustomGPT.ai Account](https://app.customgpt.ai/register)** | ✅ Trial | AI knowledge base API |
-| **Microsoft Teams Admin** | - | Install bot in Teams |
-| **Python 3.8 - 3.11** | ✅ Yes | Local development |
-| **Redis** (Optional) | ✅ Yes | Distributed rate limiting |
+| Requirement                                                   | Free Tier Available | Purpose                      |
+| ------------------------------------------------------------- | ------------------- | ---------------------------- |
+| **[Azure Account](https://azure.microsoft.com/free/)**        | ✅ Yes               | Bot registration and hosting |
+| **[CustomGPT.ai Account](https://app.customgpt.ai/register)** | ✅ Trial             | AI knowledge base API        |
+| **Microsoft Teams Admin**                                     | -                   | Install bot in Teams         |
+| **Python 3.8 - 3.11**                                         | ✅ Yes               | Local development            |
+| **Redis** (Optional)                                          | ✅ Yes               | Distributed rate limiting    |
 
 ---
 
@@ -641,14 +641,14 @@ curl -u "email@example.com:YOUR_TOKEN" \
 
 ### Basic Commands
 
-| Command | Description | Example |
-|---------|-------------|---------|
-| `/help` | Show available commands | `/help` |
-| `/start` | Start new conversation | `/start` |
-| `/reset` | Clear conversation context | `/reset` |
-| `/status` | Check rate limits and bot status | `/status` |
-| `/search` | Search Confluence (if enabled) | `/search API docs` |
-| `/confluence` | Show Confluence integration status | `/confluence` |
+| Command       | Description                        | Example            |
+| ------------- | ---------------------------------- | ------------------ |
+| `/help`       | Show available commands            | `/help`            |
+| `/start`      | Start new conversation             | `/start`           |
+| `/reset`      | Clear conversation context         | `/reset`           |
+| `/status`     | Check rate limits and bot status   | `/status`          |
+| `/search`     | Search Confluence (if enabled)     | `/search API docs` |
+| `/confluence` | Show Confluence integration status | `/confluence`      |
 
 ### Interacting with the Bot
 
@@ -970,12 +970,14 @@ CONVERSATION_TIMEOUT=86400  # 24 hours
 
 ### CustomGPT Resources
 
-- **Landing Page**: https://customgpt.ai
-- **Dashboard**: https://app.customgpt.ai
-- **API Docs**: https://docs.customgpt.ai/api-reference
-- **Postman Collection**: https://www.postman.com/customgpt/customgpt/overview
-- **Office Hours**: https://calendly.com/pollthepeople/office-hours
-- **YouTube**: https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Microsoft Resources
 

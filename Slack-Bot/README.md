@@ -205,20 +205,20 @@ Default limits:
 
 ### Environment Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `SLACK_BOT_TOKEN` | Bot User OAuth Token | Yes | - |
-| `SLACK_SIGNING_SECRET` | For verifying requests | Yes | - |
-| `CUSTOMGPT_API_KEY` | Your CustomGPT API key | Yes | - |
-| `CUSTOMGPT_PROJECT_ID` | Default agent/project ID | Yes | - |
-| `REDIS_URL` | Redis URL for caching | No | - |
-| `LOG_LEVEL` | Logging level (INFO, DEBUG) | No | INFO |
-| `RATE_LIMIT_PER_USER` | Requests per user per minute | No | 20 |
-| `RATE_LIMIT_PER_CHANNEL` | Requests per channel per hour | No | 100 |
-| `THREAD_FOLLOW_UP_ENABLED` | Enable thread follow-up responses | No | true |
-| `THREAD_FOLLOW_UP_TIMEOUT` | Thread follow-up timeout (seconds) | No | 3600 |
-| `THREAD_FOLLOW_UP_MAX_MESSAGES` | Max messages per thread | No | 50 |
-| `IGNORE_BOT_MESSAGES` | Ignore messages from bots | No | true |
+| Variable                        | Description                        | Required | Default |
+| ------------------------------- | ---------------------------------- | -------- | ------- |
+| `SLACK_BOT_TOKEN`               | Bot User OAuth Token               | Yes      | -       |
+| `SLACK_SIGNING_SECRET`          | For verifying requests             | Yes      | -       |
+| `CUSTOMGPT_API_KEY`             | Your CustomGPT API key             | Yes      | -       |
+| `CUSTOMGPT_PROJECT_ID`          | Default agent/project ID           | Yes      | -       |
+| `REDIS_URL`                     | Redis URL for caching              | No       | -       |
+| `LOG_LEVEL`                     | Logging level (INFO, DEBUG)        | No       | INFO    |
+| `RATE_LIMIT_PER_USER`           | Requests per user per minute       | No       | 20      |
+| `RATE_LIMIT_PER_CHANNEL`        | Requests per channel per hour      | No       | 100     |
+| `THREAD_FOLLOW_UP_ENABLED`      | Enable thread follow-up responses  | No       | true    |
+| `THREAD_FOLLOW_UP_TIMEOUT`      | Thread follow-up timeout (seconds) | No       | 3600    |
+| `THREAD_FOLLOW_UP_MAX_MESSAGES` | Max messages per thread            | No       | 50      |
+| `IGNORE_BOT_MESSAGES`           | Ignore messages from bots          | No       | true    |
 
 ### Thread Follow-up Feature
 
@@ -365,18 +365,17 @@ python bot.py
 ## Resources
 
 ### CustomGPT Links
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
-- **[MCP Documentation](https://docs.customgpt.ai/model-content-protocol)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Video Tutorial
-- **[Slack Bot Setup Video](https://youtu.be/5x2NMQ7qIvg)**
+- **[Slack Bot Setup Video](https://youtu.be/ESZxuiFFCPQ?si=dyYbb6PofN6zRc00)**
 
 ### Platform Documentation
 - Slack API Documentation: [api.slack.com](https://api.slack.com)

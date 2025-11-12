@@ -10,31 +10,31 @@ You will need our API to use any of these below listed integration, [create your
 
 ### 🤖 Messaging Platform Integrations
 
-| Integration | Description | Key Features | Status |
-|------------|-------------|--------------|---------|
-| **[WhatsApp Bot](Whatsapp-Bot/README.md)** | Integrate with WhatsApp Business using Twilio API | Rich media, rate limiting, session management, starter questions | ✅ Ready |
-| **[Discord Bot](Discord-Bot/README.md)** | AI-powered Discord server bot with slash commands | Slash commands, conversation memory, interactive UI, citations | ✅ Ready |
-| **[Slack Bot](Slack-Bot/README.md)** | Enterprise Slack integration with multi-agent support | Multi-agent, threading, rate limiting, analytics | ✅ Ready |
-| **[Telegram Bot](Telegram-Bot/README.md)** | Fast Telegram bot with polling and webhook support | Inline keyboards, conversation management, usage stats | ✅ Ready |
-| **[MS Teams Bot](MS%20Teams/README.md)** | Enterprise Microsoft Teams bot with Adaptive Cards | @mentions, threading, Confluence integration, file attachments | ✅ Ready |
-| **[Google Chat Bot](Google%20Chat-Bot/README.md)** | Native Google Workspace integration | Direct messages, space conversations, multi-agent support | ✅ Ready |
-| **[Rocket.Chat Bot](Rocket%20Chat%20Bot/README.md)** | Self-hosted chat platform integration | AI responses, citation support, thread support, analytics | ✅ Ready |
-| **[Instagram Bot](Instagram%20Chat%20Bot/README.md)** | Instagram DM bot with planned comment replies | Multi-agent, starter questions, rate limiting, typing indicators | 🚧 Beta |
-| **[FB Messenger Bot](Facebook%20Messenger-Bot/README.md)** | Facebook Messenger integration | Quick replies, persistent menu, typing indicators, media support | 🚧 WIP |
+| Integration                                                | Description                                           | Key Features                                                     | Status  |
+| ---------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| **[WhatsApp Bot](Whatsapp-Bot/README.md)**                 | Integrate with WhatsApp Business using Twilio API     | Rich media, rate limiting, session management, starter questions | ✅ Ready |
+| **[Discord Bot](Discord-Bot/README.md)**                   | AI-powered Discord server bot with slash commands     | Slash commands, conversation memory, interactive UI, citations   | ✅ Ready |
+| **[Slack Bot](Slack-Bot/README.md)**                       | Enterprise Slack integration with multi-agent support | Multi-agent, threading, rate limiting, analytics                 | ✅ Ready |
+| **[Telegram Bot](Telegram-Bot/README.md)**                 | Fast Telegram bot with polling and webhook support    | Inline keyboards, conversation management, usage stats           | ✅ Ready |
+| **[MS Teams Bot](MS%20Teams/README.md)**                   | Enterprise Microsoft Teams bot with Adaptive Cards    | @mentions, threading, Confluence integration, file attachments   | ✅ Ready |
+| **[Google Chat Bot](Google%20Chat-Bot/README.md)**         | Native Google Workspace integration                   | Direct messages, space conversations, multi-agent support        | ✅ Ready |
+| **[Rocket.Chat Bot](Rocket%20Chat%20Bot/README.md)**       | Self-hosted chat platform integration                 | AI responses, citation support, thread support, analytics        | ✅ Ready |
+| **[Instagram Bot](Instagram%20Chat%20Bot/README.md)**      | Instagram DM bot with planned comment replies         | Multi-agent, starter questions, rate limiting, typing indicators | 🚧 Beta  |
+| **[FB Messenger Bot](Facebook%20Messenger-Bot/README.md)** | Facebook Messenger integration                        | Quick replies, persistent menu, typing indicators, media support | 🚧 WIP   |
 
 ### 💻 Website Widgets & Embeds
 
-| Integration | Description | Key Features | Status |
-|------------|-------------|--------------|---------|
-| **[CustomGPT Widget (Python)](customgpt-widget/README.md)** | Voice-enabled AI assistant with 3D avatar and particle animations | Voice mode (VAD), 3D avatar with lip-sync, multiple TTS providers, chat mode, floating/inline embed | ✅ Ready |
-| **[CustomGPT Widget (Next.js)](customgpt-widget-next/README.md)** | Modern Next.js widget with voice and with one-click Vercel deployment | Next.js App Router, voice mode, TTS support, serverless functions, TypeScript | ✅ Ready |
+| Integration                                                       | Description                                                           | Key Features                                                                                        | Status  |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------- |
+| **[CustomGPT Widget (Python)](customgpt-widget/README.md)**       | Voice-enabled AI assistant with 3D avatar and particle animations     | Voice mode (VAD), 3D avatar with lip-sync, multiple TTS providers, chat mode, floating/inline embed | ✅ Ready |
+| **[CustomGPT Widget (Next.js)](customgpt-widget-next/README.md)** | Modern Next.js widget with voice and with one-click Vercel deployment | Next.js App Router, voice mode, TTS support, serverless functions, TypeScript                       | ✅ Ready |
 
 ### 🔧 Browser Extensions & Automation
 
-| Integration | Description | Key Features | Status |
-|------------|-------------|--------------|---------|
+| Integration                                        | Description                                    | Key Features                                                             | Status  |
+| -------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------ | ------- |
 | **[Chrome Extension](chrome-extension/README.md)** | White-label Chrome extension with Vercel proxy | Zero user setup, white-label ready, modern UI, citations, Vercel backend | ✅ Ready |
-| **[n8n/Make.com](n8n-make.com%20integration/)** | Workflow automation templates and blueprints | Google Sheets integration, workflow templates, API examples | ✅ Ready |
+| **[n8n/Make.com](n8n-make.com%20integration/)**    | Workflow automation templates and blueprints   | Google Sheets integration, workflow templates, API examples              | ✅ Ready |
 
 ---
 
@@ -77,31 +77,31 @@ All integrations are designed for easy deployment, customization, and white-labe
 
 ### Messaging Platform Features
 
-| Feature | WhatsApp | Discord | Slack | Telegram | Google Chat | MS Teams | Rocket.Chat | Instagram | FB Messenger |
-|---------|----------|---------|-------|----------|-------------|----------|-------------|-----------|--------------|
-| Free Hosting | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | 🚧 WIP |
-| Rate Limiting | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | 🚧 WIP |
-| Multi-Agent | ✖ | ✖ | ✔ | ✖ | ✔ | ✖ | ✖ | ✔ | 🚧 WIP |
-| Rich Media | ✔ | ✔ | ✔ | ✔ | Limited | ✔ | ✔ | Limited | 🚧 WIP |
-| Threading | ✖ | ✔ | ✔ | ✖ | ✔ | ✔ | ✔ | ✖ | 🚧 WIP |
-| Analytics | ✔ | ✖ | ✔ | ✔ | ✖ | ✔ | ✔ | ✔ | 🚧 WIP |
-| Confluence | ✖ | ✖ | ✖ | ✖ | ✖ | ✔ | ✖ | ✖ | 🚧 WIP |
-| Setup Complexity | Medium | Easy | Medium | Easy | Easy | Medium | Medium | Medium | 🚧 WIP |
+| Feature          | WhatsApp | Discord | Slack  | Telegram | Google Chat | MS Teams | Rocket.Chat | Instagram | FB Messenger |
+| ---------------- | -------- | ------- | ------ | -------- | ----------- | -------- | ----------- | --------- | ------------ |
+| Free Hosting     | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | ✔           | ✔         | 🚧 WIP        |
+| Rate Limiting    | ✔        | ✔       | ✔      | ✔        | ✔           | ✔        | ✔           | ✔         | 🚧 WIP        |
+| Multi-Agent      | ✖        | ✖       | ✔      | ✖        | ✔           | ✖        | ✖           | ✔         | 🚧 WIP        |
+| Rich Media       | ✔        | ✔       | ✔      | ✔        | Limited     | ✔        | ✔           | Limited   | 🚧 WIP        |
+| Threading        | ✖        | ✔       | ✔      | ✖        | ✔           | ✔        | ✔           | ✖         | 🚧 WIP        |
+| Analytics        | ✔        | ✖       | ✔      | ✔        | ✖           | ✔        | ✔           | ✔         | 🚧 WIP        |
+| Confluence       | ✖        | ✖       | ✖      | ✖        | ✖           | ✔        | ✖           | ✖         | 🚧 WIP        |
+| Setup Complexity | Medium   | Easy    | Medium | Easy     | Easy        | Medium   | Medium      | Medium    | 🚧 WIP        |
 
 ### Widget & Extension Features
 
-| Feature | Widget (Python) | Widget (Next.js) | Chrome Extension |
-|---------|----------------|------------------|------------------|
-| Voice Mode | ✔ (VAD) | ✔ (WebM) | ✖ |
-| 3D Avatar | ✔ | ✖ | ✖ |
-| Chat Mode | ✔ | ✔ | ✔ |
-| TTS Support | ✔ Multiple | ✔ Multiple | ✖ |
-| Citations | ✔ | ✔ | ✔ |
-| Reactions | ✔ | ✔ | ✔ |
-| White-Label | ✔ | ✔ | ✔ |
-| Docker Ready | ✔ | ✔ | ✖ |
-| One-Click Deploy | ✔ | ✔ (Vercel) | ✔ (Vercel proxy) |
-| Framework | FastAPI + Vue | Next.js | Vanilla JS |
+| Feature          | Widget (Python) | Widget (Next.js) | Chrome Extension |
+| ---------------- | --------------- | ---------------- | ---------------- |
+| Voice Mode       | ✔ (VAD)         | ✔ (WebM)         | ✖                |
+| 3D Avatar        | ✔               | ✖                | ✖                |
+| Chat Mode        | ✔               | ✔                | ✔                |
+| TTS Support      | ✔ Multiple      | ✔ Multiple       | ✖                |
+| Citations        | ✔               | ✔                | ✔                |
+| Reactions        | ✔               | ✔                | ✔                |
+| White-Label      | ✔               | ✔                | ✔                |
+| Docker Ready     | ✔               | ✔                | ✖                |
+| One-Click Deploy | ✔               | ✔ (Vercel)       | ✔ (Vercel proxy) |
+| Framework        | FastAPI + Vue   | Next.js          | Vanilla JS       |
 
 ---
 
@@ -118,14 +118,14 @@ All integrations support multiple deployment options. See individual README file
 
 ### CustomGPT Resources
 
-- **Landing Page**: [customgpt.ai](https://customgpt.ai)
-- **Dashboard**: [app.customgpt.ai](https://app.customgpt.ai)
-- **Live Demo**: [app.customgpt.ai/agents?demo=chat](https://app.customgpt.ai/agents?demo=chat)
-- **API Documentation**: [docs.customgpt.ai/api-reference](https://docs.customgpt.ai/api-reference)
-- **Postman Collection**: [postman.com/customgpt/customgpt/overview](https://www.postman.com/customgpt/customgpt/overview)
-- **MCP Documentation**: [docs.customgpt.ai/model-content-protocol](https://docs.customgpt.ai/model-content-protocol)
-- **Office Hours**: [calendly.com/pollthepeople/office-hours](https://calendly.com/pollthepeople/office-hours)
-- **YouTube Channel**: [youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
+- **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
+- **[CustomGPT Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
+- **[API Documentation](https://docs.customgpt.ai/reference/i-api-homepage?utm_source=github_integrations)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
+- **[MCP Documentation](https://docs.customgpt.ai/reference/customgptai-mcp-support#/?utm_source=github_integrations)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
+- **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Integration-Specific Video Tutorials
 

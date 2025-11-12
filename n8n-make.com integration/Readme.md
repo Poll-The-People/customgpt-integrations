@@ -205,10 +205,10 @@ docker run -it --rm \
 - User information
 
 **Example Sheet Structure:**
-| questions (A) | answers (B) | status (C) | timestamp (D) |
-|---------------|-------------|------------|---------------|
-| What is your return policy? | [AI Response] | processed | 2025-01-15 |
-| How do I reset my password? | [AI Response] | processed | 2025-01-15 |
+| questions (A)               | answers (B)   | status (C) | timestamp (D) |
+| --------------------------- | ------------- | ---------- | ------------- |
+| What is your return policy? | [AI Response] | processed  | 2025-01-15    |
+| How do I reset my password? | [AI Response] | processed  | 2025-01-15    |
 
 ### CustomGPT API Configuration
 
@@ -391,38 +391,7 @@ Content-Type: application/json
 2. View execution data in the node
 3. Check browser console for errors
 
-## Best Practices
 
-### Performance Optimization
-
-1. **Batch Processing**: Process multiple rows in chunks
-2. **Conditional Logic**: Only process rows that need updating
-3. **Caching**: Store frequently used responses
-4. **Error Recovery**: Implement retry logic with exponential backoff
-
-### Security
-
-1. **API Key Protection**
-   - Never commit API keys to version control
-   - Use environment variables or credential storage
-   - Rotate keys regularly
-
-2. **Data Validation**
-   - Sanitize inputs before sending to API
-   - Validate response data before writing to sheets
-   - Implement input length limits
-
-3. **Access Control**
-   - Restrict Google Sheets access appropriately
-   - Use service accounts for production workflows
-   - Implement audit logging
-
-### Cost Management
-
-1. **Monitor Usage**: Track API calls and token usage
-2. **Optimize Prompts**: Keep prompts concise and clear
-3. **Set Limits**: Implement daily/monthly usage caps
-4. **Choose Right Model**: Use appropriate model for task complexity
 
 ## Additional Integrations
 
@@ -439,27 +408,16 @@ The blueprint can be extended to connect with:
 - **Calendar**: Google Calendar, Outlook Calendar
 - **Forms**: Typeform, Google Forms, Jotform
 
-### Multi-Agent Workflows
-
-Use different CustomGPT agents for different tasks:
-
-```
-Router Node
-├─ Support Questions → Support Agent (ID: 123)
-├─ Sales Inquiries → Sales Agent (ID: 456)
-└─ Technical Issues → Tech Agent (ID: 789)
-```
 
 ## Resources
 
 ### CustomGPT Resources
-- **[CustomGPT Landing Page](https://customgpt.ai)**
-- **[Live Demo](https://app.customgpt.ai/agents?demo=chat)**
+- **[CustomGPT Landing Page](https://customgpt.ai?utm_source=github_integrations)**
 - **[API Documentation](https://docs.customgpt.ai/api-reference)**
-- **[Postman Collection](https://www.postman.com/customgpt/customgpt/overview)**
+- **[Postman Collection](https://customgpt.ai/postman-api-collection?utm_source=github_integrations)**
 - **[CustomGPT Starter Kit](https://github.com/Poll-The-People/customgpt-starter-kit)**
 - **[All Integrations](https://github.com/Poll-The-People/customgpt-integrations)**
-- **[Office Hours](https://calendly.com/pollthepeople/office-hours)**
+- **[Developer Office Hours](https://lu.ma/customgpt)**
 - **[YouTube Channel](https://www.youtube.com/channel/UC6HOk7Z9OwVPNYiC7SKMJ6g)**
 
 ### Platform Documentation
@@ -467,25 +425,10 @@ Router Node
 - **[n8n Documentation](https://docs.n8n.io)**
 - **[Google Sheets API](https://developers.google.com/sheets/api)**
 
-### Video Tutorials
-- **[Make.com Tutorial](https://www.youtube.com/watch?v=...)** *(coming soon)*
-- **[n8n Tutorial](https://www.youtube.com/watch?v=...)** *(coming soon)*
-
 ## Support
 
 - **CustomGPT Issues**: Open an issue in the [customgpt-integrations repository](https://github.com/Poll-The-People/customgpt-integrations/issues)
-- **Make.com Support**: [support.make.com](https://support.make.com)
-- **n8n Support**: [community.n8n.io](https://community.n8n.io)
 
-## Examples & Templates
-
-Check out additional blueprint examples:
-- Customer support automation
-- Lead qualification workflow
-- Content generation pipeline
-- Data enrichment automation
-- Multi-language translation
-- Sentiment analysis workflow
 
 ## Contributing
 
